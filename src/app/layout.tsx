@@ -1,3 +1,4 @@
+import StyledComponentsRegistry from "@medlinked/lib/registry";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {};
@@ -9,7 +10,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body>{children}</body>
+      <body>
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+      </body>
     </html>
   );
 }
