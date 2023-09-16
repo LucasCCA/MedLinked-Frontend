@@ -5,7 +5,5 @@
     "source.organizeImports": true
   },
   "editor.tabSize": 2,
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
