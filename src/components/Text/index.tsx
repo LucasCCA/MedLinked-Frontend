@@ -2,17 +2,15 @@ import React from "react";
 import { StyledText } from "./styles";
 
 type TextProps = {
-  color?:
-    | "black_100"
-    | "black_80"
-    | "black_60"
-    | "white"
-    | "blue_100"
-    | "blue_80"
-    | "blue_60";
+  color?: "black_80" | "white";
+  fontWeight?: number;
   children: React.ReactNode;
 };
 
-export function Text({ color, children }: TextProps) {
-  return <StyledText color={color}>{children}</StyledText>;
+export function Text({ color, fontWeight, children }: TextProps) {
+  return (
+    <StyledText color={color} fontWeight={fontWeight}>
+      {children}
+    </StyledText>
+  );
 }
