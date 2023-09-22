@@ -10,7 +10,11 @@ import {
   UserContainer,
 } from "./styles";
 
-export function Header() {
+type HeaderProps = {
+  username: string;
+};
+
+export function Header({ username }: HeaderProps) {
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
 
@@ -28,7 +32,7 @@ export function Header() {
             }
           }}
         >
-          <Text color="white">Usuário</Text>
+          <Text color="white">{username}</Text>
           <ChevronContainer
             openAnimation={openAnimation}
             closeAnimation={closeAnimation}
@@ -36,20 +40,23 @@ export function Header() {
             <ChevronDown />
           </ChevronContainer>
         </ClickableContainer>
-        {openAnimation && (
-          <OptionsContainer>
-            <div>
-              <Option>
-                <UserCircle2 />
-                <Text color="black_80">Perfil</Text>
-              </Option>
-              <Option>
-                <LogOut />
-                <Text color="black_80">Sair</Text>
-              </Option>
-            </div>
-          </OptionsContainer>
-        )}
+        {/* {openAnimation && ( */}
+        <OptionsContainer
+          openAnimation={openAnimation}
+          closeAnimation={closeAnimation}
+        >
+          <div>
+            <Option>
+              <UserCircle2 />
+              <Text color="black_80">Perfil</Text>
+            </Option>
+            <Option>
+              <LogOut />
+              <Text color="black_80">Sair</Text>
+            </Option>
+          </div>
+        </OptionsContainer>
+        {/* )} */}
       </UserContainer>
     </HeaderContainer>
   );

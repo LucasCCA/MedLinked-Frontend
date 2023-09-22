@@ -1,7 +1,7 @@
 "use client";
 
-import { Header } from "@medlinked/components";
+import { Text } from "@medlinked/components";
 
 export default function Home() {
-  return <Header />;
+  return <Text>Medlinked</Text>;
 }

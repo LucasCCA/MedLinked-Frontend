@@ -6,12 +6,14 @@ export const HeaderContainer = styled.section`
   align-items: center;
   background: ${(props) => props.theme.colors.dark_blue_100};
   padding: 1.75rem 3.5rem;
+  user-select: none;
 `;
 
 export const UserContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
+  position: relative;
   color: ${(props) => props.theme.colors.black_80};
 
   p {
@@ -28,7 +30,7 @@ export const ClickableContainer = styled.div`
   }
 `;
 
-const open = keyframes`
+const openChevron = keyframes`
   from {
     transform: rotate(0);
   }
@@ -38,7 +40,7 @@ const open = keyframes`
   }
 `;
 
-const close = keyframes`
+const closeChevron = keyframes`
   from {
     transform: rotate(180deg);
   }
@@ -56,19 +58,19 @@ export const ChevronContainer = styled.div<{
   ${({ openAnimation }) =>
     openAnimation &&
     css`
-      animation: ${open} 200ms;
+      animation: ${openChevron} 200ms;
       animation-fill-mode: forwards;
     `}
 
   ${({ closeAnimation }) =>
     closeAnimation &&
     css`
-      animation: ${close} 200ms;
+      animation: ${closeChevron} 200ms;
       animation-fill-mode: forwards;
     `}
 `;
 
-const height = keyframes`
+const showOptions = keyframes`
   from {
     max-height: 0;
   }
@@ -78,12 +80,33 @@ const height = keyframes`
   }
 `;
 
-export const OptionsContainer = styled.div`
+const hideOptions = keyframes`
+  from {
+    max-height: 1000px;
+  }
+
+  to {
+    max-height: 0;
+  }
+`;
+
+export const OptionsContainer = styled.div<{
+  openAnimation: boolean;
+  closeAnimation: boolean;
+}>`
   position: absolute;
-  margin-top: 100px;
-  width: 110px;
+  margin-top: 30px;
+  width: 150px;
   border-radius: ${(props) => props.theme.border_radius};
-  animation: ${height} 2s;
+  animation-fill-mode: forwards;
+  max-height: 0;
+  overflow: hidden;
+  -webkit-transition: max-width 2s;
+  -moz-transition: max-width 2s;
+  -ms-transition: max-width 2s;
+  -o-transition: max-width 2s;
+  transition: max-width 2s;
+  top: 0;
 
   > div:first-child {
     -moz-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
@@ -91,9 +114,23 @@ export const OptionsContainer = styled.div`
     box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
   }
 
-  :hover {
+  &:hover {
     cursor: pointer;
   }
+
+  ${({ openAnimation }) =>
+    openAnimation &&
+    css`
+      animation: ${showOptions} 2s;
+      animation-fill-mode: forwards;
+    `}
+
+  ${({ closeAnimation }) =>
+    closeAnimation &&
+    css`
+      animation: ${hideOptions} 200ms;
+      animation-fill-mode: forwards;
+    `}
 `;
 
 export const Option = styled.div`
