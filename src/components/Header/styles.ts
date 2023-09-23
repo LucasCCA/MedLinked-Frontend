@@ -1,5 +1,5 @@
-import Link from "next/link";
 import styled, { css, keyframes } from "styled-components";
+import { CustomLink } from "..";
 
 type HeaderStylesProps = {
   readonly $openAnimation: boolean;
@@ -16,7 +16,6 @@ export const HeaderContainer = styled.section`
   background: ${(props) => props.theme.colors.dark_blue_100};
   padding: 1.5rem 3.5rem;
   user-select: none;
-  color: ${(props) => props.theme.colors.white};
 `;
 
 export const UserContainer = styled.div`
@@ -30,6 +29,7 @@ export const ClickableContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  color: ${(props) => props.theme.colors.white};
 
   &:hover {
     cursor: pointer;
@@ -125,14 +125,13 @@ export const DropdownContainer = styled.div<HeaderStylesProps>`
     `}
 `;
 
-export const Option = styled(Link)`
+export const Option = styled(CustomLink)`
   display: flex;
   align-items: center;
   width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.colors.gray_80};
   padding: 5px 1rem 5px 8px;
   gap: 5px;
-  text-decoration: none;
 
   svg {
     color: ${(props) => props.theme.colors.black_80};

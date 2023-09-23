@@ -1,15 +1,14 @@
 import styled, { css } from "styled-components";
 
-type TextStylesProps = {
+export type TextStylesProps = {
   $color?: "black_80" | "black_60" | "white";
   $weight?: number;
   $size?: "h1" | "h2" | "h3" | "h5" | "h6";
   $align?: "center" | "left";
 };
 
-export const StyledText = styled.p<TextStylesProps>`
+export const baseTextStyles = css<TextStylesProps>`
   font-weight: ${(props) => props.$weight || 400};
-  color: ${(props) => props.theme.colors.black_100};
   font-size: ${(props) => props.theme.font_sizes.h4};
   text-align: justify;
 
@@ -67,4 +66,10 @@ export const StyledText = styled.p<TextStylesProps>`
         `;
     }
   }};
+`;
+
+export const StyledText = styled.p<TextStylesProps>`
+  color: ${(props) => props.theme.colors.black_100};
+
+  ${baseTextStyles}
 `;

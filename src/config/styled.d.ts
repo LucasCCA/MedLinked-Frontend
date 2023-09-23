@@ -26,9 +26,6 @@ declare module "styled-components" {
       red_60: string;
       yellow: string;
     };
-    fonts: {
-      roboto: string;
-    };
     font_sizes: {
       h1: string;
       h2: string;

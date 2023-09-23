@@ -1,7 +1,12 @@
 "use client";
 
-import { CustomText } from "@medlinked/components";
+import { CustomLink, CustomText } from "@medlinked/components";
 
 export default function Home() {
-  return <CustomText>Medlinked</CustomText>;
+  return (
+    <>
+      <CustomText>Medlinked</CustomText>
+      <CustomLink href="">Medlinked Link</CustomLink>
+    </>
+  );
 }
