@@ -55,15 +55,15 @@ export function Header({ username }: HeaderProps) {
           $closeAnimation={closeAnimation}
         >
           <NameContainer>
-            <CustomText align="left">{username}</CustomText>
+            <CustomText $align="left">{username}</CustomText>
           </NameContainer>
           <Option href="">
             <UserCog2 />
-            <CustomText color="black_80">Perfil</CustomText>
+            <CustomText $color="black_80">Perfil</CustomText>
           </Option>
           <Option href="">
             <LogOut />
-            <CustomText color="black_80">Sair</CustomText>
+            <CustomText $color="black_80">Sair</CustomText>
           </Option>
         </DropdownContainer>
       </UserContainer>
