@@ -27,7 +27,7 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <Header username="Usuário" />
+            <Header username="Lucas Cândido Clemente Amaral" />
             {children}
           </ThemeProvider>
         </StyledComponentsRegistry>

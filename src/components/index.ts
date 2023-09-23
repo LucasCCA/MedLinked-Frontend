@@ -1,2 +1,2 @@
+export * from "./CustomText";
 export * from "./Header";
-export * from "./Text";

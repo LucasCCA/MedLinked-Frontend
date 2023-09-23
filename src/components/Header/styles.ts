@@ -1,12 +1,22 @@
+import Link from "next/link";
 import styled, { css, keyframes } from "styled-components";
 
+type HeaderStylesProps = {
+  readonly $openAnimation: boolean;
+  readonly $closeAnimation: boolean;
+};
+
 export const HeaderContainer = styled.section`
+  position: sticky;
+  max-width: 100%;
+  top: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   background: ${(props) => props.theme.colors.dark_blue_100};
   padding: 1.75rem 3.5rem;
   user-select: none;
+  color: ${(props) => props.theme.colors.white};
 `;
 
 export const UserContainer = styled.div`
@@ -14,16 +24,15 @@ export const UserContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
   position: relative;
-  color: ${(props) => props.theme.colors.black_80};
-
-  p {
-    padding-right: 0.25rem;
-  }
 `;
 
 export const ClickableContainer = styled.div`
   display: flex;
   align-items: center;
+
+  svg:first-child {
+    padding-right: 0.25rem;
+  }
 
   :hover {
     cursor: pointer;
@@ -50,20 +59,18 @@ const closeChevron = keyframes`
   }
 `;
 
-export const ChevronContainer = styled.div<{
-  openAnimation: boolean;
-  closeAnimation: boolean;
-}>`
+export const ChevronContainer = styled.div<HeaderStylesProps>`
   color: ${(props) => props.theme.colors.white};
-  ${({ openAnimation }) =>
-    openAnimation &&
+
+  ${({ $openAnimation }) =>
+    $openAnimation &&
     css`
       animation: ${openChevron} 200ms;
       animation-fill-mode: forwards;
     `}
 
-  ${({ closeAnimation }) =>
-    closeAnimation &&
+  ${({ $closeAnimation }) =>
+    $closeAnimation &&
     css`
       animation: ${closeChevron} 200ms;
       animation-fill-mode: forwards;
@@ -90,13 +97,10 @@ const hideOptions = keyframes`
   }
 `;
 
-export const OptionsContainer = styled.div<{
-  openAnimation: boolean;
-  closeAnimation: boolean;
-}>`
+export const DropdownContainer = styled.div<HeaderStylesProps>`
   position: absolute;
-  margin-top: 30px;
-  width: 150px;
+  margin-top: 35px;
+  width: 180px;
   border-radius: ${(props) => props.theme.border_radius};
   animation-fill-mode: forwards;
   max-height: 0;
@@ -107,47 +111,52 @@ export const OptionsContainer = styled.div<{
   -o-transition: max-width 2s;
   transition: max-width 2s;
   top: 0;
+  -moz-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
+  -webkit-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
+  box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
+  background: ${(props) => props.theme.colors.white};
 
-  > div:first-child {
-    -moz-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
-    -webkit-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
-    box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  ${({ openAnimation }) =>
-    openAnimation &&
+  ${({ $openAnimation }) =>
+    $openAnimation &&
     css`
       animation: ${showOptions} 2s;
       animation-fill-mode: forwards;
     `}
 
-  ${({ closeAnimation }) =>
-    closeAnimation &&
+  ${({ $closeAnimation }) =>
+    $closeAnimation &&
     css`
       animation: ${hideOptions} 200ms;
       animation-fill-mode: forwards;
     `}
 `;
 
-export const Option = styled.div`
+export const Option = styled(Link)`
   display: flex;
   align-items: center;
+  width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.colors.gray_80};
   padding: 5px 1rem 5px 8px;
-  background: ${(props) => props.theme.colors.white};
-
-  p {
-    padding-left: 5px;
-  }
+  gap: 5px;
+  color: ${(props) => props.theme.colors.black_80};
+  text-decoration: none;
 
   &:hover {
+    cursor: pointer;
+
     p,
     svg {
       color: ${(props) => props.theme.colors.black_100};
     }
   }
+`;
+
+export const NameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${(props) => props.theme.colors.gray_80};
+  padding: 1rem;
+  user-select: text;
 `;

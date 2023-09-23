@@ -1,12 +1,14 @@
-import { ChevronDown, LogOut, UserCircle2 } from "lucide-react";
+import { ChevronDown, LogOut, UserCircle2, UserCog2 } from "lucide-react";
 import { useState } from "react";
-import { Text } from "..";
+import { useDetectClickOutside } from "react-detect-click-outside";
+import { CustomText } from "..";
 import {
   ChevronContainer,
   ClickableContainer,
+  DropdownContainer,
   HeaderContainer,
+  NameContainer,
   Option,
-  OptionsContainer,
   UserContainer,
 } from "./styles";
 
@@ -17,10 +19,18 @@ type HeaderProps = {
 export function Header({ username }: HeaderProps) {
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
+  const ref = useDetectClickOutside({
+    onTriggered: () => {
+      if (openAnimation) {
+        setOpenAnimation(false);
+        setCloseAnimation(true);
+      }
+    },
+  });
 
   return (
     <HeaderContainer>
-      <UserContainer>
+      <UserContainer ref={ref}>
         <ClickableContainer
           onClick={() => {
             if (openAnimation) {
@@ -32,31 +42,30 @@ export function Header({ username }: HeaderProps) {
             }
           }}
         >
-          <Text color="white">{username}</Text>
+          <UserCircle2 size={30} />
           <ChevronContainer
-            openAnimation={openAnimation}
-            closeAnimation={closeAnimation}
+            $openAnimation={openAnimation}
+            $closeAnimation={closeAnimation}
           >
             <ChevronDown />
           </ChevronContainer>
         </ClickableContainer>
-        {/* {openAnimation && ( */}
-        <OptionsContainer
-          openAnimation={openAnimation}
-          closeAnimation={closeAnimation}
+        <DropdownContainer
+          $openAnimation={openAnimation}
+          $closeAnimation={closeAnimation}
         >
-          <div>
-            <Option>
-              <UserCircle2 />
-              <Text color="black_80">Perfil</Text>
-            </Option>
-            <Option>
-              <LogOut />
-              <Text color="black_80">Sair</Text>
-            </Option>
-          </div>
-        </OptionsContainer>
-        {/* )} */}
+          <NameContainer>
+            <CustomText align="left">{username}</CustomText>
+          </NameContainer>
+          <Option href="">
+            <UserCog2 />
+            <CustomText color="black_80">Perfil</CustomText>
+          </Option>
+          <Option href="">
+            <LogOut />
+            <CustomText color="black_80">Sair</CustomText>
+          </Option>
+        </DropdownContainer>
       </UserContainer>
     </HeaderContainer>
   );
