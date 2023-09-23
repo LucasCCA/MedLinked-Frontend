@@ -1,5 +1,6 @@
 "use client";
 
+import { Header } from "@medlinked/components";
 import { GlobalStyle, theme } from "@medlinked/config";
 import { StyledComponentsRegistry } from "@medlinked/lib";
 import type { Metadata } from "next";
@@ -26,6 +27,7 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
+            <Header username="Lucas Cândido Clemente Amaral" />
             {children}
           </ThemeProvider>
         </StyledComponentsRegistry>

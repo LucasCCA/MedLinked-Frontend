@@ -1,7 +1,7 @@
 "use client";
 
-import { Text } from "@medlinked/components";
+import { CustomText } from "@medlinked/components";
 
 export default function Home() {
-  return <Text>MedLinked</Text>;
+  return <CustomText>Medlinked</CustomText>;
 }

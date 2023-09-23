@@ -1,9 +1,11 @@
+import { sizes } from "./sizes";
+
 export const breakpoints = {
-  xxs: "(min-width: 0px)",
-  xs: "(min-width: 390px)",
-  sm: "(min-width: 576px)",
-  md: "(min-width: 768px)",
-  lg: "(min-width: 992px)",
-  xl: "(min-width: 1200px)",
-  xxl: "(min-width: 1400px)",
+  xxs: `(min-width: ${sizes.xxs})`,
+  xs: `(min-width: ${sizes.xs})`,
+  sm: `(min-width: ${sizes.sm})`,
+  md: `(min-width: ${sizes.md})`,
+  lg: `(min-width: ${sizes.lg})`,
+  xl: `(min-width: ${sizes.xl})`,
+  xxl: `(min-width: ${sizes.xxl})`,
 };
