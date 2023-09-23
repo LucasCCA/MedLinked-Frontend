@@ -14,7 +14,7 @@ export const HeaderContainer = styled.section`
   justify-content: flex-end;
   align-items: center;
   background: ${(props) => props.theme.colors.dark_blue_100};
-  padding: 1.75rem 3.5rem;
+  padding: 1.5rem 3.5rem;
   user-select: none;
   color: ${(props) => props.theme.colors.white};
 `;
@@ -29,12 +29,9 @@ export const UserContainer = styled.div`
 export const ClickableContainer = styled.div`
   display: flex;
   align-items: center;
+  gap: 0.25rem;
 
-  svg:first-child {
-    padding-right: 0.25rem;
-  }
-
-  :hover {
+  &:hover {
     cursor: pointer;
   }
 `;
@@ -60,8 +57,6 @@ const closeChevron = keyframes`
 `;
 
 export const ChevronContainer = styled.div<HeaderStylesProps>`
-  color: ${(props) => props.theme.colors.white};
-
   ${({ $openAnimation }) =>
     $openAnimation &&
     css`
@@ -102,7 +97,6 @@ export const DropdownContainer = styled.div<HeaderStylesProps>`
   margin-top: 35px;
   width: 180px;
   border-radius: ${(props) => props.theme.border_radius};
-  animation-fill-mode: forwards;
   max-height: 0;
   overflow: hidden;
   -webkit-transition: max-width 2s;
@@ -138,8 +132,11 @@ export const Option = styled(Link)`
   border-bottom: 1px solid ${(props) => props.theme.colors.gray_80};
   padding: 5px 1rem 5px 8px;
   gap: 5px;
-  color: ${(props) => props.theme.colors.black_80};
   text-decoration: none;
+
+  svg {
+    color: ${(props) => props.theme.colors.black_80};
+  }
 
   &:hover {
     cursor: pointer;
