@@ -1,11 +1,12 @@
 "use client";
 
-import { Header } from "@medlinked/components";
+import { Header, Navbar } from "@medlinked/components";
 import { GlobalStyle, theme } from "@medlinked/config";
 import { StyledComponentsRegistry } from "@medlinked/lib";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ThemeProvider } from "styled-components";
+import { ContentContainer } from "./styles";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500"],
@@ -27,8 +28,10 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <Header username="Lucas Cândido Clemente Amaral" />
-            {children}
+            <ContentContainer>
+              <Navbar />
+              <Header username="Lucas">{children}</Header>
+            </ContentContainer>
           </ThemeProvider>
         </StyledComponentsRegistry>
       </body>

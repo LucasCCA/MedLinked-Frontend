@@ -19,7 +19,11 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "error",
-    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "indent": [
+      "error",
+      2,
+      { "SwitchCase": 1, "ignoredNodes": ["ConditionalExpression"] }
+    ],
     "linebreak-style": ["warn", "windows"],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],

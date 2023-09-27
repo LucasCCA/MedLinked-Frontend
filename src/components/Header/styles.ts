@@ -6,6 +6,13 @@ type HeaderStylesProps = {
   readonly $closeAnimation: boolean;
 };
 
+export const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
 export const HeaderContainer = styled.section`
   position: sticky;
   max-width: 100%;
@@ -14,6 +21,9 @@ export const HeaderContainer = styled.section`
   justify-content: flex-end;
   align-items: center;
   background: ${(props) => props.theme.colors.dark_blue_100};
+  -moz-box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
+  -webkit-box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
+  box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
   padding: 1.5rem 3.5rem;
   user-select: none;
 `;
@@ -150,7 +160,7 @@ export const Option = styled(CustomLink)`
 export const NameContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-sizing: border-box;
   border-bottom: 1px solid ${(props) => props.theme.colors.gray_80};
   padding: 1rem;

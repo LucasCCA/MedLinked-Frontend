@@ -5,6 +5,7 @@ import { CustomText } from "..";
 import {
   ChevronContainer,
   ClickableContainer,
+  ContentContainer,
   DropdownContainer,
   HeaderContainer,
   NameContainer,
@@ -14,9 +15,10 @@ import {
 
 type HeaderProps = {
   username: string;
+  children?: React.ReactNode;
 };
 
-export function Header({ username }: HeaderProps) {
+export function Header({ username, children }: HeaderProps) {
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
   const ref = useDetectClickOutside({
@@ -29,44 +31,47 @@ export function Header({ username }: HeaderProps) {
   });
 
   return (
-    <HeaderContainer>
-      <UserContainer ref={ref}>
-        <ClickableContainer
-          onClick={() => {
-            if (openAnimation) {
-              setOpenAnimation(false);
-              setCloseAnimation(true);
-            } else {
-              setOpenAnimation(true);
-              setCloseAnimation(false);
-            }
-          }}
-        >
-          <UserCircle2 size={30} />
-          <ChevronContainer
+    <ContentContainer>
+      <HeaderContainer>
+        <UserContainer ref={ref}>
+          <ClickableContainer
+            onClick={() => {
+              if (openAnimation) {
+                setOpenAnimation(false);
+                setCloseAnimation(true);
+              } else {
+                setOpenAnimation(true);
+                setCloseAnimation(false);
+              }
+            }}
+          >
+            <UserCircle2 size={30} />
+            <ChevronContainer
+              $openAnimation={openAnimation}
+              $closeAnimation={closeAnimation}
+            >
+              <ChevronDown />
+            </ChevronContainer>
+          </ClickableContainer>
+          <DropdownContainer
             $openAnimation={openAnimation}
             $closeAnimation={closeAnimation}
           >
-            <ChevronDown />
-          </ChevronContainer>
-        </ClickableContainer>
-        <DropdownContainer
-          $openAnimation={openAnimation}
-          $closeAnimation={closeAnimation}
-        >
-          <NameContainer>
-            <CustomText $align="left">{username}</CustomText>
-          </NameContainer>
-          <Option href="">
-            <UserCog2 />
-            <CustomText $color="black_80">Perfil</CustomText>
-          </Option>
-          <Option href="">
-            <LogOut />
-            <CustomText $color="black_80">Sair</CustomText>
-          </Option>
-        </DropdownContainer>
-      </UserContainer>
-    </HeaderContainer>
+            <NameContainer>
+              <CustomText>{username}</CustomText>
+            </NameContainer>
+            <Option href="">
+              <UserCog2 />
+              <CustomText $color="black_80">Perfil</CustomText>
+            </Option>
+            <Option href="">
+              <LogOut />
+              <CustomText $color="black_80">Sair</CustomText>
+            </Option>
+          </DropdownContainer>
+        </UserContainer>
+      </HeaderContainer>
+      {children}
+    </ContentContainer>
   );
 }
