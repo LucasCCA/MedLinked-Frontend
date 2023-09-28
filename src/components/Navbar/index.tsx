@@ -1,9 +1,10 @@
 "use client";
 
+import { useWindowDimensions } from "@medlinked/hooks";
 import { Calendar, Menu, ShieldPlus, Stethoscope, User2 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { CustomLink, CustomText } from "..";
 import {
@@ -16,12 +17,12 @@ import {
 } from "./styles";
 
 export function Navbar() {
-  const windowWidth = useRef(window.innerWidth);
+  const { width } = useWindowDimensions();
   const pathname = usePathname();
-  const [expanded, setExpanded] = useState(windowWidth.current > 768);
+  const [expanded, setExpanded] = useState(width > 768);
   const ref = useDetectClickOutside({
     onTriggered: () => {
-      if (windowWidth.current < 768) setExpanded(false);
+      if (width < 768) setExpanded(false);
     },
   });
 
