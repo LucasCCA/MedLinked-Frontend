@@ -1,3 +1,4 @@
+import { breakpoints } from "@medlinked/config";
 import styled from "styled-components";
 
 type ExpansionProps = {
@@ -10,21 +11,39 @@ type ColorProps = {
 
 type NavigationContainerProps = ColorProps & ExpansionProps;
 
+export const Overlay = styled.div<ExpansionProps>`
+  display: ${(props) => (props.$expanded ? "block" : "none")};
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: ${(props) => props.theme.colors.black_60};
+  z-index: 9;
+
+  @media ${breakpoints.md} {
+    display: none;
+  }
+`;
+
 export const AvoidNavbarContainer = styled.div<ExpansionProps>`
-  margin-left: ${(props) => (props.$expanded ? "250px" : "62px")};
+  margin-left: 62px;
   transition: margin-left ease 200ms;
+
+  @media ${breakpoints.md} {
+    margin-left: ${(props) => (props.$expanded ? "250px" : "62px")};
+  }
 `;
 
 export const NavbarContainer = styled.aside<ExpansionProps>`
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.colors.white};
-  width: ${(props) => (props.$expanded ? "250px" : "62px")};
+  width: 100%;
   max-width: ${(props) => (props.$expanded ? "250px" : "62px")};
-  height: 100%;
+  transition: max-width ease 200ms;
   position: fixed;
   top: 0;
-  transition: max-width ease 200ms;
+  height: 100%;
+  z-index: 10;
 `;
 
 export const BlueContainer = styled.div<ExpansionProps>`

@@ -1,7 +1,9 @@
+"use client";
+
 import { ChevronDown, LogOut, UserCircle2, UserCog2 } from "lucide-react";
 import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { CustomText } from "..";
+import { Container, CustomText } from "..";
 import {
   ChevronContainer,
   ClickableContainer,
@@ -33,43 +35,45 @@ export function Header({ username, children }: HeaderProps) {
   return (
     <ContentContainer>
       <HeaderContainer>
-        <UserContainer ref={ref}>
-          <ClickableContainer
-            onClick={() => {
-              if (openAnimation) {
-                setOpenAnimation(false);
-                setCloseAnimation(true);
-              } else {
-                setOpenAnimation(true);
-                setCloseAnimation(false);
-              }
-            }}
-          >
-            <UserCircle2 size={30} />
-            <ChevronContainer
+        <Container $header>
+          <UserContainer ref={ref}>
+            <ClickableContainer
+              onClick={() => {
+                if (openAnimation) {
+                  setOpenAnimation(false);
+                  setCloseAnimation(true);
+                } else {
+                  setOpenAnimation(true);
+                  setCloseAnimation(false);
+                }
+              }}
+            >
+              <UserCircle2 size={30} />
+              <ChevronContainer
+                $openAnimation={openAnimation}
+                $closeAnimation={closeAnimation}
+              >
+                <ChevronDown />
+              </ChevronContainer>
+            </ClickableContainer>
+            <DropdownContainer
               $openAnimation={openAnimation}
               $closeAnimation={closeAnimation}
             >
-              <ChevronDown />
-            </ChevronContainer>
-          </ClickableContainer>
-          <DropdownContainer
-            $openAnimation={openAnimation}
-            $closeAnimation={closeAnimation}
-          >
-            <NameContainer>
-              <CustomText>{username}</CustomText>
-            </NameContainer>
-            <Option href="">
-              <UserCog2 />
-              <CustomText $color="black_80">Perfil</CustomText>
-            </Option>
-            <Option href="">
-              <LogOut />
-              <CustomText $color="black_80">Sair</CustomText>
-            </Option>
-          </DropdownContainer>
-        </UserContainer>
+              <NameContainer>
+                <CustomText>{username}</CustomText>
+              </NameContainer>
+              <Option href="">
+                <UserCog2 />
+                <CustomText $color="black_80">Perfil</CustomText>
+              </Option>
+              <Option href="">
+                <LogOut />
+                <CustomText $color="black_80">Sair</CustomText>
+              </Option>
+            </DropdownContainer>
+          </UserContainer>
+        </Container>
       </HeaderContainer>
       {children}
     </ContentContainer>

@@ -1,9 +1,8 @@
 "use client";
 
-import { Header, Navbar } from "@medlinked/components";
+import { Container, Header, Navbar } from "@medlinked/components";
 import { GlobalStyle, theme } from "@medlinked/config";
 import { StyledComponentsRegistry } from "@medlinked/lib";
-import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ThemeProvider } from "styled-components";
 import { ContentContainer } from "./styles";
@@ -15,8 +14,6 @@ const roboto = Roboto({
   display: "swap",
 });
 
-export const metadata: Metadata = {};
-
 export default function RootLayout({
   children,
 }: {
@@ -24,13 +21,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br" className={roboto.className}>
+      <head>
+        <title>MedLinked</title>
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+      </head>
       <body>
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
             <ContentContainer>
               <Navbar />
-              <Header username="Lucas">{children}</Header>
+              <Header username="Lucas">
+                <Container>{children}</Container>
+              </Header>
             </ContentContainer>
           </ThemeProvider>
         </StyledComponentsRegistry>
