@@ -1,6 +1,6 @@
 "use client";
 
-import { useWindowDimensions } from "@medlinked/hooks";
+import { useWindowWidth } from "@react-hook/window-size";
 import { Calendar, Menu, ShieldPlus, Stethoscope, User2 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -17,9 +17,9 @@ import {
 } from "./styles";
 
 export function Navbar() {
-  const { width } = useWindowDimensions();
-  const pathname = usePathname();
+  const width = useWindowWidth();
   const [expanded, setExpanded] = useState(width > 768);
+  const pathname = usePathname();
   const ref = useDetectClickOutside({
     onTriggered: () => {
       if (width < 768) setExpanded(false);
