@@ -2,8 +2,8 @@ import styled, { css, keyframes } from "styled-components";
 import { CustomLink } from "..";
 
 type HeaderStylesProps = {
-  readonly $openAnimation: boolean;
-  readonly $closeAnimation: boolean;
+  $openAnimation: boolean;
+  $closeAnimation: boolean;
 };
 
 export const ContentContainer = styled.div`
