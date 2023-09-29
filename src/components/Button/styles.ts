@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 type StyledButtonProps = {
   $color?: "red_80";
+  $fullWidth?: boolean;
 };
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -10,7 +11,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   border: none;
   padding: 0.75rem 0;
   padding-left: 15px;
-  width: 100%;
+  width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
   display: flex;
   justify-content: flex-start;
   align-items: center;

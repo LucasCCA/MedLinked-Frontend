@@ -7,13 +7,21 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   color?: "red_80";
   icon?: "plus" | "pen" | "trash" | "calendar";
+  fullWidth?: boolean;
 }
 
-export function Button({ href, children, color, icon, ...props }: ButtonProps) {
+export function Button({
+  href,
+  children,
+  color,
+  icon,
+  fullWidth,
+  ...props
+}: ButtonProps) {
   return (
     <>
       {!href && (
-        <StyledButton $color={color} {...props}>
+        <StyledButton $color={color} $fullWidth={fullWidth} {...props}>
           {icon == "plus" && <Plus size={25} />}
           {icon == "pen" && <Pen size={25} />}
           {icon == "trash" && <Trash size={25} />}
@@ -24,7 +32,7 @@ export function Button({ href, children, color, icon, ...props }: ButtonProps) {
         </StyledButton>
       )}
       {href && (
-        <StyledButton $color={color} {...props}>
+        <StyledButton $color={color} $fullWidth={fullWidth} {...props}>
           {icon == "plus" && <Plus size={25} />}
           {icon == "pen" && <Pen size={25} />}
           {icon == "trash" && <Trash size={25} />}
