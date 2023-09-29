@@ -1,11 +1,11 @@
 "use client";
 
-import { CustomText } from "@medlinked/components";
+import { Button } from "@medlinked/components";
 
 export default function Home() {
   return (
     <>
-      <CustomText>Medlinked</CustomText>
+      <Button icon="plus">Agendamento</Button>
     </>
   );
 }
