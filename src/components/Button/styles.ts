@@ -47,16 +47,13 @@ export const StyledButton = styled.button<StyledButtonProps>`
     }
   }
 
-  ${({ $color }) => {
-    switch ($color) {
-      case "red_80":
-        return css`
-          background: ${(props) => props.theme.colors.red_80};
+  ${({ $color }) =>
+    $color == "red_80" &&
+    css`
+      background: ${(props) => props.theme.colors.red_80};
 
-          &:hover {
-            background: ${(props) => props.theme.colors.red_100};
-          }
-        `;
-    }
-  }}
+      &:hover {
+        background: ${(props) => props.theme.colors.red_100};
+      }
+    `}
 `;
