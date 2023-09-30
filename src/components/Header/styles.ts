@@ -109,11 +109,6 @@ export const DropdownContainer = styled.div<HeaderStylesProps>`
   border-radius: ${(props) => props.theme.border_radius};
   max-height: 0;
   overflow: hidden;
-  -webkit-transition: max-width 2s;
-  -moz-transition: max-width 2s;
-  -ms-transition: max-width 2s;
-  -o-transition: max-width 2s;
-  transition: max-width 2s;
   top: 0;
   -moz-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
   -webkit-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};

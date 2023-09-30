@@ -26,7 +26,7 @@ export const InputContainer = styled.div<InputContainerProps>`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 0.5rem;
+  padding: 0 0.5rem;
   color: ${(props) => props.theme.colors.black_100};
   gap: 5px;
   border: 1px solid ${(props) => props.theme.colors.blue_60};
