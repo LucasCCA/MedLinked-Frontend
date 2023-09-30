@@ -1,8 +1,14 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-type InputProps = {
+type WidthProps = {
   $fullWidth?: boolean;
 };
+
+type ErrorProps = {
+  $error?: boolean;
+};
+
+type InputContainerProps = WidthProps & ErrorProps;
 
 export const StyledInput = styled.input`
   border: none;
@@ -16,7 +22,7 @@ export const StyledInput = styled.input`
   }
 `;
 
-export const InputContainer = styled.div<InputProps>`
+export const InputContainer = styled.div<InputContainerProps>`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -35,4 +41,19 @@ export const InputContainer = styled.div<InputProps>`
   &:hover {
     border: 1px solid ${(props) => props.theme.colors.blue_100};
   }
+
+  ${({ $error }) =>
+    $error &&
+    css`
+      border: 1px solid ${(props) => props.theme.colors.red_60};
+
+      &:hover {
+        border: 1px solid ${(props) => props.theme.colors.red_100};
+      }
+    `}
+`;
+
+export const ErrorMessageContainer = styled.div<WidthProps>`
+  margin-top: 5px;
+  width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
 `;

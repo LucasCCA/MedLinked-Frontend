@@ -7,23 +7,36 @@ import {
   UserCircle2,
 } from "lucide-react";
 import { InputHTMLAttributes } from "react";
-import { InputContainer, StyledInput } from "./styles";
+import { CustomText } from "..";
+import { ErrorMessageContainer, InputContainer, StyledInput } from "./styles";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: "User2" | "Asterisk" | "Mail" | "Phone" | "UserCircle2" | "KeyRound";
   fullWidth?: boolean;
+  errorMessage?: string;
 }
 
-export function Input({ icon, fullWidth, ...props }: InputProps) {
+export function Input({ icon, fullWidth, errorMessage, ...props }: InputProps) {
+  console.log(errorMessage != null);
+
   return (
-    <InputContainer $fullWidth={fullWidth}>
-      {icon == "User2" && <User2 />}
-      {icon == "Asterisk" && <Asterisk />}
-      {icon == "Mail" && <Mail />}
-      {icon == "Phone" && <Phone />}
-      {icon == "UserCircle2" && <UserCircle2 />}
-      {icon == "KeyRound" && <KeyRound />}
-      <StyledInput {...props} />
-    </InputContainer>
+    <>
+      <InputContainer $fullWidth={fullWidth} $error={errorMessage != null}>
+        {icon == "User2" && <User2 />}
+        {icon == "Asterisk" && <Asterisk />}
+        {icon == "Mail" && <Mail />}
+        {icon == "Phone" && <Phone />}
+        {icon == "UserCircle2" && <UserCircle2 />}
+        {icon == "KeyRound" && <KeyRound />}
+        <StyledInput {...props} />
+      </InputContainer>
+      {errorMessage != null && (
+        <ErrorMessageContainer>
+          <CustomText $size="h5" $color="red_80">
+            {errorMessage}
+          </CustomText>
+        </ErrorMessageContainer>
+      )}
+    </>
   );
 }
