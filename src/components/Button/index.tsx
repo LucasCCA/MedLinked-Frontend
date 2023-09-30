@@ -26,9 +26,7 @@ export function Button({
           {icon == "pen" && <Pen size={25} />}
           {icon == "trash" && <Trash size={25} />}
           {icon == "calendar" && <Calendar size={25} />}
-          <CustomText $color="white" $weight={500}>
-            {children}
-          </CustomText>
+          <CustomText $color="white">{children}</CustomText>
         </StyledButton>
       )}
       {href && (
@@ -37,7 +35,7 @@ export function Button({
           {icon == "pen" && <Pen size={25} />}
           {icon == "trash" && <Trash size={25} />}
           {icon == "calendar" && <Calendar size={25} />}
-          <CustomLink $color="white" $weight={500} href={href}>
+          <CustomLink $color="white" href={href}>
             {children}
           </CustomLink>
         </StyledButton>
