@@ -17,7 +17,7 @@ import {
 } from "./styles";
 
 export function Navbar() {
-  const width = useWindowWidth();
+  const width = useWindowWidth() || 769;
   const [expanded, setExpanded] = useState(width > 768);
   const pathname = usePathname();
   const ref = useDetectClickOutside({
@@ -40,10 +40,12 @@ export function Navbar() {
             <LogoContainer>
               {expanded && (
                 <Image
-                  src="/images/favicon.ico"
+                  src="/images/icon.png"
                   alt="Logo Medlinked"
                   width={31}
                   height={31}
+                  quality={100}
+                  priority
                 />
               )}
               <CustomText $color="white" $size="h3" $weight={500}>
