@@ -13,11 +13,11 @@ type NavigationContainerProps = ColorProps & ExpansionProps;
 
 export const Overlay = styled.div<ExpansionProps>`
   display: ${(props) => (props.$expanded ? "block" : "none")};
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   background: ${(props) => props.theme.colors.black_60};
-  z-index: 9;
+  z-index: 998;
 
   @media ${breakpoints.md} {
     display: none;
@@ -43,7 +43,7 @@ export const NavbarContainer = styled.aside<ExpansionProps>`
   position: fixed;
   top: 0;
   height: 100%;
-  z-index: 10;
+  z-index: 999;
 `;
 
 export const BlueContainer = styled.div<ExpansionProps>`

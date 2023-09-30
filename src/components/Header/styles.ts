@@ -24,8 +24,9 @@ export const HeaderContainer = styled.section`
   -moz-box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
   -webkit-box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
   box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
-  padding: calc(1.5rem + 0.5px) 0;
+  padding: 1.5rem 0;
   user-select: none;
+  z-index: 997;
 `;
 
 export const UserContainer = styled.div`
@@ -109,11 +110,6 @@ export const DropdownContainer = styled.div<HeaderStylesProps>`
   border-radius: ${(props) => props.theme.border_radius};
   max-height: 0;
   overflow: hidden;
-  -webkit-transition: max-width 2s;
-  -moz-transition: max-width 2s;
-  -ms-transition: max-width 2s;
-  -o-transition: max-width 2s;
-  transition: max-width 2s;
   top: 0;
   -moz-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
   -webkit-box-shadow: 0 0 6px ${(props) => props.theme.colors.black_60};
