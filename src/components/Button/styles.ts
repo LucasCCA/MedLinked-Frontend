@@ -18,6 +18,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   text-align: left;
   gap: 5px;
   color: ${(props) => props.theme.colors.white};
+  font-family: inherit;
 
   > a {
     width: 100%;
