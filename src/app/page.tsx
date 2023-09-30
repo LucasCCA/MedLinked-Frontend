@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@medlinked/components";
+import { Input } from "@medlinked/components";
 
 export default function Home() {
   return (
     <>
-      <Button icon="plus">Agendamento</Button>
+      <Input icon="KeyRound" placeholder="teste" />
     </>
   );
 }
