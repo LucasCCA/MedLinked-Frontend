@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 export type TextStylesProps = {
-  $color?: "black_80" | "black_60" | "white";
+  $color?: "black_80" | "black_60" | "white" | "red_80";
   $weight?: number;
   $size?: "h1" | "h2" | "h3" | "h5" | "h6";
   $align?: "center" | "left";
@@ -25,6 +25,10 @@ export const baseTextStyles = css<TextStylesProps>`
       case "white":
         return css`
           color: ${(props) => props.theme.colors.white};
+        `;
+      case "red_80":
+        return css`
+          color: ${(props) => props.theme.colors.red_80};
         `;
     }
   }};
