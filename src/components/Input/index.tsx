@@ -17,8 +17,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({ icon, fullWidth, errorMessage, ...props }: InputProps) {
-  console.log(errorMessage != null);
-
   return (
     <>
       <InputContainer $fullWidth={fullWidth} $error={errorMessage != null}>
