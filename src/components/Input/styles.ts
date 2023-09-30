@@ -16,6 +16,7 @@ export const StyledInput = styled.input`
   width: 100%;
   font-family: inherit;
   padding: 0.75rem 0.5rem 0.75rem 0.5rem;
+  background: none;
 
   &::placeholder {
     color: ${(props) => props.theme.colors.black_60};

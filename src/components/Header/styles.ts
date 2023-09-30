@@ -24,8 +24,9 @@ export const HeaderContainer = styled.section`
   -moz-box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
   -webkit-box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
   box-shadow: 0 2px 6px ${(props) => props.theme.colors.black_60};
-  padding: calc(1.5rem + 0.5px) 0;
+  padding: 1.5rem 0;
   user-select: none;
+  z-index: 997;
 `;
 
 export const UserContainer = styled.div`

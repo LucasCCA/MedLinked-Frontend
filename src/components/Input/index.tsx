@@ -14,12 +14,19 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: "User2" | "Asterisk" | "Mail" | "Phone" | "UserCircle2" | "KeyRound";
   fullWidth?: boolean;
   errorMessage?: string;
+  hasError?: boolean;
 }
 
-export function Input({ icon, fullWidth, errorMessage, ...props }: InputProps) {
+export function Input({
+  icon,
+  fullWidth,
+  errorMessage,
+  hasError,
+  ...props
+}: InputProps) {
   return (
     <>
-      <InputContainer $fullWidth={fullWidth} $error={errorMessage != null}>
+      <InputContainer $fullWidth={fullWidth} $error={hasError}>
         {icon == "User2" && <User2 />}
         {icon == "Asterisk" && <Asterisk />}
         {icon == "Mail" && <Mail />}
@@ -28,7 +35,7 @@ export function Input({ icon, fullWidth, errorMessage, ...props }: InputProps) {
         {icon == "KeyRound" && <KeyRound />}
         <StyledInput {...props} />
       </InputContainer>
-      {errorMessage != null && (
+      {hasError && (
         <ErrorMessageContainer>
           <CustomText $size="h5" $color="red_80">
             {errorMessage}
