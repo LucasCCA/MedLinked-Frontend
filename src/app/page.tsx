@@ -1,6 +1,6 @@
 "use client";
 
-import { Select } from "@medlinked/components";
+import { Card, CustomText, Select } from "@medlinked/components";
 
 const options = [
   {
@@ -33,6 +33,9 @@ export default function Home() {
   return (
     <>
       <Select options={options} placeholder="Escolha uma opção" />
+      <Card>
+        <CustomText>Teste</CustomText>
+      </Card>
     </>
   );
 }
