@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronDown } from "lucide-react";
 import { HTMLAttributes, useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";

@@ -1,3 +1,5 @@
+"use client";
+
 import { Calendar, Pen, Plus, Trash } from "lucide-react";
 import { CustomLink, CustomText } from "..";
 import { StyledButton } from "./styles";
