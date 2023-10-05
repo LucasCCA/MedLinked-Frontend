@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 type CardStylesProps = {
+  $selectable?: boolean;
   $selected?: boolean;
 };
 
@@ -15,14 +16,18 @@ export const CardStyles = styled.div<CardStylesProps>`
   justify-content: center;
   width: 100%;
 
-  &:hover {
-    background: ${(props) => props.theme.colors.blue_60};
-    cursor: pointer;
+  ${({ $selectable }) =>
+    $selectable &&
+    css`
+      &:hover {
+        background: ${(props) => props.theme.colors.blue_60};
+        cursor: pointer;
 
-    > p {
-      color: ${(props) => props.theme.colors.white};
-    }
-  }
+        > p {
+          color: ${(props) => props.theme.colors.white};
+        }
+      }
+    `}
 
   ${({ $selected }) =>
     $selected &&
