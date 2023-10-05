@@ -56,19 +56,28 @@ export function Navbar() {
           <Menu size={30} onClick={() => setExpanded(!expanded)} />
         </BlueContainer>
         <NavigationContainer $expanded={expanded}>
-          <CustomLink href="/" $color={getLinkColor("/")}>
+          <CustomLink href="/admin" $color={getLinkColor("/admin")}>
             <Calendar size={25} />
             {expanded && <>Agenda</>}
           </CustomLink>
-          <CustomLink href="/" $color={getLinkColor("/medico")}>
+          <CustomLink
+            href="/admin/medicos"
+            $color={getLinkColor("/admin/medicos")}
+          >
             <Stethoscope />
             {expanded && <>Médico</>}
           </CustomLink>
-          <CustomLink href="/" $color={getLinkColor("/paciente")}>
+          <CustomLink
+            href="/admin/pacientes"
+            $color={getLinkColor("/admin/pacientes")}
+          >
             <User2 />
             {expanded && <>Paciente</>}
           </CustomLink>
-          <CustomLink href="/" $color={getLinkColor("/plano")}>
+          <CustomLink
+            href="/admin/convenios"
+            $color={getLinkColor("/admin/convenios")}
+          >
             <ShieldPlus />
             {expanded && <>Convênio</>}
           </CustomLink>
