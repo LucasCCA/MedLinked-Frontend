@@ -38,11 +38,11 @@ export function Button({
           $hasLink={href != ""}
           {...props}
         >
-          {icon == "plus" && <Plus size={25} />}
-          {icon == "pen" && <Pen size={25} />}
-          {icon == "trash" && <Trash size={25} />}
-          {icon == "calendar" && <Calendar size={25} />}
           <CustomLink $color="white" href={href}>
+            {icon == "plus" && <Plus size={25} />}
+            {icon == "pen" && <Pen size={25} />}
+            {icon == "trash" && <Trash size={25} />}
+            {icon == "calendar" && <Calendar size={25} />}
             {children}
           </CustomLink>
         </StyledButton>

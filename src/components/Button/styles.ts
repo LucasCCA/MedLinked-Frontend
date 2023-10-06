@@ -25,6 +25,10 @@ export const StyledButton = styled.button<StyledButtonProps>`
     width: 100%;
     padding: 0.75rem 0;
     padding-left: 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
 
     &:hover {
       color: ${(props) => props.theme.colors.white};
