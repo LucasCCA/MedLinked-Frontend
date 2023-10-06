@@ -25,6 +25,7 @@ interface SelectProps extends HTMLAttributes<HTMLSelectElement> {
   errorMessage?: string;
   options: OptionData[];
   hasError?: boolean;
+  disabled?: boolean;
 }
 
 export function Select({
@@ -32,6 +33,7 @@ export function Select({
   errorMessage,
   options,
   hasError,
+  disabled,
   placeholder,
   ...props
 }: SelectProps) {
@@ -62,6 +64,7 @@ export function Select({
         $error={hasError}
         $openAnimation={openAnimation}
         $closeAnimation={closeAnimation}
+        $disabled={disabled}
         onClick={() => {
           if (!openAnimation) {
             setOpenAnimation(true);
