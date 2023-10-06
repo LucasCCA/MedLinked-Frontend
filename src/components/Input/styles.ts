@@ -4,11 +4,12 @@ type WidthProps = {
   $fullWidth?: boolean;
 };
 
-type ErrorProps = {
+type InputProps = {
   $error?: boolean;
+  $disabled?: boolean;
 };
 
-type InputContainerProps = WidthProps & ErrorProps;
+type InputContainerProps = WidthProps & InputProps;
 
 export const StyledInput = styled.input`
   border: none;
@@ -50,6 +51,18 @@ export const InputContainer = styled.div<InputContainerProps>`
 
       &:hover {
         border: 1px solid ${(props) => props.theme.colors.red_100};
+      }
+    `}
+
+  ${({ $disabled }) =>
+    $disabled &&
+    css`
+      background: ${(props) => props.theme.colors.gray_80};
+      pointer-events: none;
+
+      &:hover {
+        cursor: default;
+        background: ${(props) => props.theme.colors.gray_80};
       }
     `}
 `;
