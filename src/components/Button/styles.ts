@@ -3,14 +3,15 @@ import styled, { css } from "styled-components";
 type StyledButtonProps = {
   $color?: "red_80";
   $fullWidth?: boolean;
+  $hasLink?: boolean;
 };
 
 export const StyledButton = styled.button<StyledButtonProps>`
   border-radius: ${(props) => props.theme.border_radius};
   background: ${(props) => props.theme.colors.dark_blue_80};
   border: none;
-  padding: 0.75rem 0;
-  padding-left: 15px;
+  padding: ${(props) => (props.$hasLink ? 0 : "0.75rem 0")};
+  padding-left: ${(props) => (props.$hasLink ? 0 : "15px")};
   width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
   display: flex;
   justify-content: flex-start;
@@ -22,6 +23,8 @@ export const StyledButton = styled.button<StyledButtonProps>`
 
   > a {
     width: 100%;
+    padding: 0.75rem 0;
+    padding-left: 15px;
 
     &:hover {
       color: ${(props) => props.theme.colors.white};

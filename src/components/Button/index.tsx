@@ -32,7 +32,12 @@ export function Button({
         </StyledButton>
       )}
       {href && (
-        <StyledButton $color={color} $fullWidth={fullWidth} {...props}>
+        <StyledButton
+          $color={color}
+          $fullWidth={fullWidth}
+          {...props}
+          $hasLink={href != ""}
+        >
           {icon == "plus" && <Plus size={25} />}
           {icon == "pen" && <Pen size={25} />}
           {icon == "trash" && <Trash size={25} />}
