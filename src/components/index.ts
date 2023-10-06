@@ -6,4 +6,5 @@ export * from "./CustomText/CustomLink";
 export * from "./Header";
 export * from "./Input";
 export * from "./Navbar";
+export * from "./Pagination";
 export * from "./Select";
