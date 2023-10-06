@@ -35,8 +35,8 @@ export function Button({
         <StyledButton
           $color={color}
           $fullWidth={fullWidth}
-          {...props}
           $hasLink={href != ""}
+          {...props}
         >
           {icon == "plus" && <Plus size={25} />}
           {icon == "pen" && <Pen size={25} />}
