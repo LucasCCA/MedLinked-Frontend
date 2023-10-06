@@ -15,7 +15,6 @@ export const PaginationItemsContainer = styled.div`
 
 export const PaginationItemContainer = styled.div<PaginationStylesProps>`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0.15rem 0.5rem;

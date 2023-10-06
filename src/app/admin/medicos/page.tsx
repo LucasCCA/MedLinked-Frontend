@@ -5,7 +5,6 @@ import { useState } from "react";
 
 export default function Page() {
   const [pageNumber, setPageNumber] = useState(1);
-  console.log("pageNumber = " + pageNumber);
 
   function changePage(newPageNumber: number) {
     setPageNumber(newPageNumber);
