@@ -9,7 +9,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-br">
+    <>
       <head>
         <title>MedLinked - Agenda</title>
       </head>
@@ -21,6 +21,6 @@ export default function AdminLayout({
           </Header>
         </ContentContainer>
       </body>
-    </html>
+    </>
   );
 }

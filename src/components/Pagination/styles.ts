@@ -45,6 +45,11 @@ export const PaginationItemContainer = styled.div<PaginationStylesProps>`
     $selected &&
     css`
       background: ${(props) => props.theme.colors.blue_60};
+
+      > svg,
+      p {
+        color: ${(props) => props.theme.colors.white};
+      }
     `}
 
   ${({ $disabled }) =>
