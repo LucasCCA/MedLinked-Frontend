@@ -1,11 +1,11 @@
 "use client";
 
-import { Input } from "@medlinked/components";
+import { Select } from "@medlinked/components";
 
 export default function Page() {
   return (
     <>
-      <Input disabled />
+      <Select options={[]} disabled />
     </>
   );
 }

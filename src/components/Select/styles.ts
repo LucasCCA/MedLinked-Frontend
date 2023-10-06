@@ -5,8 +5,9 @@ type WidthProps = {
   $fullWidth?: boolean;
 };
 
-type ErrorProps = {
+type SelectProps = {
   $error?: boolean;
+  $disabled?: boolean;
 };
 
 type AnimationProps = {
@@ -18,7 +19,7 @@ type OptionProps = {
   $selected: boolean;
 };
 
-type SelectContainerProps = WidthProps & ErrorProps & AnimationProps;
+type SelectContainerProps = WidthProps & SelectProps & AnimationProps;
 
 type OptionsContainerProps = WidthProps & AnimationProps;
 
@@ -137,6 +138,18 @@ export const SelectContainer = styled.div<SelectContainerProps>`
       > svg {
         animation: ${closeChevron} 200ms;
         animation-fill-mode: forwards;
+      }
+    `}
+
+    ${({ $disabled }) =>
+    $disabled &&
+    css`
+      background: ${(props) => props.theme.colors.gray_80};
+      pointer-events: none;
+
+      &:hover {
+        cursor: default;
+        background: ${(props) => props.theme.colors.gray_80};
       }
     `}
 `;
