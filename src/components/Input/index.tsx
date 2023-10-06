@@ -24,11 +24,16 @@ export function Input({
   fullWidth,
   errorMessage,
   hasError,
+  disabled,
   ...props
 }: InputProps) {
   return (
     <>
-      <InputContainer $fullWidth={fullWidth} $error={hasError}>
+      <InputContainer
+        $fullWidth={fullWidth}
+        $error={hasError}
+        $disabled={disabled}
+      >
         {icon == "User2" && <User2 />}
         {icon == "Asterisk" && <Asterisk />}
         {icon == "Mail" && <Mail />}
