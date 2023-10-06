@@ -4,14 +4,12 @@ type WidthProps = {
   $fullWidth?: boolean;
 };
 
-type ErrorProps = {
+type InputProps = {
   $error?: boolean;
+  $disabled?: boolean;
 };
 
-type InputContainerProps = WidthProps &
-  ErrorProps & {
-    $disabled?: boolean;
-  };
+type InputContainerProps = WidthProps & InputProps;
 
 export const StyledInput = styled.input`
   border: none;
