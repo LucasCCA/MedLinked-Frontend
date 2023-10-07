@@ -8,6 +8,7 @@ import {
   Input,
   Pagination,
   Select,
+  Spinner,
 } from "@medlinked/components";
 import {
   EspecializacaoResponse,
@@ -30,6 +31,7 @@ const records = [
 
 export default function Page() {
   const [pageNumber, setPageNumber] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [medicos, setMedicos] = useState<MedicoResponse>([]);
   const [currentMedico, setCurrentMedico] = useState<Medico>();
   const [planosSaude, setPlanosSaude] = useState<PlanosSaudeResponse>([]);
@@ -38,20 +40,27 @@ export default function Page() {
 
   useEffect(() => {
     function getMedicos() {
-      return medlinked.get<MedicoResponse>("medico");
+      medlinked.get<MedicoResponse>("medico").then((response) => {
+        setMedicos(response.data);
+        setLoading(false);
+      });
     }
 
     function getEspecializacoes() {
-      return medlinked.get<EspecializacaoResponse>("especialidade");
+      medlinked
+        .get<EspecializacaoResponse>("especialidade")
+        .then((response) => setEspecializacoes(response.data));
     }
 
     function getPlanosSaude() {
-      return medlinked.get<PlanosSaudeResponse>("plano-saude");
+      medlinked
+        .get<PlanosSaudeResponse>("plano-saude")
+        .then((response) => setPlanosSaude(response.data));
     }
 
-    getMedicos().then((response) => setMedicos(response.data));
-    getEspecializacoes().then((response) => setEspecializacoes(response.data));
-    getPlanosSaude().then((response) => setPlanosSaude(response.data));
+    getMedicos();
+    getEspecializacoes();
+    getPlanosSaude();
   }, []);
 
   const especializacoesOptions = [];
@@ -122,6 +131,7 @@ export default function Page() {
         />
         <Input placeholder="Pesquise por nome" fullWidth />
       </FiltersContainer>
+      {loading && <Spinner />}
       {medicos.length > 0 && (
         <CardsContainer>
           {medicos.map((medico) => (
@@ -140,19 +150,21 @@ export default function Page() {
           ))}
         </CardsContainer>
       )}
-      <PaginationAndRecordsContainer>
-        <Select
-          options={records}
-          defaultSelected={records[0]}
-          fullWidth
-          readOnly
-        />
-        <Pagination
-          pageNumber={pageNumber}
-          changePage={changePage}
-          numberOfPages={15}
-        />
-      </PaginationAndRecordsContainer>
+      {!loading && (
+        <PaginationAndRecordsContainer>
+          <Select
+            options={records}
+            defaultSelected={records[0]}
+            fullWidth
+            readOnly
+          />
+          <Pagination
+            pageNumber={pageNumber}
+            changePage={changePage}
+            numberOfPages={15}
+          />
+        </PaginationAndRecordsContainer>
+      )}
     </>
   );
 }

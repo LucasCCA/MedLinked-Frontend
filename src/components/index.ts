@@ -8,3 +8,4 @@ export * from "./Input";
 export * from "./Navbar";
 export * from "./Pagination";
 export * from "./Select";
+export * from "./Spinner";
