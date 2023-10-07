@@ -6,6 +6,7 @@ import {
   Card,
   CustomText,
   Input,
+  NoResults,
   Pagination,
   Select,
   Spinner,
@@ -132,7 +133,7 @@ export default function Page() {
         <Input placeholder="Pesquise por nome" fullWidth />
       </FiltersContainer>
       {loading && <Spinner />}
-      {medicos.length > 0 && (
+      {medicos.length > 0 ? (
         <CardsContainer>
           {medicos.map((medico) => (
             <Card
@@ -149,6 +150,8 @@ export default function Page() {
             </Card>
           ))}
         </CardsContainer>
+      ) : (
+        !loading && <NoResults message={"Nenhum médico encontrado"} />
       )}
       {!loading && (
         <PaginationAndRecordsContainer>
