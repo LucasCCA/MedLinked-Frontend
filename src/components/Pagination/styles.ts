@@ -11,6 +11,7 @@ export const PaginationItemsContainer = styled.div`
   align-items: center;
   gap: 5px;
   width: fit-content;
+  flex-wrap: wrap;
 `;
 
 export const PaginationItemContainer = styled.div<PaginationStylesProps>`
