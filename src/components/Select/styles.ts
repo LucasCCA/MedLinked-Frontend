@@ -8,6 +8,7 @@ type WidthProps = {
 type SelectProps = {
   $error?: boolean;
   $disabled?: boolean;
+  $readOnly?: boolean;
 };
 
 type AnimationProps = {
@@ -33,6 +34,10 @@ export const StyledInput = styled.input`
 
   &::placeholder {
     color: ${(props) => props.theme.colors.black_60};
+  }
+
+  &:read-only:hover {
+    cursor: pointer;
   }
 `;
 
@@ -138,6 +143,14 @@ export const SelectContainer = styled.div<SelectContainerProps>`
       > svg {
         animation: ${closeChevron} 200ms;
         animation-fill-mode: forwards;
+      }
+    `}
+
+    ${({ $readOnly }) =>
+    $readOnly &&
+    css`
+      &:hover {
+        cursor: pointer;
       }
     `}
 
