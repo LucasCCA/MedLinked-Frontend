@@ -44,8 +44,8 @@ export function Select({
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<OptionData>(
-    defaultSelected ? defaultSelected : { label: "", value: "" },
+  const [selected, setSelected] = useState<OptionData | undefined>(
+    defaultSelected,
   );
   const ref = useDetectClickOutside({
     onTriggered: () => {
@@ -85,7 +85,7 @@ export function Select({
           value={selected ? selected.label : search}
           onChange={(e) => {
             setSearch(e.currentTarget.value);
-            setSelected({ label: "", value: "" });
+            setSelected(undefined);
           }}
           readOnly={readOnly}
           onClick={() => {

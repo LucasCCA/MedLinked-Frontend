@@ -46,6 +46,7 @@ export const PaginationAndRecordsContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  margin-bottom: 30px;
 
   > div:first-of-type {
     max-width: 100px;

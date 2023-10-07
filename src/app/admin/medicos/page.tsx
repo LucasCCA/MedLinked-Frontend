@@ -1,5 +1,6 @@
 "use client";
 
+import { medlinked } from "@medlinked/api";
 import {
   Button,
   Card,
@@ -8,7 +9,13 @@ import {
   Pagination,
   Select,
 } from "@medlinked/components";
-import { useState } from "react";
+import {
+  EspecializacaoResponse,
+  Medico,
+  MedicoResponse,
+  PlanosSaudeResponse,
+} from "@medlinked/types";
+import { useEffect, useState } from "react";
 import {
   CardsContainer,
   FiltersContainer,
@@ -23,6 +30,47 @@ const records = [
 
 export default function Page() {
   const [pageNumber, setPageNumber] = useState(1);
+  const [medicos, setMedicos] = useState<MedicoResponse>([]);
+  const [currentMedico, setCurrentMedico] = useState<Medico>();
+  const [planosSaude, setPlanosSaude] = useState<PlanosSaudeResponse>([]);
+  const [especializacoes, setEspecializacoes] =
+    useState<EspecializacaoResponse>([]);
+
+  useEffect(() => {
+    function getMedicos() {
+      return medlinked.get<MedicoResponse>("medico");
+    }
+
+    function getEspecializacoes() {
+      return medlinked.get<EspecializacaoResponse>("especialidade");
+    }
+
+    function getPlanosSaude() {
+      return medlinked.get<PlanosSaudeResponse>("plano-saude");
+    }
+
+    getMedicos().then((response) => setMedicos(response.data));
+    getEspecializacoes().then((response) => setEspecializacoes(response.data));
+    getPlanosSaude().then((response) => setPlanosSaude(response.data));
+  }, []);
+
+  const especializacoesOptions = [];
+
+  for (let i = 0; i < especializacoes.length; i++) {
+    especializacoesOptions.push({
+      label: especializacoes[i].descricao,
+      value: especializacoes[i].idEspecialidade.toString(),
+    });
+  }
+
+  const planosSaudeOptions = [];
+
+  for (let i = 0; i < planosSaude.length; i++) {
+    planosSaudeOptions.push({
+      label: planosSaude[i].descricao,
+      value: planosSaude[i].idPlanoSaude.toString(),
+    });
+  }
 
   function changePage(number: number) {
     setPageNumber(number);
@@ -34,17 +82,27 @@ export default function Page() {
         <Button icon="plus" fullWidth>
           Médico
         </Button>
-        <Button icon="pen" href="/admin/medicos/medico" fullWidth disabled>
+        <Button
+          icon="pen"
+          href={`/admin/medicos/medico/${currentMedico?.idMedico}`}
+          fullWidth
+          disabled={currentMedico == null}
+        >
           Visualizar / Editar
         </Button>
-        <Button icon="trash" color="red_80" fullWidth disabled>
+        <Button
+          icon="trash"
+          color="red_80"
+          fullWidth
+          disabled={currentMedico == null}
+        >
           Deletar
         </Button>
         <Button
           icon="calendar"
-          href="/admin/medicos/agendamento"
+          href={`/admin/medicos/agendamento/${currentMedico?.idMedico}`}
           fullWidth
-          disabled
+          disabled={currentMedico == null}
         >
           Agendamentos
         </Button>
@@ -52,28 +110,36 @@ export default function Page() {
       <FiltersContainer>
         <Select
           placeholder="Pesquise por especialização"
-          options={[]}
+          options={especializacoesOptions}
           fullWidth
+          disabled={especializacoes.length < 1}
         />
-        <Select placeholder="Pesquise por convênio" options={[]} fullWidth />
+        <Select
+          placeholder="Pesquise por convênio"
+          options={planosSaudeOptions}
+          fullWidth
+          disabled={planosSaude.length < 1}
+        />
         <Input placeholder="Pesquise por nome" fullWidth />
       </FiltersContainer>
-      <CardsContainer>
-        <Card $selectable>
-          <CustomText $size="h2">Dr. Fulano</CustomText>
-          <CustomText $size="h3">CRM: PR-36730</CustomText>
-          <CustomText $size="h3">
-            Especialidades: Oftalmologista, Pediatra
-          </CustomText>
-        </Card>
-        <Card $selectable>
-          <CustomText $size="h2">Dr. Fulano</CustomText>
-          <CustomText $size="h3">CRM: PR-36730</CustomText>
-          <CustomText $size="h3">
-            Especialidades: Oftalmologista, Pediatra
-          </CustomText>
-        </Card>
-      </CardsContainer>
+      {medicos.length > 0 && (
+        <CardsContainer>
+          {medicos.map((medico) => (
+            <Card
+              $selectable
+              key={medico.idMedico}
+              onClick={() => setCurrentMedico(medico)}
+              $selected={currentMedico?.idMedico == medico.idMedico}
+            >
+              <CustomText $size="h2">{medico.pessoa.nome}</CustomText>
+              <CustomText $size="h3">CRM: PR-36730</CustomText>
+              <CustomText $size="h3">
+                Especialidades: Oftalmologista, Pediatra
+              </CustomText>
+            </Card>
+          ))}
+        </CardsContainer>
+      )}
       <PaginationAndRecordsContainer>
         <Select
           options={records}
