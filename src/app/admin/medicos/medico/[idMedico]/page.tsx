@@ -1,21 +1,31 @@
 "use client";
 
-import { Breadcrumb } from "@medlinked/components";
+import { Tabs } from "@medlinked/components";
 import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const items = [
   {
-    label: "Médicos",
-    href: "/admin/medicos",
+    id: 1,
+    label: "Informações",
   },
   {
-    label: "Cadastro",
-    href: "",
+    id: 2,
+    label: "Convênios",
   },
 ];
 
 export default function Page() {
   const params = useParams();
+  const [currentItem, setCurrentItem] = useState(1);
 
-  return <Breadcrumb items={items} />;
+  return (
+    <>
+      <Tabs
+        items={items}
+        currentItemId={currentItem}
+        changeCurrentItemId={setCurrentItem}
+      />
+    </>
+  );
 }

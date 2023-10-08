@@ -11,3 +11,4 @@ export * from "./NoResults";
 export * from "./Pagination";
 export * from "./Select";
 export * from "./Spinner";
+export * from "./Tabs";
