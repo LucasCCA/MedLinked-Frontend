@@ -13,9 +13,15 @@ type TabsProps = {
   items: ItemProps[];
   currentItemId: number;
   changeCurrentItemId: Dispatch<SetStateAction<number>>;
+  disabledItemsIds?: number[];
 };
 
-export function Tabs({ items, currentItemId, changeCurrentItemId }: TabsProps) {
+export function Tabs({
+  items,
+  currentItemId,
+  changeCurrentItemId,
+  disabledItemsIds,
+}: TabsProps) {
   return (
     <TabsItemsContainer>
       {items.map((item, index) => (
@@ -24,6 +30,7 @@ export function Tabs({ items, currentItemId, changeCurrentItemId }: TabsProps) {
           $firstItem={index == 0}
           $lastItem={index == items.length - 1}
           $selected={currentItemId == item.id}
+          $disabled={disabledItemsIds?.includes(item.id)}
           onClick={() => changeCurrentItemId(item.id)}
         >
           <CustomText $size="h3">{item.label}</CustomText>
