@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
+import { Fragment } from "react";
 import { CustomLink, CustomText } from "..";
 import { BreadcrumbItemsContainer } from "./styles";
 
@@ -21,12 +22,12 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
       </CustomLink>
       {items.map((item, index) =>
         index != items.length - 1 ? (
-          <>
-            <CustomLink key={index} href={item.href} $color="black_60">
+          <Fragment key={index}>
+            <CustomLink href={item.href} $color="black_60">
               {item.label}
             </CustomLink>
             <CustomText>/</CustomText>
-          </>
+          </Fragment>
         ) : (
           <CustomText key={index}>{item.label}</CustomText>
         ),
