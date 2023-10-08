@@ -3,6 +3,8 @@
 import { GlobalStyle, theme } from "@medlinked/config";
 import { StyledComponentsRegistry } from "@medlinked/lib";
 import { Roboto } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "styled-components";
 
 const roboto = Roboto({
@@ -27,6 +29,7 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
+            <ToastContainer />
             {children}
           </ThemeProvider>
         </StyledComponentsRegistry>
