@@ -8,6 +8,7 @@ type WidthProps = {
 type SelectProps = {
   $error?: boolean;
   $disabled?: boolean;
+  $readOnly?: boolean;
 };
 
 type AnimationProps = {
@@ -33,6 +34,10 @@ export const StyledInput = styled.input`
 
   &::placeholder {
     color: ${(props) => props.theme.colors.black_60};
+  }
+
+  &:read-only:hover {
+    cursor: pointer;
   }
 `;
 
@@ -141,6 +146,14 @@ export const SelectContainer = styled.div<SelectContainerProps>`
       }
     `}
 
+    ${({ $readOnly }) =>
+    $readOnly &&
+    css`
+      &:hover {
+        cursor: pointer;
+      }
+    `}
+
     ${({ $disabled }) =>
     $disabled &&
     css`
@@ -185,6 +198,7 @@ export const OptionsContainer = styled.div<OptionsContainerProps>`
   -webkit-box-shadow: 0 2px 6px ${(props) => props.theme.colors.blue_60};
   box-shadow: 0 2px 6px ${(props) => props.theme.colors.blue_60};
   overflow-y: scroll;
+  user-select: none;
 
   &::-webkit-scrollbar {
     width: 5px;

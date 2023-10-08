@@ -22,6 +22,17 @@ export const StyledInput = styled.input`
   &::placeholder {
     color: ${(props) => props.theme.colors.black_60};
   }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
 `;
 
 export const InputContainer = styled.div<InputContainerProps>`

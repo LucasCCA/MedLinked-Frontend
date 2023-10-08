@@ -26,6 +26,8 @@ interface SelectProps extends HTMLAttributes<HTMLSelectElement> {
   options: OptionData[];
   hasError?: boolean;
   disabled?: boolean;
+  defaultSelected?: OptionData;
+  readOnly?: boolean;
 }
 
 export function Select({
@@ -34,13 +36,17 @@ export function Select({
   options,
   hasError,
   disabled,
+  defaultSelected,
+  readOnly,
   placeholder,
   ...props
 }: SelectProps) {
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<OptionData>();
+  const [selected, setSelected] = useState<OptionData | undefined>(
+    defaultSelected,
+  );
   const ref = useDetectClickOutside({
     onTriggered: () => {
       if (openAnimation) {
@@ -52,7 +58,7 @@ export function Select({
 
   return (
     <>
-      <StyledSelect {...props} value={selected?.value}>
+      <StyledSelect {...props} defaultValue={selected?.value}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -65,6 +71,7 @@ export function Select({
         $openAnimation={openAnimation}
         $closeAnimation={closeAnimation}
         $disabled={disabled}
+        $readOnly={readOnly}
         onClick={() => {
           if (!openAnimation) {
             setOpenAnimation(true);
@@ -79,6 +86,13 @@ export function Select({
           onChange={(e) => {
             setSearch(e.currentTarget.value);
             setSelected(undefined);
+          }}
+          readOnly={readOnly}
+          onClick={() => {
+            if (readOnly && openAnimation) {
+              setOpenAnimation(false);
+              setCloseAnimation(true);
+            }
           }}
         />
         <ChevronDown

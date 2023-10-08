@@ -1,3 +1,4 @@
+export * from "./Breadcrumb";
 export * from "./Button";
 export * from "./Card";
 export * from "./Container";
@@ -6,5 +7,9 @@ export * from "./CustomText/CustomLink";
 export * from "./Header";
 export * from "./Input";
 export * from "./Navbar";
+export * from "./NoResults";
 export * from "./Pagination";
 export * from "./Select";
+export * from "./Spacing";
+export * from "./Spinner";
+export * from "./Tabs";
