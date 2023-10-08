@@ -4,6 +4,7 @@ type TabItemContainerProps = {
   $selected?: boolean;
   $firstItem?: boolean;
   $lastItem?: boolean;
+  $disabled?: boolean;
 };
 
 export const TabsItemsContainer = styled.div`
@@ -26,7 +27,7 @@ export const TabItemContainer = styled.div<TabItemContainerProps>`
     border: 1px solid ${(props) => props.theme.colors.blue_100};
 
     > p {
-      color: ${(props) => props.theme.colors.blue_100};
+      color: ${(props) => props.theme.colors.blue_80};
     }
   }
 
@@ -52,5 +53,12 @@ export const TabItemContainer = styled.div<TabItemContainerProps>`
     css`
       border-radius: 0 ${(props) => props.theme.border_radius}
         ${(props) => props.theme.border_radius} 0;
+    `}
+
+    ${({ $disabled }) =>
+    $disabled &&
+    css`
+      pointer-events: none;
+      background: ${(props) => props.theme.colors.gray_80};
     `}
 `;

@@ -40,6 +40,7 @@ export default function Page() {
           items={tabsItems}
           currentItemId={currentItem}
           changeCurrentItemId={setCurrentItem}
+          disabledItemsIds={[2]}
         />
       </Spacing>
     </>
