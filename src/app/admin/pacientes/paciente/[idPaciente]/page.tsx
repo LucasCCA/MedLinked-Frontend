@@ -10,11 +10,21 @@ import {
   Spacing,
   Tabs,
 } from "@medlinked/components";
-import { cpfMask, crmMask, phoneNumberMask } from "@medlinked/utils";
+import {
+  cepMask,
+  cpfMask,
+  onlyNumbers,
+  phoneNumberMask,
+} from "@medlinked/utils";
 import { Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { CPFContainer, CardContentContainer, FieldsContainer } from "./styles";
+import {
+  CardContentContainer,
+  FieldsContainer,
+  HealthInsuranceInfoContainer,
+  SingleFieldContainer,
+} from "./styles";
 
 const tabsItems = [
   {
@@ -29,8 +39,8 @@ const tabsItems = [
 
 const breadcrumbItems = [
   {
-    label: "Médico",
-    href: "/admin/medicos",
+    label: "Paciente",
+    href: "/admin/pacientes",
   },
   {
     label: "Cadastro",
@@ -45,7 +55,9 @@ export default function Page() {
   const [currentInfoStep, setCurrentInfoStep] = useState(1);
   const [cpf, setCpf] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [crm, setCrm] = useState("");
+  const [cep, setCep] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [healthInsuranceNumber, setHealthInsuranceNumber] = useState("");
 
   return (
     <>
@@ -66,7 +78,7 @@ export default function Page() {
             <CustomText $size="h2">Dados Pessoais</CustomText>
           </Spacing>
           <Spacing>
-            <CPFContainer>
+            <SingleFieldContainer>
               <Input
                 placeholder="Digite o CPF *"
                 fullWidth
@@ -74,7 +86,7 @@ export default function Page() {
                 value={cpf}
                 onChange={(e) => setCpf(cpfMask(e.currentTarget.value))}
               />
-            </CPFContainer>
+            </SingleFieldContainer>
             <FieldsContainer>
               <Input placeholder="Digite o nome *" fullWidth maxLength={120} />
               <Input placeholder="Digite o email *" fullWidth maxLength={120} />
@@ -109,55 +121,44 @@ export default function Page() {
         currentItem == 1 && (
           <>
             <Spacing>
-              <CustomText $size="h2">Dados do Médico</CustomText>
+              <CustomText $size="h2">Endereco</CustomText>
             </Spacing>
             <Spacing>
-              <FieldsContainer>
-                <Select
-                  placeholder="Escolha o estado do CRM *"
-                  fullWidth
-                  options={[]}
-                />
+              <SingleFieldContainer>
                 <Input
-                  placeholder="Digite o número do CRM *"
+                  placeholder="Digite o CEP *"
                   fullWidth
-                  value={crm}
-                  onChange={(e) => setCrm(crmMask(e.currentTarget.value))}
+                  maxLength={11}
+                  value={cep}
+                  onChange={(e) => setCep(cepMask(e.currentTarget.value))}
                 />
-              </FieldsContainer>
-            </Spacing>
-            <Spacing>
-              <CustomText $size="h2">Especializações</CustomText>
-            </Spacing>
-            <Spacing>
+              </SingleFieldContainer>
               <FieldsContainer>
                 <Select
-                  placeholder="Escolha uma especialização *"
+                  placeholder="Escolha o estado *"
                   fullWidth
                   options={[]}
                 />
+                <Select
+                  placeholder="Escolha a cidade *"
+                  fullWidth
+                  options={[]}
+                />
+                <Input placeholder="Digite o logradouro *" fullWidth />
+                <Input placeholder="Digite o bairro *" fullWidth />
+                <Input
+                  placeholder="Digite o número *"
+                  fullWidth
+                  value={houseNumber}
+                  onChange={(e) =>
+                    setHouseNumber(onlyNumbers(e.currentTarget.value))
+                  }
+                />
+                <Input placeholder="Digite o complemento" fullWidth />
               </FieldsContainer>
             </Spacing>
             <Spacing>
               <CustomText $weight={500}>* Campo Obrigatório</CustomText>
-            </Spacing>
-            <Spacing>
-              <FieldsContainer>
-                <Button textAlign="center" fullWidth>
-                  Vincular especialização
-                </Button>
-              </FieldsContainer>
-            </Spacing>
-            <Spacing>
-              <CustomText $size="h2">Especializações Vinculadas</CustomText>
-            </Spacing>
-            <Spacing>
-              <Card>
-                <CardContentContainer>
-                  <CustomText $size="h2">Especialização X</CustomText>
-                  <Trash />
-                </CardContentContainer>
-              </Card>
             </Spacing>
             <Spacing>
               <FieldsContainer>
@@ -192,6 +193,19 @@ export default function Page() {
                 fullWidth
                 options={[]}
               />
+              <Select
+                placeholder="Escolha o tipo de convênio *"
+                fullWidth
+                options={[]}
+              />
+              <Input
+                placeholder="Digite o número da carteirinha *"
+                fullWidth
+                value={healthInsuranceNumber}
+                onChange={(e) =>
+                  setHealthInsuranceNumber(onlyNumbers(e.currentTarget.value))
+                }
+              />
             </FieldsContainer>
           </Spacing>
           <Spacing>
@@ -210,7 +224,11 @@ export default function Page() {
           <Spacing>
             <Card>
               <CardContentContainer>
-                <CustomText $size="h2">Convênio X</CustomText>
+                <HealthInsuranceInfoContainer>
+                  <CustomText $size="h2">Convênio X</CustomText>
+                  <CustomText $size="h3">Tipo: Tipo Y</CustomText>
+                  <CustomText $size="h3">Carteirinha: 12345</CustomText>
+                </HealthInsuranceInfoContainer>
                 <Trash />
               </CardContentContainer>
             </Card>

@@ -1,7 +1,7 @@
 import { breakpoints } from "@medlinked/config";
 import styled from "styled-components";
 
-export const CPFContainer = styled.div`
+export const SingleFieldContainer = styled.div`
   width: 100%;
   margin-bottom: 10px;
 
@@ -39,4 +39,11 @@ export const CardContentContainer = styled.div`
       color: ${(props) => props.theme.colors.red_100};
     }
   }
+`;
+
+export const HealthInsuranceInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
 `;
