@@ -9,6 +9,7 @@ import {
   NoResults,
   Pagination,
   Select,
+  Spacing,
   Spinner,
 } from "@medlinked/components";
 import {
@@ -97,68 +98,74 @@ export default function Page() {
 
   return (
     <>
-      <FiltersContainer>
-        <Button icon="plus" href="/admin/medicos/medico" fullWidth>
-          Médico
-        </Button>
-        <Button
-          icon="pen"
-          href={`/admin/medicos/medico/${currentMedico?.idMedico}`}
-          fullWidth
-          disabled={currentMedico == null}
-        >
-          Visualizar / Editar
-        </Button>
-        <Button
-          icon="trash"
-          color="red_80"
-          fullWidth
-          disabled={currentMedico == null}
-        >
-          Deletar
-        </Button>
-        <Button
-          icon="calendar"
-          href={`/admin/medicos/agendamento/${currentMedico?.idMedico}`}
-          fullWidth
-          disabled={currentMedico == null}
-        >
-          Agendamentos
-        </Button>
-      </FiltersContainer>
-      <FiltersContainer>
-        <Select
-          placeholder="Pesquise por especialização"
-          options={especializacoesOptions}
-          fullWidth
-          disabled={loading}
-        />
-        <Select
-          placeholder="Pesquise por convênio"
-          options={planosSaudeOptions}
-          fullWidth
-          disabled={loading}
-        />
-        <Input placeholder="Pesquise por nome" fullWidth disabled={loading} />
-      </FiltersContainer>
+      <Spacing>
+        <FiltersContainer>
+          <Button icon="plus" href="/admin/medicos/medico/0" fullWidth>
+            Médico
+          </Button>
+          <Button
+            icon="pen"
+            href={`/admin/medicos/medico/${currentMedico?.idMedico}`}
+            fullWidth
+            disabled={currentMedico == null}
+          >
+            Visualizar / Editar
+          </Button>
+          <Button
+            icon="trash"
+            color="red_80"
+            fullWidth
+            disabled={currentMedico == null}
+          >
+            Deletar
+          </Button>
+          <Button
+            icon="calendar"
+            href={`/admin/medicos/agendamento/${currentMedico?.idMedico}`}
+            fullWidth
+            disabled={currentMedico == null}
+          >
+            Agendamentos
+          </Button>
+        </FiltersContainer>
+      </Spacing>
+      <Spacing>
+        <FiltersContainer>
+          <Select
+            placeholder="Pesquise por especialização"
+            options={especializacoesOptions}
+            fullWidth
+            disabled={loading}
+          />
+          <Select
+            placeholder="Pesquise por convênio"
+            options={planosSaudeOptions}
+            fullWidth
+            disabled={loading}
+          />
+          <Input placeholder="Pesquise por nome" fullWidth disabled={loading} />
+        </FiltersContainer>
+      </Spacing>
       {loading && <Spinner />}
       {medicos.length > 0 ? (
-        <CardsContainer>
-          {medicos.map((medico) => (
-            <Card
-              $selectable
-              key={medico.idMedico}
-              onClick={() => setCurrentMedico(medico)}
-              $selected={currentMedico?.idMedico == medico.idMedico}
-            >
-              <CustomText $size="h2">{medico.pessoa.nome}</CustomText>
-              <CustomText $size="h3">CRM: PR-36730</CustomText>
-              <CustomText $size="h3">
-                Especialidades: Oftalmologista, Pediatra
-              </CustomText>
-            </Card>
-          ))}
-        </CardsContainer>
+        <Spacing>
+          <CardsContainer>
+            {medicos.map((medico) => (
+              <Card
+                $selectable
+                key={medico.idMedico}
+                onClick={() => setCurrentMedico(medico)}
+                $selected={currentMedico?.idMedico == medico.idMedico}
+              >
+                <CustomText $size="h2">{medico.pessoa.nome}</CustomText>
+                <CustomText $size="h3">CRM: PR-36730</CustomText>
+                <CustomText $size="h3">
+                  Especialidades: Oftalmologista, Pediatra
+                </CustomText>
+              </Card>
+            ))}
+          </CardsContainer>
+        </Spacing>
       ) : (
         !loading && <NoResults message={"Nenhum médico encontrado"} />
       )}
