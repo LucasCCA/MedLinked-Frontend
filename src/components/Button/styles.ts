@@ -20,6 +20,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   gap: 5px;
   color: ${(props) => props.theme.colors.white};
   font-family: inherit;
+  user-select: none;
 
   > a {
     width: 100%;

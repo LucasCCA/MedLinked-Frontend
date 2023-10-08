@@ -198,6 +198,7 @@ export const OptionsContainer = styled.div<OptionsContainerProps>`
   -webkit-box-shadow: 0 2px 6px ${(props) => props.theme.colors.blue_60};
   box-shadow: 0 2px 6px ${(props) => props.theme.colors.blue_60};
   overflow-y: scroll;
+  user-select: none;
 
   &::-webkit-scrollbar {
     width: 5px;
