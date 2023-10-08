@@ -26,10 +26,10 @@ export default function RootLayout({
         <link rel="icon" type="image/x-icon" href="/images/icon.png" />
       </head>
       <body>
+        <ToastContainer />
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <ToastContainer />
             {children}
           </ThemeProvider>
         </StyledComponentsRegistry>

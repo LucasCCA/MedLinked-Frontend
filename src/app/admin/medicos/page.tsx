@@ -119,14 +119,14 @@ export default function Page() {
           >
             Deletar
           </Button>
-          <Button
+          {/* <Button
             icon="calendar"
             href={`/admin/medicos/agendamento/${currentMedico?.idMedico}`}
             fullWidth
             disabled={currentMedico == null}
           >
             Agendamentos
-          </Button>
+          </Button> */}
         </FiltersContainer>
       </Spacing>
       <Spacing>

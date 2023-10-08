@@ -24,3 +24,19 @@ export const FieldsContainer = styled.div`
     justify-content: flex-start;
   }
 `;
+
+export const SpecializationCardContentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  > svg {
+    color: ${(props) => props.theme.colors.red_80};
+
+    &:hover {
+      cursor: pointer;
+      color: ${(props) => props.theme.colors.red_100};
+    }
+  }
+`;
