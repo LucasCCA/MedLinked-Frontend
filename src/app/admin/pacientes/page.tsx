@@ -33,6 +33,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [pacientes, setPacientes] = useState<PacienteResponse>([]);
   const [currentPaciente, setCurrentPaciente] = useState<Paciente>();
+  const [cpf, setCpf] = useState("");
 
   function changePage(number: number) {
     setPageNumber(number);
@@ -94,8 +95,19 @@ export default function Page() {
       </Spacing>
       <Spacing>
         <FiltersContainer>
-          <Input placeholder="Pesquise por nome" fullWidth disabled={loading} />
-          <Input placeholder="Pesquise por CPF" fullWidth disabled={loading} />
+          <Input
+            placeholder="Pesquise por nome"
+            fullWidth
+            disabled={loading}
+            maxLength={120}
+          />
+          <Input
+            placeholder="Digite o CPF *"
+            fullWidth
+            maxLength={14}
+            value={cpf}
+            onChange={(e) => setCpf(cpfMask(e.currentTarget.value))}
+          />
         </FiltersContainer>
       </Spacing>
       {loading && <Spinner />}
