@@ -98,7 +98,7 @@ export default function Page() {
   return (
     <>
       <FiltersContainer>
-        <Button icon="plus" fullWidth>
+        <Button icon="plus" href="/admin/medicos/medico" fullWidth>
           Médico
         </Button>
         <Button
@@ -131,19 +131,15 @@ export default function Page() {
           placeholder="Pesquise por especialização"
           options={especializacoesOptions}
           fullWidth
-          disabled={especializacoes.length < 1}
+          disabled={loading}
         />
         <Select
           placeholder="Pesquise por convênio"
           options={planosSaudeOptions}
           fullWidth
-          disabled={planosSaude.length < 1}
+          disabled={loading}
         />
-        <Input
-          placeholder="Pesquise por nome"
-          fullWidth
-          disabled={medicos.length < 1}
-        />
+        <Input placeholder="Pesquise por nome" fullWidth disabled={loading} />
       </FiltersContainer>
       {loading && <Spinner />}
       {medicos.length > 0 ? (

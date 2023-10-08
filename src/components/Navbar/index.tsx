@@ -27,7 +27,11 @@ export function Navbar() {
   });
 
   function getLinkColor(url: string) {
-    if (pathname != url) return "black_80";
+    if (
+      (url == "/admin" && pathname != url) ||
+      !pathname.toLowerCase().includes(url.toLowerCase())
+    )
+      return "black_80";
   }
 
   return (
@@ -60,23 +64,20 @@ export function Navbar() {
             <Calendar size={25} />
             {expanded && <>Agenda</>}
           </CustomLink>
-          <CustomLink
-            href="/admin/medicos"
-            $color={getLinkColor("/admin/medicos")}
-          >
+          <CustomLink href="/admin/medicos" $color={getLinkColor("/medicos")}>
             <Stethoscope />
             {expanded && <>Médico</>}
           </CustomLink>
           <CustomLink
             href="/admin/pacientes"
-            $color={getLinkColor("/admin/pacientes")}
+            $color={getLinkColor("/pacientes")}
           >
             <User2 />
             {expanded && <>Paciente</>}
           </CustomLink>
           <CustomLink
             href="/admin/convenios"
-            $color={getLinkColor("/admin/convenios")}
+            $color={getLinkColor("/convenios")}
           >
             <ShieldPlus />
             {expanded && <>Convênio</>}
