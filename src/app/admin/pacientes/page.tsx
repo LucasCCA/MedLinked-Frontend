@@ -107,6 +107,7 @@ export default function Page() {
             maxLength={14}
             value={cpf}
             onChange={(e) => setCpf(cpfMask(e.currentTarget.value))}
+            disabled={loading}
           />
         </FiltersContainer>
       </Spacing>
