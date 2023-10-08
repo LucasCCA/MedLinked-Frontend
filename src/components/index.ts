@@ -10,5 +10,6 @@ export * from "./Navbar";
 export * from "./NoResults";
 export * from "./Pagination";
 export * from "./Select";
+export * from "./Spacing";
 export * from "./Spinner";
 export * from "./Tabs";

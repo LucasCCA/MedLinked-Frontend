@@ -1,10 +1,10 @@
 "use client";
 
-import { Tabs } from "@medlinked/components";
+import { Breadcrumb, Spacing, Tabs } from "@medlinked/components";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-const items = [
+const tabsItems = [
   {
     id: 1,
     label: "Informações",
@@ -15,17 +15,33 @@ const items = [
   },
 ];
 
+const breadcrumbItems = [
+  {
+    label: "Médico",
+    href: "/admin/medicos",
+  },
+  {
+    label: "Cadastro",
+    href: "",
+  },
+];
+
 export default function Page() {
   const params = useParams();
   const [currentItem, setCurrentItem] = useState(1);
 
   return (
     <>
-      <Tabs
-        items={items}
-        currentItemId={currentItem}
-        changeCurrentItemId={setCurrentItem}
-      />
+      <Spacing>
+        <Breadcrumb items={breadcrumbItems} />
+      </Spacing>
+      <Spacing>
+        <Tabs
+          items={tabsItems}
+          currentItemId={currentItem}
+          changeCurrentItemId={setCurrentItem}
+        />
+      </Spacing>
     </>
   );
 }

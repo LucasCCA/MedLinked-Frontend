@@ -7,7 +7,6 @@ export const FiltersContainer = styled.section`
   align-items: center;
   justify-content: flex-start;
   gap: 15px;
-  margin-bottom: 1rem;
 
   @media ${breakpoints.md} {
     display: grid;
@@ -33,7 +32,6 @@ export const CardsContainer = styled.div`
   flex-direction: column;
   width: 100%;
   gap: 10px;
-  margin-bottom: 15px;
 
   > div {
     gap: 5px;
