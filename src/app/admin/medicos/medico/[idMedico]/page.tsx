@@ -1,8 +1,16 @@
 "use client";
 
-import { Breadcrumb, Spacing, Tabs } from "@medlinked/components";
+import {
+  Breadcrumb,
+  Button,
+  CustomText,
+  Input,
+  Spacing,
+  Tabs,
+} from "@medlinked/components";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { CPFContainer, FieldsContainer } from "./styles";
 
 const tabsItems = [
   {
@@ -42,6 +50,29 @@ export default function Page() {
           changeCurrentItemId={setCurrentItem}
           disabledItemsIds={[2]}
         />
+      </Spacing>
+      <Spacing>
+        <CustomText $size="h2">Dados Pessoais</CustomText>
+      </Spacing>
+      <Spacing>
+        <CPFContainer>
+          <Input placeholder="Digite o CPF *" fullWidth />
+        </CPFContainer>
+        <FieldsContainer>
+          <Input placeholder="Digite o nome *" fullWidth />
+          <Input placeholder="Digite o email *" fullWidth />
+          <Input placeholder="Digite o celular" fullWidth />
+        </FieldsContainer>
+      </Spacing>
+      <Spacing>
+        <CustomText $weight={500}>* Campo Obrigatório</CustomText>
+      </Spacing>
+      <Spacing>
+        <FieldsContainer>
+          <Button textAlign="center" fullWidth>
+            Próximo
+          </Button>
+        </FieldsContainer>
       </Spacing>
     </>
   );

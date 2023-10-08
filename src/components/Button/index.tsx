@@ -10,6 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "red_80";
   icon?: "plus" | "pen" | "trash" | "calendar";
   fullWidth?: boolean;
+  textAlign?: "center";
 }
 
 export function Button({
@@ -18,12 +19,18 @@ export function Button({
   color,
   icon,
   fullWidth,
+  textAlign,
   ...props
 }: ButtonProps) {
   return (
     <>
       {!href && (
-        <StyledButton $color={color} $fullWidth={fullWidth} {...props}>
+        <StyledButton
+          $color={color}
+          $fullWidth={fullWidth}
+          $textAlign={textAlign}
+          {...props}
+        >
           {icon == "plus" && <Plus size={25} />}
           {icon == "pen" && <Pen size={25} />}
           {icon == "trash" && <Trash size={25} />}
@@ -36,6 +43,7 @@ export function Button({
           $color={color}
           $fullWidth={fullWidth}
           $hasLink={href != ""}
+          $textAlign={textAlign}
           {...props}
         >
           <CustomLink $color="white" href={href}>

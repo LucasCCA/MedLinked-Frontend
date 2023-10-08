@@ -4,6 +4,7 @@ type StyledButtonProps = {
   $color?: "red_80";
   $fullWidth?: boolean;
   $hasLink?: boolean;
+  $textAlign?: "center";
 };
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -14,7 +15,8 @@ export const StyledButton = styled.button<StyledButtonProps>`
   padding-left: ${(props) => (props.$hasLink ? 0 : "15px")};
   width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
   display: flex;
-  justify-content: flex-start;
+  justify-content: ${(props) =>
+    props.$textAlign == "center" ? "center" : "flex-start"};
   align-items: center;
   text-align: left;
   gap: 5px;
