@@ -143,7 +143,12 @@ export default function Page() {
             fullWidth
             disabled={loading}
           />
-          <Input placeholder="Pesquise por nome" fullWidth disabled={loading} />
+          <Input
+            placeholder="Pesquise por nome"
+            fullWidth
+            disabled={loading}
+            maxLength={120}
+          />
         </FiltersContainer>
       </Spacing>
       {loading && <Spinner />}
