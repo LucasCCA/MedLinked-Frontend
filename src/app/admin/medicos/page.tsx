@@ -18,6 +18,7 @@ import {
   PlanosSaudeResponse,
 } from "@medlinked/types";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import {
   CardsContainer,
   FiltersContainer,
@@ -41,10 +42,18 @@ export default function Page() {
 
   useEffect(() => {
     function getMedicos() {
-      medlinked.get<MedicoResponse>("medico").then((response) => {
-        setMedicos(response.data);
-        setLoading(false);
-      });
+      medlinked
+        .get<MedicoResponse>("medico")
+        .then((response) => {
+          setMedicos(response.data);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+          toast.error(
+            "Ocorreu um erro ao buscar médicos. Tente novamente mais tarde.",
+          );
+        });
     }
 
     function getEspecializacoes() {
@@ -130,7 +139,11 @@ export default function Page() {
           fullWidth
           disabled={planosSaude.length < 1}
         />
-        <Input placeholder="Pesquise por nome" fullWidth />
+        <Input
+          placeholder="Pesquise por nome"
+          fullWidth
+          disabled={medicos.length < 1}
+        />
       </FiltersContainer>
       {loading && <Spinner />}
       {medicos.length > 0 ? (
