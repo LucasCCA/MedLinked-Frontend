@@ -20,8 +20,8 @@ const spin = keyframes`
 `;
 
 export const SpinnerStyles = styled.div`
-  border: 10px solid ${(props) => props.theme.colors.gray_60};
-  border-top: 10px solid ${(props) => props.theme.colors.blue_100};
+  border: 8px solid ${(props) => props.theme.colors.gray_60};
+  border-top: 8px solid ${(props) => props.theme.colors.blue_100};
   border-radius: 50%;
   width: 80px;
   height: 80px;
