@@ -1,1 +1,1 @@
-export * from "./mascara";
+export * from "./mascaras";
