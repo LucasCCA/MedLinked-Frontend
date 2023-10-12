@@ -15,7 +15,7 @@ import {
   LogoContainer,
   PageContentContainer,
   WhiteContainer,
-} from "./styles";
+} from "../styles";
 
 export default function Page() {
   return (
@@ -41,9 +41,33 @@ export default function Page() {
         <Container>
           <WhiteContainer>
             <CustomText $size="h2" $align="center">
-              Login
+              Cadastro
             </CustomText>
             <FormContainer>
+              <Input
+                icon="User2"
+                placeholder="Digite seu nome *"
+                fullWidth
+                type="text"
+              />
+              <Input
+                icon="Asterisk"
+                placeholder="Digite seu CPF *"
+                fullWidth
+                type="text"
+              />
+              <Input
+                icon="Mail"
+                placeholder="Digite seu email *"
+                fullWidth
+                type="email"
+              />
+              <Input
+                icon="Phone"
+                placeholder="Digite seu telefone"
+                fullWidth
+                type="tel"
+              />
               <Input
                 icon="UserCircle2"
                 placeholder="Digite seu usuário *"
@@ -60,12 +84,12 @@ export default function Page() {
                 * Campo Obrigatório
               </CustomText>
               <Button textAlign="center" fullWidth type="submit">
-                Entrar
+                Cadastrar
               </Button>
             </FormContainer>
             <CustomText $weight={500} $align="center">
-              Ainda não possui cadastro?{" "}
-              <CustomLink href="/cadastro">Cadastre-se agora!</CustomLink>
+              Já possui um cadastro?{" "}
+              <CustomLink href="/">Faça login!</CustomLink>
             </CustomText>
           </WhiteContainer>
         </Container>
