@@ -49,12 +49,14 @@ export default function Page() {
                 placeholder="Digite seu usuário *"
                 fullWidth
                 type="text"
+                maxLength={120}
               />
               <Input
                 icon="KeyRound"
                 placeholder="Digite sua senha *"
                 fullWidth
                 type="password"
+                maxLength={200}
               />
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório

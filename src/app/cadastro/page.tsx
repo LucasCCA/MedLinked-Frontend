@@ -7,7 +7,9 @@ import {
   CustomText,
   Input,
 } from "@medlinked/components";
+import { cpfMask, phoneNumberMask } from "@medlinked/utils";
 import Image from "next/image";
+import { useState } from "react";
 import {
   BlueBackground,
   FormContainer,
@@ -18,6 +20,9 @@ import {
 } from "../styles";
 
 export default function Page() {
+  const [cpf, setCpf] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   return (
     <BlueBackground>
       <HeaderContainer>
@@ -49,11 +54,15 @@ export default function Page() {
                 placeholder="Digite seu nome *"
                 fullWidth
                 type="text"
+                maxLength={120}
               />
               <Input
                 icon="Asterisk"
                 placeholder="Digite seu CPF *"
                 fullWidth
+                maxLength={14}
+                value={cpf}
+                onChange={(e) => setCpf(cpfMask(e.currentTarget.value))}
                 type="text"
               />
               <Input
@@ -61,24 +70,32 @@ export default function Page() {
                 placeholder="Digite seu email *"
                 fullWidth
                 type="email"
+                maxLength={120}
               />
               <Input
                 icon="Phone"
+                type="tel"
                 placeholder="Digite seu telefone"
                 fullWidth
-                type="tel"
+                maxLength={17}
+                value={phoneNumber}
+                onChange={(e) =>
+                  setPhoneNumber(phoneNumberMask(e.currentTarget.value))
+                }
               />
               <Input
                 icon="UserCircle2"
                 placeholder="Digite seu usuário *"
                 fullWidth
                 type="text"
+                maxLength={120}
               />
               <Input
                 icon="KeyRound"
                 placeholder="Digite sua senha *"
                 fullWidth
                 type="password"
+                maxLength={200}
               />
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
