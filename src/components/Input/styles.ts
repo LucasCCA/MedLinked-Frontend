@@ -82,3 +82,8 @@ export const ErrorMessageContainer = styled.div<WidthProps>`
   margin-top: 5px;
   width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
 `;
+
+export const InputAndErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

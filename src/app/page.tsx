@@ -1,5 +1,7 @@
 "use client";
 
+import { yupResolver } from "@hookform/resolvers/yup";
+import { medlinked } from "@medlinked/api";
 import {
   Button,
   Container,
@@ -7,10 +9,14 @@ import {
   CustomText,
   Input,
 } from "@medlinked/components";
+import { loginSchema } from "@medlinked/schemas";
+import { Usuario, UsuarioResponse } from "@medlinked/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   BlueBackground,
-  FormContainer,
+  Form,
   HeaderContainer,
   LogoContainer,
   PageContentContainer,
@@ -18,6 +24,30 @@ import {
 } from "./styles";
 
 export default function Page() {
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Usuario>({
+    resolver: yupResolver(loginSchema),
+  });
+
+  const onSubmit: SubmitHandler<Usuario> = (data) => {
+    medlinked
+      .post<UsuarioResponse>("usuario/authenticate", {
+        username: data.username,
+        password: data.password,
+      })
+      .then((response) => {
+        console.log(response.data);
+        localStorage.setItem("token", response.data.token);
+        router.push("/admin");
+      })
+      .catch((response) => console.log(response));
+  };
+
   return (
     <BlueBackground>
       <HeaderContainer>
@@ -43,13 +73,16 @@ export default function Page() {
             <CustomText $size="h2" $align="center">
               Login
             </CustomText>
-            <FormContainer>
+            <Form onSubmit={handleSubmit(onSubmit)}>
               <Input
                 icon="UserCircle2"
                 placeholder="Digite seu usuário *"
                 fullWidth
                 type="text"
                 maxLength={120}
+                register={{ ...register("username") }}
+                hasError={Boolean(errors.username)}
+                errorMessage={errors.username?.message}
               />
               <Input
                 icon="KeyRound"
@@ -57,6 +90,9 @@ export default function Page() {
                 fullWidth
                 type="password"
                 maxLength={200}
+                register={{ ...register("password") }}
+                hasError={Boolean(errors.password)}
+                errorMessage={errors.password?.message}
               />
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
@@ -64,7 +100,7 @@ export default function Page() {
               <Button textAlign="center" fullWidth type="submit">
                 Entrar
               </Button>
-            </FormContainer>
+            </Form>
             <CustomText $weight={500} $align="center">
               Ainda não possui cadastro?{" "}
               <CustomLink href="/cadastro">Cadastre-se agora!</CustomLink>

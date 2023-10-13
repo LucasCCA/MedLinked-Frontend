@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useState } from "react";
 import {
   BlueBackground,
-  FormContainer,
+  Form,
   HeaderContainer,
   LogoContainer,
   PageContentContainer,
@@ -48,7 +48,7 @@ export default function Page() {
             <CustomText $size="h2" $align="center">
               Cadastro
             </CustomText>
-            <FormContainer>
+            <Form>
               <Input
                 icon="User2"
                 placeholder="Digite seu nome *"
@@ -103,7 +103,7 @@ export default function Page() {
               <Button textAlign="center" fullWidth type="submit">
                 Cadastrar
               </Button>
-            </FormContainer>
+            </Form>
             <CustomText $weight={500} $align="center">
               Já possui um cadastro?{" "}
               <CustomLink href="/">Faça login!</CustomLink>

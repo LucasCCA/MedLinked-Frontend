@@ -61,7 +61,7 @@ export const WhiteContainer = styled.div`
   }
 `;
 
-export const FormContainer = styled.form`
+export const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin: 2.5rem 0;

@@ -1,6 +1,7 @@
 "use client";
 
 import { Container, Header, Navbar } from "@medlinked/components";
+import { useRouter } from "next/navigation";
 import { ContentContainer } from "./styles";
 
 export default function AdminLayout({
@@ -8,6 +9,11 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  if (!localStorage.getItem("token")) {
+    router.push("/");
+  }
+
   return (
     <>
       <head>
