@@ -51,7 +51,7 @@ export function Input({
         <StyledInput {...props} {...register} />
       </InputContainer>
       {hasError && (
-        <ErrorMessageContainer>
+        <ErrorMessageContainer $fullWidth={fullWidth}>
           <CustomText $size="h5" $color="red_80">
             {errorMessage}
           </CustomText>
