@@ -13,7 +13,9 @@ import { loginSchema } from "@medlinked/schemas";
 import { Usuario, UsuarioResponse } from "@medlinked/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import {
   BlueBackground,
   Form,
@@ -25,6 +27,7 @@ import {
 
 export default function Page() {
   const router = useRouter();
+  const [loggingIn, setLoggingIn] = useState(false);
 
   const {
     register,
@@ -35,17 +38,21 @@ export default function Page() {
   });
 
   const onSubmit: SubmitHandler<Usuario> = (data) => {
+    setLoggingIn(true);
+
     medlinked
       .post<UsuarioResponse>("usuario/authenticate", {
         username: data.username,
         password: data.password,
       })
       .then((response) => {
-        console.log(response.data);
         localStorage.setItem("token", response.data.token);
         router.push("/admin");
       })
-      .catch((response) => console.log(response));
+      .catch(() => {
+        toast.error("Usuário ou senha incorretos.");
+      })
+      .finally(() => setLoggingIn(false));
   };
 
   return (
@@ -83,6 +90,7 @@ export default function Page() {
                 register={{ ...register("username") }}
                 hasError={Boolean(errors.username)}
                 errorMessage={errors.username?.message}
+                autoComplete="off"
               />
               <Input
                 icon="KeyRound"
@@ -97,7 +105,12 @@ export default function Page() {
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
               </CustomText>
-              <Button textAlign="center" fullWidth type="submit">
+              <Button
+                textAlign="center"
+                fullWidth
+                type="submit"
+                disabled={loggingIn}
+              >
                 Entrar
               </Button>
             </Form>
