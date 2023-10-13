@@ -5,4 +5,6 @@ export * from "./medico";
 export * from "./paciente";
 export * from "./pessoa";
 export * from "./planosSaude";
+export * from "./secretaria";
 export * from "./tipoPlanoSaude";
+export * from "./usuario";

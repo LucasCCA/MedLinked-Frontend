@@ -67,7 +67,7 @@ export function Header({ username, children }: HeaderProps) {
                 <UserCog2 />
                 <CustomText $color="black_80">Perfil</CustomText>
               </Option>
-              <Option href="">
+              <Option href="/" onClick={() => localStorage.removeItem("token")}>
                 <LogOut />
                 <CustomText $color="black_80">Sair</CustomText>
               </Option>

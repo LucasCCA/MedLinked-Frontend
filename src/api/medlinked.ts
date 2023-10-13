@@ -7,3 +7,13 @@ export const medlinked = axios.create({
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
   },
 });
+
+medlinked.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    const auth = token ? `Bearer ${token}` : "";
+    config.headers.Authorization = auth;
+    return config;
+  },
+  (error) => Promise.reject(error),
+);

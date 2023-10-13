@@ -40,7 +40,7 @@ export function Navbar() {
       <AvoidNavbarContainer $expanded={expanded} />
       <NavbarContainer $expanded={expanded} ref={ref}>
         <BlueContainer $expanded={expanded}>
-          <CustomLink href="/">
+          <CustomLink href="/admin">
             <LogoContainer>
               {expanded && (
                 <Image

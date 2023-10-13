@@ -9,14 +9,21 @@ import {
   UserCircle2,
 } from "lucide-react";
 import { InputHTMLAttributes } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 import { CustomText } from "..";
-import { ErrorMessageContainer, InputContainer, StyledInput } from "./styles";
+import {
+  ErrorMessageContainer,
+  InputAndErrorContainer,
+  InputContainer,
+  StyledInput,
+} from "./styles";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: "User2" | "Asterisk" | "Mail" | "Phone" | "UserCircle2" | "KeyRound";
   fullWidth?: boolean;
   errorMessage?: string;
   hasError?: boolean;
+  register?: UseFormRegisterReturn<string>;
 }
 
 export function Input({
@@ -25,10 +32,11 @@ export function Input({
   errorMessage,
   hasError,
   disabled,
+  register,
   ...props
 }: InputProps) {
   return (
-    <>
+    <InputAndErrorContainer>
       <InputContainer
         $fullWidth={fullWidth}
         $error={hasError}
@@ -40,15 +48,15 @@ export function Input({
         {icon == "Phone" && <Phone />}
         {icon == "UserCircle2" && <UserCircle2 />}
         {icon == "KeyRound" && <KeyRound />}
-        <StyledInput {...props} />
+        <StyledInput {...props} {...register} />
       </InputContainer>
       {hasError && (
-        <ErrorMessageContainer>
+        <ErrorMessageContainer $fullWidth={fullWidth}>
           <CustomText $size="h5" $color="red_80">
             {errorMessage}
           </CustomText>
         </ErrorMessageContainer>
       )}
-    </>
+    </InputAndErrorContainer>
   );
 }

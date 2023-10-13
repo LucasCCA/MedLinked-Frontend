@@ -5,3 +5,10 @@ export type Pessoa = {
   email: string;
   celular: number;
 };
+
+export type RegisterPessoa = {
+  nome: string;
+  cpf: string;
+  email: string;
+  celular: string;
+};
