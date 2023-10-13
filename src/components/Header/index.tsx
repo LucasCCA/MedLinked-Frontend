@@ -61,7 +61,7 @@ export function Header({ username, children }: HeaderProps) {
               $closeAnimation={closeAnimation}
             >
               <NameContainer>
-                <CustomText>{username}</CustomText>
+                <CustomText $align="left">{username}</CustomText>
               </NameContainer>
               <Option href="">
                 <UserCog2 />
