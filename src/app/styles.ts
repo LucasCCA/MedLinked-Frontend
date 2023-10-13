@@ -1,7 +1,7 @@
 import { breakpoints } from "@medlinked/config";
 import styled from "styled-components";
 
-export const BlueBackground = styled.div`
+export const BlueBackground = styled.section`
   background: ${(props) => props.theme.colors.dark_blue_100};
   width: 100vw;
   height: 100vh;

@@ -1,5 +1,7 @@
 "use client";
 
+import { yupResolver } from "@hookform/resolvers/yup";
+import { medlinked } from "@medlinked/api";
 import {
   Button,
   Container,
@@ -7,9 +9,14 @@ import {
   CustomText,
   Input,
 } from "@medlinked/components";
-import { cpfMask, phoneNumberMask } from "@medlinked/utils";
+import { registerSchema } from "@medlinked/schemas";
+import { RegisterSecretaria, UsuarioResponse } from "@medlinked/types";
+import { cpfMask, onlyNumbers, phoneNumberMask } from "@medlinked/utils";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import {
   BlueBackground,
   Form,
@@ -20,8 +27,46 @@ import {
 } from "../styles";
 
 export default function Page() {
-  const [cpf, setCpf] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const router = useRouter();
+  const [signingUp, setSigningUp] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<RegisterSecretaria>({ resolver: yupResolver(registerSchema) });
+
+  const onSubmit: SubmitHandler<RegisterSecretaria> = (data) => {
+    setSigningUp(true);
+
+    medlinked
+      .post<UsuarioResponse>("secretaria/create", {
+        nome: data.pessoa.nome,
+        cpf: Number(onlyNumbers(data.pessoa.cpf)),
+        celular: Number(onlyNumbers(data.pessoa.celular)),
+        email: data.pessoa.email,
+        usuarioRegisterDto: {
+          username: data.usuario.username,
+          password: data.usuario.password,
+        },
+      })
+      .then((response) => {
+        localStorage.setItem("token", response.data.token);
+        router.push("/admin");
+      })
+      .catch(() => toast.error("Ocorreu um erro, tente novamente mais tarde."))
+      .finally(() => setSigningUp(false));
+  };
+
+  const cpfValue = watch("pessoa.cpf");
+  const phoneNumberValue = watch("pessoa.celular");
+
+  useEffect(() => {
+    setValue("pessoa.cpf", cpfMask(cpfValue));
+    setValue("pessoa.celular", phoneNumberMask(phoneNumberValue));
+  }, [cpfValue, phoneNumberValue, setValue]);
 
   return (
     <BlueBackground>
@@ -48,40 +93,52 @@ export default function Page() {
             <CustomText $size="h2" $align="center">
               Cadastro
             </CustomText>
-            <Form>
+            <Form onSubmit={handleSubmit(onSubmit)}>
               <Input
                 icon="User2"
                 placeholder="Digite seu nome *"
                 fullWidth
                 type="text"
                 maxLength={120}
+                register={{ ...register("pessoa.nome") }}
+                hasError={Boolean(errors.pessoa?.nome)}
+                errorMessage={errors.pessoa?.nome?.message}
+                autoComplete="off"
               />
               <Input
                 icon="Asterisk"
                 placeholder="Digite seu CPF *"
                 fullWidth
                 maxLength={14}
-                value={cpf}
-                onChange={(e) => setCpf(cpfMask(e.currentTarget.value))}
                 type="text"
+                register={{
+                  ...register("pessoa.cpf"),
+                }}
+                hasError={Boolean(errors.pessoa?.cpf)}
+                errorMessage={errors.pessoa?.cpf?.message}
+                autoComplete="off"
               />
               <Input
                 icon="Mail"
                 placeholder="Digite seu email *"
                 fullWidth
-                type="email"
+                type="text"
                 maxLength={120}
+                register={{ ...register("pessoa.email") }}
+                hasError={Boolean(errors.pessoa?.email)}
+                errorMessage={errors.pessoa?.email?.message}
+                autoComplete="on"
               />
               <Input
                 icon="Phone"
-                type="tel"
+                type="text"
                 placeholder="Digite seu telefone"
                 fullWidth
                 maxLength={17}
-                value={phoneNumber}
-                onChange={(e) =>
-                  setPhoneNumber(phoneNumberMask(e.currentTarget.value))
-                }
+                register={{ ...register("pessoa.celular") }}
+                hasError={Boolean(errors.pessoa?.celular)}
+                errorMessage={errors.pessoa?.celular?.message}
+                autoComplete="on"
               />
               <Input
                 icon="UserCircle2"
@@ -89,6 +146,10 @@ export default function Page() {
                 fullWidth
                 type="text"
                 maxLength={120}
+                register={{ ...register("usuario.username") }}
+                hasError={Boolean(errors.usuario?.username)}
+                errorMessage={errors.usuario?.username?.message}
+                autoComplete="off"
               />
               <Input
                 icon="KeyRound"
@@ -96,11 +157,19 @@ export default function Page() {
                 fullWidth
                 type="password"
                 maxLength={200}
+                register={{ ...register("usuario.password") }}
+                hasError={Boolean(errors.usuario?.password)}
+                errorMessage={errors.usuario?.password?.message}
               />
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
               </CustomText>
-              <Button textAlign="center" fullWidth type="submit">
+              <Button
+                textAlign="center"
+                fullWidth
+                type="submit"
+                disabled={signingUp}
+              >
                 Cadastrar
               </Button>
             </Form>
