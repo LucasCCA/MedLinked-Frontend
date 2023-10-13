@@ -119,7 +119,7 @@ export function Select({
               .includes(search.toLowerCase().trimEnd()),
           ).length == 0 && (
             <NoOptionContainer>
-              <CustomText>Nenhuma opção encontrada</CustomText>
+              <CustomText $align="left">Nenhuma opção encontrada</CustomText>
             </NoOptionContainer>
           )}
           {options?.length > 0 &&
@@ -143,7 +143,10 @@ export function Select({
                     }
                   }}
                 >
-                  <OptionText $selected={selected?.value == option.value}>
+                  <OptionText
+                    $selected={selected?.value == option.value}
+                    $align="left"
+                  >
                     {option.label}
                   </OptionText>
                 </Option>

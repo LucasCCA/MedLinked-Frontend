@@ -1,6 +1,8 @@
 "use client";
 
 import { Container, Header, Navbar } from "@medlinked/components";
+import { TokenData } from "@medlinked/types";
+import jwt_decode from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { ContentContainer } from "./styles";
 
@@ -10,7 +12,12 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  if (!localStorage.getItem("token")) {
+
+  const token = localStorage.getItem("token");
+  const tokenData: TokenData = jwt_decode<TokenData>(token || "");
+
+  if (!token || Date.now() >= tokenData.exp * 1000) {
+    localStorage.removeItem("token");
     router.push("/");
   }
 
@@ -22,7 +29,7 @@ export default function AdminLayout({
       <body>
         <ContentContainer>
           <Navbar />
-          <Header username="Lucas">
+          <Header username={tokenData.nome}>
             <Container>{children}</Container>
           </Header>
         </ContentContainer>

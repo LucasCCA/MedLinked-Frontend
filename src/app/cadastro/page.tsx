@@ -44,7 +44,7 @@ export default function Page() {
     medlinked
       .post<UsuarioResponse>("secretaria/create", {
         nome: data.pessoa.nome,
-        cpf: Number(onlyNumbers(data.pessoa.cpf)),
+        cpf: onlyNumbers(data.pessoa.cpf),
         celular: Number(onlyNumbers(data.pessoa.celular)),
         email: data.pessoa.email,
         usuarioRegisterDto: {

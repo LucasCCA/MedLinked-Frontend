@@ -6,3 +6,11 @@ export type Usuario = {
 export type UsuarioResponse = {
   token: string;
 };
+
+export type TokenData = {
+  idUsuario: number;
+  nome: string;
+  sub: string;
+  iat: number;
+  exp: number;
+};
