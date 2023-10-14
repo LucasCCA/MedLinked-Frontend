@@ -12,6 +12,7 @@ import {
 import { registerSchema } from "@medlinked/schemas";
 import { RegisterSecretaria, UsuarioResponse } from "@medlinked/types";
 import { cpfMask, onlyNumbers, phoneNumberMask } from "@medlinked/utils";
+import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -53,7 +54,7 @@ export default function Page() {
         },
       })
       .then((response) => {
-        localStorage.setItem("token", response.data.token);
+        Cookies.set("token", response.data.token);
         router.push("/admin");
       })
       .catch(() => toast.error("Ocorreu um erro, tente novamente mais tarde."))

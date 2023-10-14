@@ -11,6 +11,7 @@ import {
 } from "@medlinked/components";
 import { loginSchema } from "@medlinked/schemas";
 import { Usuario, UsuarioResponse } from "@medlinked/types";
+import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -46,7 +47,7 @@ export default function Page() {
         password: data.password,
       })
       .then((response) => {
-        localStorage.setItem("token", response.data.token);
+        Cookies.set("token", response.data.token);
         router.push("/admin");
       })
       .catch(() => {

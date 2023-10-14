@@ -1,5 +1,6 @@
 "use client";
 
+import Cookies from "js-cookie";
 import { ChevronDown, LogOut, UserCircle2, UserCog2 } from "lucide-react";
 import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -67,7 +68,7 @@ export function Header({ username, children }: HeaderProps) {
                 <UserCog2 />
                 <CustomText $color="black_80">Perfil</CustomText>
               </Option>
-              <Option href="/" onClick={() => localStorage.removeItem("token")}>
+              <Option href="/" onClick={() => Cookies.remove("token")}>
                 <LogOut />
                 <CustomText $color="black_80">Sair</CustomText>
               </Option>
