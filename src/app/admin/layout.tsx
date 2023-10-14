@@ -2,8 +2,8 @@
 
 import { Container, Header, Navbar } from "@medlinked/components";
 import { TokenData } from "@medlinked/types";
+import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-import { useRouter } from "next/navigation";
 import { ContentContainer } from "./styles";
 
 export default function AdminLayout({
@@ -11,16 +11,6 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-
-  const token = localStorage.getItem("token");
-  const tokenData: TokenData = jwt_decode<TokenData>(token || "");
-
-  if (!token || Date.now() >= tokenData.exp * 1000) {
-    localStorage.removeItem("token");
-    router.push("/");
-  }
-
   return (
     <>
       <head>
@@ -29,7 +19,7 @@ export default function AdminLayout({
       <body>
         <ContentContainer>
           <Navbar />
-          <Header username={tokenData.nome}>
+          <Header username={jwt_decode<TokenData>(Cookies.get("token")!).nome}>
             <Container>{children}</Container>
           </Header>
         </ContentContainer>
