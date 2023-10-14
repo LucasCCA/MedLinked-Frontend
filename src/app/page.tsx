@@ -47,8 +47,8 @@ export default function Page() {
         password: data.password,
       })
       .then((response) => {
-        router.push("/admin");
         Cookies.set("token", response.data.token);
+        router.push("/admin");
       })
       .catch(() => {
         toast.error("Usuário ou senha incorretos.");
