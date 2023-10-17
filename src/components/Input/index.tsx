@@ -36,7 +36,7 @@ export function Input({
   ...props
 }: InputProps) {
   return (
-    <InputAndErrorContainer>
+    <InputAndErrorContainer $fullWidth={fullWidth}>
       <InputContainer
         $fullWidth={fullWidth}
         $error={hasError}
