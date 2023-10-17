@@ -7,6 +7,8 @@ export default function middleware(request: NextRequest) {
   const tokenData = token ? jwt_decode<TokenData>(token) : ({} as TokenData);
 
   if (!token || Date.now() >= tokenData.exp * 1000) {
+    request.cookies.delete("token");
+
     if (
       request.nextUrl.pathname === "/" ||
       request.nextUrl.pathname === "/cadastro"
