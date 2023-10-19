@@ -3,13 +3,14 @@
 import { ChevronDown } from "lucide-react";
 import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { CustomText } from "..";
+import { CustomText, Input } from "..";
 import {
   ErrorMessageContainer,
   NoOptionContainer,
   Option,
   OptionText,
   OptionsContainer,
+  SearchContainer,
   SelectAndErrorContainer,
   SelectContainer,
   StyledInput,
@@ -83,17 +84,13 @@ export function Select({
         <StyledInput
           placeholder={placeholder}
           value={
-            selected != 0
-              ? options.find((option) => option.value == selected)?.label
-              : search
+            options.find((option) => option.value == selected) == undefined
+              ? ""
+              : options.find((option) => option.value == selected)!.label
           }
-          onChange={(e) => {
-            setSearch(e.currentTarget.value);
-            setSelected(0);
-          }}
-          readOnly={readOnly}
+          readOnly
           onClick={() => {
-            if (readOnly && openAnimation) {
+            if (openAnimation) {
               setOpenAnimation(false);
               setCloseAnimation(true);
             }
@@ -116,6 +113,17 @@ export function Select({
           $closeAnimation={closeAnimation}
           $fullWidth={fullWidth}
         >
+          <SearchContainer $readOnly={readOnly}>
+            <Input
+              icon={"Search"}
+              value={search}
+              placeholder="Pesquisar..."
+              onChange={(e) => {
+                setSearch(e.currentTarget.value);
+              }}
+              fullWidth
+            />
+          </SearchContainer>
           {options?.filter((option) =>
             option.label
               .toLowerCase()

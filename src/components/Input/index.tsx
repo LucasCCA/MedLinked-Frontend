@@ -5,6 +5,7 @@ import {
   KeyRound,
   Mail,
   Phone,
+  Search,
   User2,
   UserCircle2,
 } from "lucide-react";
@@ -19,7 +20,14 @@ import {
 } from "./styles";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  icon?: "User2" | "Asterisk" | "Mail" | "Phone" | "UserCircle2" | "KeyRound";
+  icon?:
+    | "User2"
+    | "Asterisk"
+    | "Mail"
+    | "Phone"
+    | "UserCircle2"
+    | "KeyRound"
+    | "Search";
   fullWidth?: boolean;
   errorMessage?: string;
   hasError?: boolean;
@@ -48,6 +56,7 @@ export function Input({
         {icon == "Phone" && <Phone />}
         {icon == "UserCircle2" && <UserCircle2 />}
         {icon == "KeyRound" && <KeyRound />}
+        {icon == "Search" && <Search />}
         <StyledInput {...props} {...register} />
       </InputContainer>
       {hasError && (
