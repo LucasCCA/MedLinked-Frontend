@@ -109,7 +109,7 @@ export function Pagination({
       ))}
       {numbersToShow[4] < numberOfPages && (
         <PaginationItemContainer
-          onClick={() => changePageByNumber(numbersToShow[4] + 2)}
+          onClick={() => changePageByNumber(numbersToShow[4])}
         >
           <CustomText>...</CustomText>
         </PaginationItemContainer>
