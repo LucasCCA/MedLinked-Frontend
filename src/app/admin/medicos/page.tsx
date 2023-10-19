@@ -5,92 +5,60 @@ import {
   Button,
   Card,
   CustomText,
-  Input,
   NoResults,
   Pagination,
   Select,
   Spacing,
   Spinner,
 } from "@medlinked/components";
-import {
-  EspecializacaoResponse,
-  Medico,
-  MedicoResponse,
-  PlanosSaudeResponse,
-} from "@medlinked/types";
-import { useEffect, useState } from "react";
+import { Medico, SecretariaMedicoResponse, TokenData } from "@medlinked/types";
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
+  CardInfoContainer,
   CardsContainer,
   FiltersContainer,
   PaginationAndRecordsContainer,
 } from "./styles";
 
 const records = [
-  { label: "5", value: "5" },
-  { label: "10", value: "10" },
-  { label: "25", value: "25" },
+  { label: "5", value: 5 },
+  { label: "10", value: 10 },
+  { label: "25", value: 25 },
 ];
 
 export default function Page() {
-  const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [medicos, setMedicos] = useState<MedicoResponse>([]);
+  const [medicos, setMedicos] = useState<SecretariaMedicoResponse>({
+    content: [],
+    pageable: { pageNumber: 0, pageSize: 0 },
+    totalPages: 0,
+  });
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
   const [currentMedico, setCurrentMedico] = useState<Medico>();
-  const [planosSaude, setPlanosSaude] = useState<PlanosSaudeResponse>([]);
-  const [especializacoes, setEspecializacoes] =
-    useState<EspecializacaoResponse>([]);
+
+  const getMedicos = useCallback(() => {
+    medlinked
+      .get<SecretariaMedicoResponse>(
+        `secretaria/medico/${
+          jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
+        }?page=${pageNumber}&pageSize=${pageSize}`,
+      )
+      .then((response) => setMedicos(response.data))
+      .catch(() =>
+        toast.error(
+          "Ocorreu um erro ao buscar médicos. Tente novamente mais tarde.",
+        ),
+      )
+      .finally(() => setLoading(false));
+  }, [pageNumber, pageSize]);
 
   useEffect(() => {
-    function getMedicos() {
-      medlinked
-        .get<MedicoResponse>("medico")
-        .then((response) => {
-          setMedicos(response.data);
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-          toast.error(
-            "Ocorreu um erro ao buscar médicos. Tente novamente mais tarde.",
-          );
-        });
-    }
-
-    function getEspecializacoes() {
-      medlinked
-        .get<EspecializacaoResponse>("especialidade")
-        .then((response) => setEspecializacoes(response.data));
-    }
-
-    function getPlanosSaude() {
-      medlinked
-        .get<PlanosSaudeResponse>("plano-saude")
-        .then((response) => setPlanosSaude(response.data));
-    }
-
     getMedicos();
-    getEspecializacoes();
-    getPlanosSaude();
-  }, []);
-
-  const especializacoesOptions = [];
-
-  for (let i = 0; i < especializacoes.length; i++) {
-    especializacoesOptions.push({
-      label: especializacoes[i].descricao,
-      value: especializacoes[i].idEspecialidade.toString(),
-    });
-  }
-
-  const planosSaudeOptions = [];
-
-  for (let i = 0; i < planosSaude.length; i++) {
-    planosSaudeOptions.push({
-      label: planosSaude[i].descricao,
-      value: planosSaude[i].idPlanoSaude.toString(),
-    });
-  }
+  }, [pageNumber, pageSize, getMedicos]);
 
   function changePage(number: number) {
     setPageNumber(number);
@@ -119,54 +87,38 @@ export default function Page() {
           >
             Deletar
           </Button>
-          {/* <Button
-            icon="calendar"
-            href={`/admin/medicos/agendamento/${currentMedico?.idMedico}`}
-            fullWidth
-            disabled={currentMedico == null}
-          >
-            Agendamentos
-          </Button> */}
-        </FiltersContainer>
-      </Spacing>
-      <Spacing>
-        <FiltersContainer>
-          <Select
-            placeholder="Pesquise por especialização"
-            options={especializacoesOptions}
-            fullWidth
-            disabled={loading}
-          />
-          <Select
-            placeholder="Pesquise por convênio"
-            options={planosSaudeOptions}
-            fullWidth
-            disabled={loading}
-          />
-          <Input
-            placeholder="Pesquise por nome"
-            fullWidth
-            disabled={loading}
-            maxLength={120}
-          />
         </FiltersContainer>
       </Spacing>
       {loading && <Spinner />}
-      {medicos.length > 0 ? (
+      {medicos.content.length > 0 ? (
         <Spacing>
           <CardsContainer>
-            {medicos.map((medico) => (
+            {medicos?.content.map((medico) => (
               <Card
                 $selectable
-                key={medico.idMedico}
-                onClick={() => setCurrentMedico(medico)}
-                $selected={currentMedico?.idMedico == medico.idMedico}
+                key={medico.medico.idMedico}
+                onClick={() => setCurrentMedico(medico.medico)}
+                $selected={currentMedico?.idMedico == medico.medico.idMedico}
               >
-                <CustomText $size="h2">{medico.pessoa.nome}</CustomText>
-                <CustomText $size="h3">CRM: PR-36730</CustomText>
-                <CustomText $size="h3">
-                  Especialidades: Oftalmologista, Pediatra
-                </CustomText>
+                <CustomText $size="h2">{medico.medico.pessoa.nome}</CustomText>
+                <CardInfoContainer>
+                  <CustomText $size="h3">CRM:</CustomText>
+                  <CustomText $size="h3" $weight={300}>
+                    {`CRM/${medico.estado.uf} ${medico.numeroCrm.toString()}`}
+                  </CustomText>
+                </CardInfoContainer>
+                <CardInfoContainer>
+                  <CustomText $size="h3">Especialidades: </CustomText>
+                  <CustomText $size="h3" $weight={300}>
+                    {medico.especialidades.map((especialidade) =>
+                      especialidade.idEspecialidade !=
+                      medico.especialidades[medico.especialidades.length - 1]
+                        .idEspecialidade
+                        ? `${especialidade.descricao}, `
+                        : `${especialidade.descricao}`,
+                    )}
+                  </CustomText>
+                </CardInfoContainer>
               </Card>
             ))}
           </CardsContainer>
@@ -177,15 +129,16 @@ export default function Page() {
       {!loading && (
         <PaginationAndRecordsContainer>
           <Select
+            selected={pageSize}
+            setSelected={setPageSize}
             options={records}
-            defaultSelected={records[0]}
             fullWidth
             readOnly
           />
           <Pagination
             pageNumber={pageNumber}
             changePage={changePage}
-            numberOfPages={15}
+            numberOfPages={medicos.totalPages}
           />
         </PaginationAndRecordsContainer>
       )}

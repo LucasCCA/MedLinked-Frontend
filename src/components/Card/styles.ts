@@ -23,7 +23,7 @@ export const CardStyles = styled.div<CardStylesProps>`
         background: ${(props) => props.theme.colors.blue_60};
         cursor: pointer;
 
-        > p {
+        p {
           color: ${(props) => props.theme.colors.white};
         }
       }
@@ -34,7 +34,7 @@ export const CardStyles = styled.div<CardStylesProps>`
     css`
       background: ${(props) => props.theme.colors.blue_80};
 
-      > p {
+      p {
         color: ${(props) => props.theme.colors.white};
       }
     `}

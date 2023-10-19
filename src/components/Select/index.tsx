@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import { HTMLAttributes, useState } from "react";
+import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { CustomText } from "..";
 import {
@@ -10,6 +10,7 @@ import {
   Option,
   OptionText,
   OptionsContainer,
+  SelectAndErrorContainer,
   SelectContainer,
   StyledInput,
   StyledSelect,
@@ -17,7 +18,7 @@ import {
 
 type OptionData = {
   label: string;
-  value: string;
+  value: number;
 };
 
 interface SelectProps extends HTMLAttributes<HTMLSelectElement> {
@@ -26,8 +27,9 @@ interface SelectProps extends HTMLAttributes<HTMLSelectElement> {
   options: OptionData[];
   hasError?: boolean;
   disabled?: boolean;
-  defaultSelected?: OptionData;
   readOnly?: boolean;
+  selected: number;
+  setSelected: Dispatch<SetStateAction<number>>;
 }
 
 export function Select({
@@ -36,17 +38,15 @@ export function Select({
   options,
   hasError,
   disabled,
-  defaultSelected,
   readOnly,
   placeholder,
+  selected,
+  setSelected,
   ...props
 }: SelectProps) {
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<OptionData | undefined>(
-    defaultSelected,
-  );
   const ref = useDetectClickOutside({
     onTriggered: () => {
       if (openAnimation) {
@@ -57,8 +57,8 @@ export function Select({
   });
 
   return (
-    <>
-      <StyledSelect {...props} defaultValue={selected?.value}>
+    <SelectAndErrorContainer $fullWidth={fullWidth}>
+      <StyledSelect {...props} defaultValue={selected}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -82,10 +82,14 @@ export function Select({
       >
         <StyledInput
           placeholder={placeholder}
-          value={selected ? selected.label : search}
+          value={
+            selected != 0
+              ? options.find((option) => option.value == selected)?.label
+              : search
+          }
           onChange={(e) => {
             setSearch(e.currentTarget.value);
-            setSelected(undefined);
+            setSelected(0);
           }}
           readOnly={readOnly}
           onClick={() => {
@@ -133,9 +137,9 @@ export function Select({
               .map((option) => (
                 <Option
                   key={option.value}
-                  $selected={selected?.value == option.value}
+                  $selected={selected == option.value}
                   onClick={() => {
-                    setSelected(option);
+                    setSelected(option.value);
                     setSearch("");
                     if (openAnimation) {
                       setOpenAnimation(false);
@@ -144,7 +148,7 @@ export function Select({
                   }}
                 >
                   <OptionText
-                    $selected={selected?.value == option.value}
+                    $selected={selected == option.value}
                     $align="left"
                   >
                     {option.label}
@@ -160,6 +164,6 @@ export function Select({
           </CustomText>
         </ErrorMessageContainer>
       )}
-    </>
+    </SelectAndErrorContainer>
   );
 }
