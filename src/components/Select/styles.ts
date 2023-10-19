@@ -172,6 +172,12 @@ export const ErrorMessageContainer = styled.div<WidthProps>`
   width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
 `;
 
+export const SelectAndErrorContainer = styled.div<WidthProps>`
+  display: flex;
+  flex-direction: column;
+  width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
+`;
+
 const showOptions = keyframes`
   from {
     max-height: 0;

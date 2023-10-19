@@ -68,3 +68,10 @@ export const PaginationAndRecordsContainer = styled.div`
     }
   }
 `;
+
+export const CardInfoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+`;
