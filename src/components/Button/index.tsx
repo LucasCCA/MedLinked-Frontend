@@ -8,7 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   children: React.ReactNode;
   color?: "red_80";
-  icon?: "plus" | "pen" | "trash" | "calendar" | "search";
+  icon?: "Plus" | "Pen" | "Trash" | "Calendar" | "Search";
   fullWidth?: boolean;
   textAlign?: "center";
 }
@@ -31,11 +31,11 @@ export function Button({
           $textAlign={textAlign}
           {...props}
         >
-          {icon == "plus" && <Plus size={25} />}
-          {icon == "pen" && <Pen size={25} />}
-          {icon == "trash" && <Trash size={25} />}
-          {icon == "calendar" && <Calendar size={25} />}
-          {icon == "search" && <Search size={25} />}
+          {icon == "Plus" && <Plus size={25} />}
+          {icon == "Pen" && <Pen size={25} />}
+          {icon == "Trash" && <Trash size={25} />}
+          {icon == "Calendar" && <Calendar size={25} />}
+          {icon == "Search" && <Search size={25} />}
           <CustomText $color="white">{children}</CustomText>
         </StyledButton>
       )}
@@ -48,11 +48,11 @@ export function Button({
           {...props}
         >
           <CustomLink $color="white" href={href}>
-            {icon == "plus" && <Plus size={25} />}
-            {icon == "pen" && <Pen size={25} />}
-            {icon == "trash" && <Trash size={25} />}
-            {icon == "calendar" && <Calendar size={25} />}
-            {icon == "search" && <Search size={25} />}
+            {icon == "Plus" && <Plus size={25} />}
+            {icon == "Pen" && <Pen size={25} />}
+            {icon == "Trash" && <Trash size={25} />}
+            {icon == "Calendar" && <Calendar size={25} />}
+            {icon == "Search" && <Search size={25} />}
             {children}
           </CustomLink>
         </StyledButton>

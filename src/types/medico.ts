@@ -8,3 +8,13 @@ export type Medico = {
 };
 
 export type MedicoResponse = Medico[];
+
+export type CreateMedico = {
+  nome: string;
+  cpf: string;
+  celular: string;
+  email: string;
+  ufCrm: string;
+  numeroCrm: number;
+  idsEspecialidades: number[];
+};

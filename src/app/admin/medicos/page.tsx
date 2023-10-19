@@ -68,11 +68,11 @@ export default function Page() {
     <>
       <Spacing>
         <FiltersContainer>
-          <Button icon="plus" href="/admin/medicos/medico/0" fullWidth>
+          <Button icon="Plus" href="/admin/medicos/medico/0" fullWidth>
             Médico
           </Button>
           <Button
-            icon="pen"
+            icon="Pen"
             href={`/admin/medicos/medico/${currentMedico?.idMedico}`}
             fullWidth
             disabled={currentMedico == null}
@@ -80,7 +80,7 @@ export default function Page() {
             Visualizar / Editar
           </Button>
           <Button
-            icon="trash"
+            icon="Trash"
             color="red_80"
             fullWidth
             disabled={currentMedico == null}
