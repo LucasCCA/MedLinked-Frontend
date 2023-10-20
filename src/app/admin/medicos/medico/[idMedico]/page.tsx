@@ -1,6 +1,5 @@
 "use client";
 
-import { yupResolver } from "@hookform/resolvers/yup";
 import { medlinked } from "@medlinked/api";
 import {
   Breadcrumb,
@@ -12,7 +11,12 @@ import {
   Spacing,
   Tabs,
 } from "@medlinked/components";
-import { CreateMedico, Pessoa } from "@medlinked/types";
+import {
+  CreateMedico,
+  EspecializacaoResponse,
+  EstadoResponse,
+  Pessoa,
+} from "@medlinked/types";
 import {
   cpfMask,
   crmMask,
@@ -56,6 +60,9 @@ export default function Page() {
   const [filledCpf, setFilledCpf] = useState(false);
   const [crm, setCrm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [estados, setEstados] = useState<EstadoResponse>([]);
+  const [especializacoes, setEspecializacoes] =
+    useState<EspecializacaoResponse>([]);
 
   const {
     register,
@@ -63,36 +70,85 @@ export default function Page() {
     formState: { errors },
     watch,
     setValue,
-  } = useForm<CreateMedico>({
-    resolver: yupResolver(),
-  });
+  } = useForm<CreateMedico>();
 
-  const cpfValue = watch("cpf");
-  const phoneNumberValue = watch("celular");
+  const cpfValue = watch("registerPessoa.cpf");
+  const phoneNumberValue = watch("registerPessoa.celular");
 
   useEffect(() => {
-    setValue("cpf", cpfMask(cpfValue));
-    setValue("celular", phoneNumberMask(phoneNumberValue));
-    setFilledCpf(watch("cpf").length == 14);
+    function getEstados() {
+      setLoading(true);
 
+      medlinked
+        .get<EstadoResponse>("estado")
+        .then((response) => setEstados(response.data))
+        .catch(() =>
+          toast.error(
+            // eslint-disable-next-line max-len
+            "Ocorreu um erro ao carregar os estados. Tente novamente mais tarde.",
+          ),
+        )
+        .finally(() => setLoading(false));
+    }
+
+    function getEspecialidades() {
+      setLoading(true);
+
+      medlinked
+        .get<EspecializacaoResponse>("especialidade")
+        .then((response) => setEspecializacoes(response.data))
+        .catch(() =>
+          toast.error(
+            // eslint-disable-next-line max-len
+            "Ocorreu um erro ao carregar as especializações. Tente novamente mais tarde.",
+          ),
+        )
+        .finally(() => setLoading(false));
+    }
+
+    getEstados();
+    getEspecialidades();
+  }, []);
+
+  const estadosOptions = [];
+
+  for (let i = 0; i < estados.length; i++) {
+    estadosOptions.push({ label: estados[i].descricao, value: estados[i].uf });
+  }
+
+  const especializacoesOptions = [];
+
+  for (let i = 0; i < especializacoes.length; i++) {
+    especializacoesOptions.push({
+      label: especializacoes[i].descricao,
+      value: especializacoes[i].idEspecialidade,
+    });
+  }
+
+  useEffect(() => {
+    setValue("registerPessoa.cpf", cpfMask(cpfValue));
+    setValue("registerPessoa.celular", phoneNumberMask(phoneNumberValue));
+    setFilledCpf(watch("registerPessoa.cpf").length == 14);
+  }, [cpfValue, phoneNumberValue, setValue, watch]);
+
+  useEffect(() => {
     if (filledCpf) {
       setLoading(true);
 
       medlinked
-        .get<Pessoa>("pessoa/cpf", {
-          params: {
-            cpf: Number(onlyNumbers(watch("cpf"))),
-          },
+        .post<Pessoa>("pessoa/cpf", {
+          cpf: Number(onlyNumbers(watch("registerPessoa.cpf"))),
         })
         .then((response) => {
           toast.info("Pessoa já cadastrada no sistema");
-          setValue("nome", response.data.nome);
-          setValue("email", response.data.email);
-          setValue("celular", String(response.data.celular));
+          setValue("registerPessoa.nome", response.data.nome);
+          setValue("registerPessoa.email", response.data.email);
+          setValue("registerPessoa.celular", String(response.data.celular));
         })
         .finally(() => setLoading(false));
     }
-  }, [cpfValue, filledCpf, phoneNumberValue, setValue, watch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filledCpf]);
 
   const onSubmit: SubmitHandler<CreateMedico> = (data) => {
     console.log(data);
@@ -123,8 +179,10 @@ export default function Page() {
                   placeholder="Digite o CPF *"
                   fullWidth
                   maxLength={14}
-                  register={{ ...register("cpf") }}
+                  register={{ ...register("registerPessoa.cpf") }}
                   disabled={loading}
+                  hasError={Boolean(errors.registerPessoa?.cpf)}
+                  errorMessage={errors.registerPessoa?.cpf?.message}
                 />
               </CPFContainer>
               <FieldsContainer>
@@ -132,19 +190,28 @@ export default function Page() {
                   placeholder="Digite o nome *"
                   fullWidth
                   maxLength={120}
+                  register={{ ...register("registerPessoa.nome") }}
                   disabled={!filledCpf || loading}
+                  hasError={Boolean(errors.registerPessoa?.nome)}
+                  errorMessage={errors.registerPessoa?.nome?.message}
                 />
                 <Input
                   placeholder="Digite o email *"
                   fullWidth
                   maxLength={120}
+                  register={{ ...register("registerPessoa.email") }}
                   disabled={!filledCpf || loading}
+                  hasError={Boolean(errors.registerPessoa?.email)}
+                  errorMessage={errors.registerPessoa?.email?.message}
                 />
                 <Input
                   placeholder="Digite o celular"
                   fullWidth
                   maxLength={17}
+                  register={{ ...register("registerPessoa.celular") }}
                   disabled={!filledCpf || loading}
+                  hasError={Boolean(errors.registerPessoa?.celular)}
+                  errorMessage={errors.registerPessoa?.celular?.message}
                 />
               </FieldsContainer>
             </Spacing>

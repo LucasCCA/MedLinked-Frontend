@@ -126,7 +126,7 @@ export default function Page() {
       ) : (
         !loading && <NoResults message={"Nenhum médico encontrado"} />
       )}
-      {!loading && (
+      {!loading && medicos.totalPages > 1 && (
         <PaginationAndRecordsContainer>
           <Select
             selected={pageSize}

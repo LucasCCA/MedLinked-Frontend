@@ -1,4 +1,4 @@
-import { Pessoa } from "./pessoa";
+import { Pessoa, RegisterPessoa } from "./pessoa";
 import { PlanosSaude } from "./planosSaude";
 
 export type Medico = {
@@ -10,10 +10,7 @@ export type Medico = {
 export type MedicoResponse = Medico[];
 
 export type CreateMedico = {
-  nome: string;
-  cpf: string;
-  celular: string;
-  email: string;
+  registerPessoa: RegisterPessoa;
   ufCrm: string;
   numeroCrm: number;
   idsEspecialidades: number[];
