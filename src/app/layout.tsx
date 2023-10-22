@@ -23,7 +23,12 @@ export default function RootLayout({
     <html lang="pt-br" className={roboto.className}>
       <head>
         <title>MedLinked</title>
+        <meta
+          name="description"
+          content="Sistema de agendamento de consultas MedLinked"
+        />
         <link rel="icon" type="image/x-icon" href="/images/icon.png" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </head>
       <body>
         <ToastContainer />

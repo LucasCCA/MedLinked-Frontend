@@ -12,16 +12,11 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <head>
-        <title>MedLinked - Agenda</title>
-      </head>
-      <ContentContainer>
-        <Navbar />
-        <Header username={jwt_decode<TokenData>(Cookies.get("token")!).nome}>
-          <Container>{children}</Container>
-        </Header>
-      </ContentContainer>
-    </>
+    <ContentContainer>
+      <Navbar />
+      <Header username={jwt_decode<TokenData>(Cookies.get("token")!).nome}>
+        <Container>{children}</Container>
+      </Header>
+    </ContentContainer>
   );
 }
