@@ -467,7 +467,7 @@ export default function Page() {
                     Voltar
                   </Button>
                   <Button textAlign="center" fullWidth type="submit">
-                    Cadastrar
+                    {idMedico == 0 ? "Cadastrar" : "Atualizar"}
                   </Button>
                 </FieldsContainer>
               </Spacing>
