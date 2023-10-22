@@ -6,7 +6,7 @@ export function formatCpf(cpf: number) {
     const difference = 11 - stringCpf.length;
 
     for (let i = 0; i < difference; i++) {
-      formattedCpf = `0${stringCpf}`;
+      formattedCpf = `0${formattedCpf}`;
     }
   }
 
