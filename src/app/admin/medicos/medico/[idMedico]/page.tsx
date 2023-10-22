@@ -242,10 +242,8 @@ export default function Page() {
         getPessoaByCpf(Number(onlyNumbers(cpfValue)))
           .then((response) => {
             if (response.data.idPessoa) {
-              if (idMedico == 0) {
-                toast.info("Pessoa já cadastrada no sistema");
-                setPersonAlreadyRegistered(true);
-              }
+              toast.info("Pessoa já cadastrada no sistema");
+              setPersonAlreadyRegistered(true);
               setValue("registerPessoa.nome", response.data.nome);
               setValue("registerPessoa.email", response.data.email);
               setValue("registerPessoa.celular", String(response.data.celular));
