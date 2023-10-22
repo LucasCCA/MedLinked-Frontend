@@ -1,6 +1,9 @@
 import { medlinked } from "@medlinked/api";
 
-export function associateConvenio(idPlanoSaude: number, idMedico: number) {
+export function associatePlanoSaudeMedico(
+  idPlanoSaude: number,
+  idMedico: number,
+) {
   return medlinked.put(
     `plano-saude/medico/adiciona-planos-medico/${idMedico}`,
     {
@@ -9,7 +12,7 @@ export function associateConvenio(idPlanoSaude: number, idMedico: number) {
   );
 }
 
-export function removeConvenio(idPlanoSaude: number, idMedico: number) {
+export function removePlanoSaudeMedico(idPlanoSaude: number, idMedico: number) {
   return medlinked.put(
     // eslint-disable-next-line max-len
     `plano-saude/medico/update-medico-remove-plano/${idMedico}/${idPlanoSaude}`,

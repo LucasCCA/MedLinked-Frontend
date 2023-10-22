@@ -14,14 +14,14 @@ import {
 } from "@medlinked/components";
 import { registerMedicoSchema } from "@medlinked/schemas";
 import {
-  associateConvenio,
+  associatePlanoSaudeMedico,
   createMedico,
   getAllEspecialidades,
   getAllEstados,
   getAllPlanosSaude,
   getMedico,
   getPessoaByCpf,
-  removeConvenio,
+  removePlanoSaudeMedico,
   updateMedico,
 } from "@medlinked/services";
 import {
@@ -42,7 +42,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CPFContainer, CardContentContainer, FieldsContainer } from "./styles";
+import { CPFContainer, CardContentContainer, FieldsContainer } from "../styles";
 
 const tabsItems = [
   {
@@ -128,10 +128,10 @@ export default function Page() {
           ),
         );
         setValue("numeroCrm", response.data.numeroCrm.toString());
-        setValue("ufCrm", response.data.ufCrm);
+        setValue("ufCrm", response.data.estado.uf);
         setCurrentUf({
-          label: response.data.descricaoUf,
-          value: response.data.ufCrm,
+          label: response.data.estado.descricao,
+          value: response.data.estado.uf,
         });
         setIdsPlanosSaude(
           response.data.planosSaudeMedico.map(
@@ -506,7 +506,10 @@ export default function Page() {
                 fullWidth
                 disabled={currentConvenio.value == ""}
                 onClick={() => {
-                  associateConvenio(Number(currentConvenio.value), idMedico)
+                  associatePlanoSaudeMedico(
+                    Number(currentConvenio.value),
+                    idMedico,
+                  )
                     .then(() => {
                       setCurrentConvenio({ label: "", value: "" });
                       setIdsPlanosSaude([
@@ -545,7 +548,7 @@ export default function Page() {
                     <CustomText $size="h2">{convenio.descricao}</CustomText>
                     <Trash
                       onClick={() => {
-                        removeConvenio(convenio.idPlanoSaude, idMedico)
+                        removePlanoSaudeMedico(convenio.idPlanoSaude, idMedico)
                           .then(() => {
                             setIdsPlanosSaude(
                               idsPlanosSaude.filter(
