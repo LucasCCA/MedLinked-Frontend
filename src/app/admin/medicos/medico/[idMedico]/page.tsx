@@ -1,7 +1,6 @@
 "use client";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { medlinked } from "@medlinked/api";
 import {
   Breadcrumb,
   Button,
@@ -15,13 +14,21 @@ import {
 } from "@medlinked/components";
 import { registerMedicoSchema } from "@medlinked/schemas";
 import {
+  associateConvenio,
+  createMedico,
+  getAllEspecialidades,
+  getAllEstados,
+  getAllPlanosSaude,
+  getMedico,
+  getPessoaByCpf,
+  removeConvenio,
+  updateMedico,
+} from "@medlinked/services";
+import {
   CreateMedico,
   EspecializacaoResponse,
   EstadoResponse,
-  Pessoa,
   PlanosSaudeResponse,
-  SecretariaMedicoData,
-  TokenData,
 } from "@medlinked/types";
 import {
   cpfMask,
@@ -29,8 +36,6 @@ import {
   onlyNumbers,
   phoneNumberMask,
 } from "@medlinked/utils";
-import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
 import { Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -103,42 +108,39 @@ export default function Page() {
 
   useEffect(() => {
     function getExistingMedico() {
-      medlinked
-        .get<SecretariaMedicoData>(`medico/${idMedico}`)
-        .then((response) => {
-          setValue("registerPessoa.cpf", cpfMask(response.data.cpf.toString()));
-          setValue(
-            "registerPessoa.celular",
-            phoneNumberMask(response.data.celular.toString()),
-          );
-          setValue("registerPessoa.email", response.data.email);
-          setValue("registerPessoa.nome", response.data.nome);
-          setValue(
-            "idsEspecialidades",
-            response.data.especialidades.map(
-              (especialidade) => especialidade.idEspecialidade,
-            ),
-          );
-          setIdsEspecialidades(
-            response.data.especialidades.map(
-              (especialidade) => especialidade.idEspecialidade,
-            ),
-          );
-          setValue("numeroCrm", response.data.numeroCrm.toString());
-          setValue("ufCrm", response.data.ufCrm);
-          setIdsPlanosSaude(
-            response.data.planosSaudeMedico.map(
-              (planoSaude) => planoSaude.idPlanoSaude,
-            ),
-          );
-        });
+      getMedico(idMedico).then((response) => {
+        setValue("registerPessoa.cpf", cpfMask(response.data.cpf.toString()));
+        setValue(
+          "registerPessoa.celular",
+          phoneNumberMask(response.data.celular.toString()),
+        );
+        setValue("registerPessoa.email", response.data.email);
+        setValue("registerPessoa.nome", response.data.nome);
+        setValue(
+          "idsEspecialidades",
+          response.data.especialidades.map(
+            (especialidade) => especialidade.idEspecialidade,
+          ),
+        );
+        setIdsEspecialidades(
+          response.data.especialidades.map(
+            (especialidade) => especialidade.idEspecialidade,
+          ),
+        );
+        setValue("numeroCrm", response.data.numeroCrm.toString());
+        setValue("ufCrm", response.data.ufCrm);
+        setIdsPlanosSaude(
+          response.data.planosSaudeMedico.map(
+            (planoSaude) => planoSaude.idPlanoSaude,
+          ),
+        );
+      });
     }
 
     function getConvenios() {
       setLoading(true);
 
-      medlinked
-        .get<PlanosSaudeResponse>("plano-saude")
+      getAllPlanosSaude()
         .then((response) => setConvenios(response.data))
         .catch(() =>
           toast.error(
@@ -152,8 +154,7 @@ export default function Page() {
     function getEstados() {
       setLoading(true);
 
-      medlinked
-        .get<EstadoResponse>("estado")
+      getAllEstados()
         .then((response) => setEstados(response.data))
         .catch(() =>
           toast.error(
@@ -167,8 +168,7 @@ export default function Page() {
     function getEspecialidades() {
       setLoading(true);
 
-      medlinked
-        .get<EspecializacaoResponse>("especialidade")
+      getAllEspecialidades()
         .then((response) => setEspecializacoes(response.data))
         .catch(() =>
           toast.error(
@@ -221,10 +221,7 @@ export default function Page() {
     if (filledCpf) {
       setLoading(true);
 
-      medlinked
-        .post<Pessoa>("pessoa/cpf", {
-          cpf: Number(onlyNumbers(watch("registerPessoa.cpf"))),
-        })
+      getPessoaByCpf(Number(onlyNumbers(cpfValue)))
         .then((response) => {
           if (response.data.idPessoa) {
             if (idMedico == 0) toast.info("Pessoa já cadastrada no sistema");
@@ -245,21 +242,7 @@ export default function Page() {
 
   const onSubmit: SubmitHandler<CreateMedico> = (data) => {
     if (idMedico == 0) {
-      medlinked
-        .post<SecretariaMedicoData>(
-          `medico/create/${
-            jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
-          }`,
-          {
-            nome: data.registerPessoa.nome,
-            cpf: onlyNumbers(data.registerPessoa.cpf),
-            celular: Number(onlyNumbers(data.registerPessoa.celular)),
-            email: data.registerPessoa.email,
-            ufCrm: data.ufCrm,
-            numeroCrm: Number(data.numeroCrm),
-            idsEspecialidades: data.idsEspecialidades,
-          },
-        )
+      createMedico(data)
         .then((response) => {
           toast.success("Médico cadastrado com sucesso!");
           setIdMedico(response.data.idMedico);
@@ -267,16 +250,7 @@ export default function Page() {
         })
         .catch((error) => toast.error(error.response.data));
     } else {
-      medlinked
-        .post<SecretariaMedicoData>(`medico/update/${idMedico}`, {
-          nome: data.registerPessoa.nome,
-          cpf: onlyNumbers(data.registerPessoa.cpf),
-          celular: Number(onlyNumbers(data.registerPessoa.celular)),
-          email: data.registerPessoa.email,
-          ufCrm: data.ufCrm,
-          numeroCrm: Number(data.numeroCrm),
-          idsEspecialidades: data.idsEspecialidades,
-        })
+      updateMedico(data, idMedico)
         .then((response) => {
           toast.success("Médico atualizado com sucesso!");
           setIdMedico(response.data.idMedico);
@@ -284,22 +258,6 @@ export default function Page() {
         .catch((error) => toast.error(error.response.data));
     }
   };
-
-  function associateConvenio(idPlanoSaude: number) {
-    return medlinked.put(
-      `plano-saude/medico/adiciona-planos-medico/${idMedico}`,
-      {
-        idsPlanosSaude: [idPlanoSaude],
-      },
-    );
-  }
-
-  function removeConvenio(idPlanoSaude: number) {
-    return medlinked.put(
-      // eslint-disable-next-line max-len
-      `plano-saude/medico/update-medico-remove-plano/${idMedico}/${idPlanoSaude}`,
-    );
-  }
 
   return (
     <>
@@ -550,7 +508,7 @@ export default function Page() {
                 fullWidth
                 disabled={currentConvenio.value == ""}
                 onClick={() => {
-                  associateConvenio(Number(currentConvenio.value))
+                  associateConvenio(Number(currentConvenio.value), idMedico)
                     .then(() => {
                       setCurrentConvenio({ label: "", value: "" });
                       setIdsPlanosSaude([
@@ -589,7 +547,7 @@ export default function Page() {
                     <CustomText $size="h2">{convenio.descricao}</CustomText>
                     <Trash
                       onClick={() => {
-                        removeConvenio(convenio.idPlanoSaude)
+                        removeConvenio(convenio.idPlanoSaude, idMedico)
                           .then(() => {
                             setIdsPlanosSaude(
                               idsPlanosSaude.filter(

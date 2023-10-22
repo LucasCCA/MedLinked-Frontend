@@ -1,6 +1,5 @@
 "use client";
 
-import { medlinked } from "@medlinked/api";
 import {
   Button,
   Card,
@@ -11,10 +10,9 @@ import {
   Spacing,
   Spinner,
 } from "@medlinked/components";
-import { SecretariaMedicoResponse, TokenData } from "@medlinked/types";
-import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
-import { useCallback, useEffect, useState } from "react";
+import { getAllMedicosSecretaria } from "@medlinked/services";
+import { SecretariaMedicoResponse } from "@medlinked/types";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   CardInfoContainer,
@@ -43,13 +41,8 @@ export default function Page() {
   });
   const [currentIdMedico, setCurrentIdMedico] = useState(0);
 
-  const getMedicos = useCallback(() => {
-    medlinked
-      .get<SecretariaMedicoResponse>(
-        `secretaria/medico/${
-          jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
-        }?page=${pageNumber}&pageSize=${Number(selectedPageSize.value)}`,
-      )
+  function getMedicos() {
+    getAllMedicosSecretaria(pageNumber, Number(selectedPageSize.value))
       .then((response) => setMedicos(response.data))
       .catch(() =>
         toast.error(
@@ -57,7 +50,7 @@ export default function Page() {
         ),
       )
       .finally(() => setLoading(false));
-  }, [pageNumber, selectedPageSize]);
+  }
 
   useEffect(() => {
     getMedicos();
