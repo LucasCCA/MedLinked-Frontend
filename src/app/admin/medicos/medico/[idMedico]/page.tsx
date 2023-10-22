@@ -77,6 +77,7 @@ export default function Page() {
   const [disabledItems, setDisabledItems] = useState(idMedico == 0 ? [2] : []);
   const [currentInfoStep, setCurrentInfoStep] = useState(1);
   const [filledCpf, setFilledCpf] = useState(false);
+  const [personAlreadyRegistered, setPersonAlreadyRegistered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [estados, setEstados] = useState<EstadoResponse>([]);
   const [especializacoes, setEspecializacoes] =
@@ -104,6 +105,7 @@ export default function Page() {
     watch,
     setValue,
     trigger,
+    resetField,
   } = useForm<CreateMedico>({ resolver: yupResolver(registerMedicoSchema) });
 
   const cpfValue = watch("registerPessoa.cpf");
@@ -222,23 +224,33 @@ export default function Page() {
     setValue("registerPessoa.celular", phoneNumberMask(phoneNumberValue));
     setValue("numeroCrm", crmMask(crmValue));
     setValue("ufCrm", currentUf?.value);
-    setFilledCpf(watch("registerPessoa.cpf").length == 14);
+    setFilledCpf(
+      idMedico == 0 ? watch("registerPessoa.cpf").length == 14 : true,
+    );
   }, [cpfValue, phoneNumberValue, crmValue, currentUf]);
 
   useEffect(() => {
     if (filledCpf) {
-      setLoading(true);
+      if (idMedico == 0) {
+        setPersonAlreadyRegistered(false);
+        resetField("registerPessoa.nome");
+        resetField("registerPessoa.email");
+        resetField("registerPessoa.celular");
 
-      getPessoaByCpf(Number(onlyNumbers(cpfValue)))
-        .then((response) => {
-          if (response.data.idPessoa) {
-            if (idMedico == 0) toast.info("Pessoa já cadastrada no sistema");
-            setValue("registerPessoa.nome", response.data.nome);
-            setValue("registerPessoa.email", response.data.email);
-            setValue("registerPessoa.celular", String(response.data.celular));
-          }
-        })
-        .finally(() => setLoading(false));
+        setLoading(true);
+
+        getPessoaByCpf(Number(onlyNumbers(cpfValue)))
+          .then((response) => {
+            if (response.data.idPessoa) {
+              toast.info("Pessoa já cadastrada no sistema");
+              setPersonAlreadyRegistered(true);
+              setValue("registerPessoa.nome", response.data.nome);
+              setValue("registerPessoa.email", response.data.email);
+              setValue("registerPessoa.celular", String(response.data.celular));
+            }
+          })
+          .finally(() => setLoading(false));
+      }
     }
   }, [filledCpf]);
 
@@ -298,7 +310,7 @@ export default function Page() {
                   fullWidth
                   maxLength={120}
                   register={{ ...register("registerPessoa.nome") }}
-                  disabled={!filledCpf || loading}
+                  disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.nome)}
                   errorMessage={errors.registerPessoa?.nome?.message}
                 />
@@ -307,16 +319,16 @@ export default function Page() {
                   fullWidth
                   maxLength={120}
                   register={{ ...register("registerPessoa.email") }}
-                  disabled={!filledCpf || loading}
+                  disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.email)}
                   errorMessage={errors.registerPessoa?.email?.message}
                 />
                 <Input
-                  placeholder="Digite o celular"
+                  placeholder="Digite o celular *"
                   fullWidth
                   maxLength={17}
                   register={{ ...register("registerPessoa.celular") }}
-                  disabled={!filledCpf || loading}
+                  disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.celular)}
                   errorMessage={errors.registerPessoa?.celular?.message}
                 />
