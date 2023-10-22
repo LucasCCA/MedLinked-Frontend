@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Pen, Plus, Search, Trash } from "lucide-react";
+import { Calendar, Pen, Plus, Search, Trash, Unlink } from "lucide-react";
 import { CustomLink, CustomText } from "..";
 import { StyledButton } from "./styles";
 
@@ -8,7 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   children: React.ReactNode;
   color?: "red_80";
-  icon?: "Plus" | "Pen" | "Trash" | "Calendar" | "Search";
+  icon?: "Plus" | "Pen" | "Trash" | "Calendar" | "Search" | "Unlink";
   fullWidth?: boolean;
   textAlign?: "center";
 }
@@ -36,6 +36,7 @@ export function Button({
           {icon == "Trash" && <Trash size={25} />}
           {icon == "Calendar" && <Calendar size={25} />}
           {icon == "Search" && <Search size={25} />}
+          {icon == "Unlink" && <Unlink size={25} />}
           <CustomText $color="white">{children}</CustomText>
         </StyledButton>
       )}
@@ -53,6 +54,7 @@ export function Button({
             {icon == "Trash" && <Trash size={25} />}
             {icon == "Calendar" && <Calendar size={25} />}
             {icon == "Search" && <Search size={25} />}
+            {icon == "Unlink" && <Unlink size={25} />}
             {children}
           </CustomLink>
         </StyledButton>

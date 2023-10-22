@@ -18,3 +18,11 @@ export function associateMedicoSecretaria(idMedico: number) {
     }/${idMedico}`,
   );
 }
+
+export function disassociateMedicoSecretaria(idMedico: number) {
+  return medlinked.put(
+    `secretaria/medico/disassociate/${
+      jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
+    }/${idMedico}`,
+  );
+}

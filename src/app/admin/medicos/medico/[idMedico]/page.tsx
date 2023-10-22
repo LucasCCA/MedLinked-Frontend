@@ -42,7 +42,11 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CPFContainer, CardContentContainer, FieldsContainer } from "../styles";
+import {
+  CardContentContainer,
+  FieldsContainer,
+  SingleFieldContainer,
+} from "../styles";
 
 const tabsItems = [
   {
@@ -277,7 +281,7 @@ export default function Page() {
               <CustomText $size="h2">Dados Pessoais</CustomText>
             </Spacing>
             <Spacing>
-              <CPFContainer>
+              <SingleFieldContainer>
                 <Input
                   placeholder="Digite o CPF *"
                   fullWidth
@@ -287,7 +291,7 @@ export default function Page() {
                   hasError={Boolean(errors.registerPessoa?.cpf)}
                   errorMessage={errors.registerPessoa?.cpf?.message}
                 />
-              </CPFContainer>
+              </SingleFieldContainer>
               <FieldsContainer>
                 <Input
                   placeholder="Digite o nome *"
@@ -322,7 +326,7 @@ export default function Page() {
               <CustomText $weight={500}>* Campo Obrigatório</CustomText>
             </Spacing>
             <Spacing>
-              <FieldsContainer>
+              <SingleFieldContainer>
                 <Button
                   textAlign="center"
                   fullWidth
@@ -336,7 +340,7 @@ export default function Page() {
                 >
                   Próximo
                 </Button>
-              </FieldsContainer>
+              </SingleFieldContainer>
             </Spacing>
           </>
         ) : (
@@ -372,7 +376,7 @@ export default function Page() {
                 <CustomText $size="h2">Especializações</CustomText>
               </Spacing>
               <Spacing>
-                <FieldsContainer>
+                <SingleFieldContainer>
                   <Select
                     placeholder="Escolha uma especialização *"
                     fullWidth
@@ -386,13 +390,13 @@ export default function Page() {
                     hasError={Boolean(errors.idsEspecialidades)}
                     errorMessage={errors.idsEspecialidades?.message}
                   />
-                </FieldsContainer>
+                </SingleFieldContainer>
               </Spacing>
               <Spacing>
                 <CustomText $weight={500}>* Campo Obrigatório</CustomText>
               </Spacing>
               <Spacing>
-                <FieldsContainer>
+                <SingleFieldContainer>
                   <Button
                     textAlign="center"
                     fullWidth
@@ -414,7 +418,7 @@ export default function Page() {
                   >
                     Vincular especialização
                   </Button>
-                </FieldsContainer>
+                </SingleFieldContainer>
               </Spacing>
               {idsEspecialidades.length > 0 && (
                 <Spacing>
@@ -481,7 +485,7 @@ export default function Page() {
             <CustomText $size="h2">Convênios</CustomText>
           </Spacing>
           <Spacing>
-            <FieldsContainer>
+            <SingleFieldContainer>
               <Select
                 placeholder="Escolha um convênio *"
                 fullWidth
@@ -494,13 +498,13 @@ export default function Page() {
                 outsideSelected={currentConvenio}
                 setOutsideSelected={setCurrentConvenio}
               />
-            </FieldsContainer>
+            </SingleFieldContainer>
           </Spacing>
           <Spacing>
             <CustomText $weight={500}>* Campo Obrigatório</CustomText>
           </Spacing>
           <Spacing>
-            <FieldsContainer>
+            <SingleFieldContainer>
               <Button
                 textAlign="center"
                 fullWidth
@@ -528,7 +532,7 @@ export default function Page() {
               >
                 Vincular convênio
               </Button>
-            </FieldsContainer>
+            </SingleFieldContainer>
           </Spacing>
           {idsPlanosSaude.length > 0 && (
             <Spacing>
