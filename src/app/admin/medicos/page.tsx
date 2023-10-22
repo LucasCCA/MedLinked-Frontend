@@ -10,7 +10,7 @@ import {
   Spacing,
   Spinner,
 } from "@medlinked/components";
-import { getAllMedicosSecretaria } from "@medlinked/services";
+import { deleteMedico, getAllMedicosSecretaria } from "@medlinked/services";
 import { SecretariaMedicoResponse } from "@medlinked/types";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -52,6 +52,20 @@ export default function Page() {
       .finally(() => setLoading(false));
   }
 
+  function handleDelete() {
+    deleteMedico(currentIdMedico)
+      .then(() => {
+        setCurrentIdMedico(0);
+        getMedicos();
+        toast.success("Médico deletado com sucesso!");
+      })
+      .catch(() =>
+        toast.error(
+          "Ocorreu um erro ao deletar o médico. Tente novamente mais tarde.",
+        ),
+      );
+  }
+
   useEffect(() => {
     getMedicos();
   }, [pageNumber, selectedPageSize]);
@@ -80,6 +94,7 @@ export default function Page() {
             color="red_80"
             fullWidth
             disabled={currentIdMedico == 0}
+            onClick={() => handleDelete()}
           >
             Deletar
           </Button>
