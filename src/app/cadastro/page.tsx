@@ -1,7 +1,6 @@
 "use client";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { medlinked } from "@medlinked/api";
 import {
   Button,
   Container,
@@ -10,8 +9,9 @@ import {
   Input,
 } from "@medlinked/components";
 import { registerSchema } from "@medlinked/schemas";
-import { RegisterSecretaria, UsuarioResponse } from "@medlinked/types";
-import { cpfMask, onlyNumbers, phoneNumberMask } from "@medlinked/utils";
+import { createSecretaria } from "@medlinked/services";
+import { RegisterSecretaria } from "@medlinked/types";
+import { cpfMask, phoneNumberMask } from "@medlinked/utils";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -42,17 +42,7 @@ export default function Page() {
   const onSubmit: SubmitHandler<RegisterSecretaria> = (data) => {
     setSigningUp(true);
 
-    medlinked
-      .post<UsuarioResponse>("secretaria/create", {
-        nome: data.pessoa.nome,
-        cpf: onlyNumbers(data.pessoa.cpf),
-        celular: Number(onlyNumbers(data.pessoa.celular)),
-        email: data.pessoa.email,
-        usuarioRegisterDto: {
-          username: data.usuario.username,
-          password: data.usuario.password,
-        },
-      })
+    createSecretaria(data)
       .then((response) => {
         Cookies.set("token", response.data.token);
         router.push("/admin");

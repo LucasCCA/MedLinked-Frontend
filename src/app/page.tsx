@@ -1,7 +1,6 @@
 "use client";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { medlinked } from "@medlinked/api";
 import {
   Button,
   Container,
@@ -10,7 +9,8 @@ import {
   Input,
 } from "@medlinked/components";
 import { loginSchema } from "@medlinked/schemas";
-import { Usuario, UsuarioResponse } from "@medlinked/types";
+import { authenticate } from "@medlinked/services";
+import { Usuario } from "@medlinked/types";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -41,11 +41,7 @@ export default function Page() {
   const onSubmit: SubmitHandler<Usuario> = (data) => {
     setLoggingIn(true);
 
-    medlinked
-      .post<UsuarioResponse>("usuario/authenticate", {
-        username: data.username,
-        password: data.password,
-      })
+    authenticate(data)
       .then((response) => {
         Cookies.set("token", response.data.token);
         router.push("/admin");
