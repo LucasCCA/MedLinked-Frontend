@@ -8,6 +8,7 @@ export type SecretariaMedicoData = {
   celular: number;
   planosSaudeMedico: PlanosSaudeResponse;
   ufCrm: string;
+  descricaoUf: string;
   numeroCrm: number;
   especialidades: EspecializacaoResponse;
 };

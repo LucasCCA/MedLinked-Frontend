@@ -33,6 +33,7 @@ import {
 import {
   cpfMask,
   crmMask,
+  formatCpf,
   onlyNumbers,
   phoneNumberMask,
 } from "@medlinked/utils";
@@ -98,7 +99,6 @@ export default function Page() {
     formState: { errors },
     watch,
     setValue,
-    getValues,
     trigger,
   } = useForm<CreateMedico>({ resolver: yupResolver(registerMedicoSchema) });
 
@@ -109,7 +109,7 @@ export default function Page() {
   useEffect(() => {
     function getExistingMedico() {
       getMedico(idMedico).then((response) => {
-        setValue("registerPessoa.cpf", cpfMask(response.data.cpf.toString()));
+        setValue("registerPessoa.cpf", cpfMask(formatCpf(response.data.cpf)));
         setValue(
           "registerPessoa.celular",
           phoneNumberMask(response.data.celular.toString()),
@@ -129,6 +129,10 @@ export default function Page() {
         );
         setValue("numeroCrm", response.data.numeroCrm.toString());
         setValue("ufCrm", response.data.ufCrm);
+        setCurrentUf({
+          label: response.data.descricaoUf,
+          value: response.data.ufCrm,
+        });
         setIdsPlanosSaude(
           response.data.planosSaudeMedico.map(
             (planoSaude) => planoSaude.idPlanoSaude,
@@ -228,12 +232,6 @@ export default function Page() {
             setValue("registerPessoa.nome", response.data.nome);
             setValue("registerPessoa.email", response.data.email);
             setValue("registerPessoa.celular", String(response.data.celular));
-            if (idMedico != 0)
-              setCurrentUf(
-                estadosOptions.find(
-                  (estadoOption) => estadoOption.value == getValues("ufCrm"),
-                )!,
-              );
           }
         })
         .finally(() => setLoading(false));
