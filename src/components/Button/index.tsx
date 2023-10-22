@@ -31,13 +31,15 @@ export function Button({
           $textAlign={textAlign}
           {...props}
         >
-          {icon == "Plus" && <Plus size={25} />}
-          {icon == "Pen" && <Pen size={25} />}
-          {icon == "Trash" && <Trash size={25} />}
-          {icon == "Calendar" && <Calendar size={25} />}
-          {icon == "Search" && <Search size={25} />}
-          {icon == "Unlink" && <Unlink size={25} />}
-          <CustomText $color="white">{children}</CustomText>
+          <CustomText $color="white">
+            {icon == "Plus" && <Plus size={25} />}
+            {icon == "Pen" && <Pen size={25} />}
+            {icon == "Trash" && <Trash size={25} />}
+            {icon == "Calendar" && <Calendar size={25} />}
+            {icon == "Search" && <Search size={25} />}
+            {icon == "Unlink" && <Unlink size={25} />}
+            {children}
+          </CustomText>
         </StyledButton>
       )}
       {href && (

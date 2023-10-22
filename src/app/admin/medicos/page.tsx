@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CustomText,
+  Modal,
   NoResults,
   Pagination,
   Select,
@@ -22,6 +23,7 @@ import {
   CardInfoContainer,
   CardsContainer,
   FiltersContainer,
+  ModalButtonContainer,
   PaginationAndRecordsContainer,
 } from "./styles";
 
@@ -44,6 +46,8 @@ export default function Page() {
     value: "5",
   });
   const [currentIdMedico, setCurrentIdMedico] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalText, setModalText] = useState(0);
 
   function getMedicos() {
     setMedicos({
@@ -67,6 +71,7 @@ export default function Page() {
     disassociateMedicoSecretaria(currentIdMedico)
       .then(() => {
         setCurrentIdMedico(0);
+        setOpenModal(false);
         getMedicos();
         toast.success("Médico desvinculado com sucesso!");
       })
@@ -82,6 +87,7 @@ export default function Page() {
     deleteMedico(currentIdMedico)
       .then(() => {
         setCurrentIdMedico(0);
+        setOpenModal(false);
         getMedicos();
         toast.success("Médico deletado com sucesso!");
       })
@@ -102,9 +108,86 @@ export default function Page() {
 
   return (
     <>
+      <Modal title="Confirmação" open={openModal} setOpen={setOpenModal}>
+        {modalText == 1 && (
+          <>
+            <CustomText $align="center">
+              Você deseja criar um novo médico ou se vincular a um existente?
+            </CustomText>
+            <ModalButtonContainer>
+              <Button fullWidth href="/admin/medicos/0" textAlign="center">
+                Criar novo
+              </Button>
+              <Button
+                fullWidth
+                href="/admin/medicos/vincular"
+                textAlign="center"
+              >
+                Vincular a existente
+              </Button>
+            </ModalButtonContainer>
+          </>
+        )}
+        {modalText == 2 && (
+          <>
+            <CustomText $align="center">
+              Você realmente deseja se desvincular desse médico? Caso ele não
+              esteja vinculado a nenhuma outra secretária ele será deletado
+            </CustomText>
+            <ModalButtonContainer>
+              <Button
+                fullWidth
+                textAlign="center"
+                onClick={() => handleDisassociate()}
+              >
+                Sim
+              </Button>
+              <Button
+                fullWidth
+                textAlign="center"
+                onClick={() => setOpenModal(false)}
+                color="red_80"
+              >
+                Não
+              </Button>
+            </ModalButtonContainer>
+          </>
+        )}
+        {modalText == 3 && (
+          <>
+            <CustomText $align="center">
+              Você realmente deseja deletar desse médico?
+            </CustomText>
+            <ModalButtonContainer>
+              <Button
+                fullWidth
+                textAlign="center"
+                onClick={() => handleDelete()}
+              >
+                Sim
+              </Button>
+              <Button
+                fullWidth
+                textAlign="center"
+                onClick={() => setOpenModal(false)}
+                color="red_80"
+              >
+                Não
+              </Button>
+            </ModalButtonContainer>
+          </>
+        )}
+      </Modal>
       <Spacing>
         <FiltersContainer>
-          <Button icon="Plus" href="/admin/medicos/0" fullWidth>
+          <Button
+            icon="Plus"
+            fullWidth
+            onClick={() => {
+              setOpenModal(true);
+              setModalText(1);
+            }}
+          >
             Médico
           </Button>
           <Button
@@ -120,7 +203,10 @@ export default function Page() {
             color="red_80"
             fullWidth
             disabled={currentIdMedico == 0}
-            onClick={() => handleDisassociate()}
+            onClick={() => {
+              setOpenModal(true);
+              setModalText(2);
+            }}
           >
             Desvincular
           </Button>
@@ -129,7 +215,10 @@ export default function Page() {
             color="red_80"
             fullWidth
             disabled={currentIdMedico == 0}
-            onClick={() => handleDelete()}
+            onClick={() => {
+              setOpenModal(true);
+              setModalText(3);
+            }}
           >
             Deletar
           </Button>
