@@ -97,8 +97,6 @@ export default function Page() {
     trigger,
   } = useForm<CreateMedico>({ resolver: yupResolver(registerMedicoSchema) });
 
-  console.log(currentUf);
-
   const cpfValue = watch("registerPessoa.cpf");
   const phoneNumberValue = watch("registerPessoa.celular");
   const crmValue = watch("numeroCrm");
