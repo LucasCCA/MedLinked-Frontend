@@ -22,6 +22,7 @@ export const FieldsContainer = styled.div`
     display: grid;
     grid-template-columns: calc(50% - 5px) calc(50% - 5px);
     justify-content: flex-start;
+    align-items: flex-start;
   }
 `;
 

@@ -3,23 +3,23 @@
 import { ChevronDown } from "lucide-react";
 import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { CustomText, Input } from "..";
+import { UseFormRegisterReturn } from "react-hook-form";
+import { CustomText } from "..";
 import {
   ErrorMessageContainer,
   NoOptionContainer,
   Option,
   OptionText,
   OptionsContainer,
-  SearchContainer,
   SelectAndErrorContainer,
   SelectContainer,
   StyledInput,
   StyledSelect,
 } from "./styles";
 
-type OptionData = {
+export type OptionData = {
   label: string;
-  value: number;
+  value: string;
 };
 
 interface SelectProps extends HTMLAttributes<HTMLSelectElement> {
@@ -29,8 +29,9 @@ interface SelectProps extends HTMLAttributes<HTMLSelectElement> {
   hasError?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
-  selected: number;
-  setSelected: Dispatch<SetStateAction<number>>;
+  outsideSelected?: OptionData;
+  setOutsideSelected?: Dispatch<SetStateAction<OptionData>>;
+  register?: UseFormRegisterReturn<string>;
 }
 
 export function Select({
@@ -41,13 +42,17 @@ export function Select({
   disabled,
   readOnly,
   placeholder,
-  selected,
-  setSelected,
+  outsideSelected,
+  setOutsideSelected,
+  register,
   ...props
 }: SelectProps) {
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<OptionData>(
+    outsideSelected || { label: "", value: "" },
+  );
   const ref = useDetectClickOutside({
     onTriggered: () => {
       if (openAnimation) {
@@ -59,7 +64,8 @@ export function Select({
 
   return (
     <SelectAndErrorContainer $fullWidth={fullWidth}>
-      <StyledSelect {...props} defaultValue={selected}>
+      <StyledSelect {...props} {...register}>
+        <option value={""} />
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -67,6 +73,7 @@ export function Select({
         ))}
       </StyledSelect>
       <SelectContainer
+        {...register}
         $fullWidth={fullWidth}
         $error={hasError}
         $openAnimation={openAnimation}
@@ -82,15 +89,18 @@ export function Select({
         ref={ref}
       >
         <StyledInput
+          autoComplete="off"
           placeholder={placeholder}
-          value={
-            options.find((option) => option.value == selected) == undefined
-              ? ""
-              : options.find((option) => option.value == selected)!.label
-          }
-          readOnly
+          value={selected.value != "" ? selected.label : search}
+          readOnly={readOnly}
+          onChange={(e) => {
+            setSearch(e.currentTarget.value);
+            setSelected({ label: "", value: "" });
+            if (setOutsideSelected != undefined)
+              setOutsideSelected({ label: "", value: "" });
+          }}
           onClick={() => {
-            if (openAnimation) {
+            if (readOnly && openAnimation) {
               setOpenAnimation(false);
               setCloseAnimation(true);
             }
@@ -113,17 +123,6 @@ export function Select({
           $closeAnimation={closeAnimation}
           $fullWidth={fullWidth}
         >
-          <SearchContainer $readOnly={readOnly}>
-            <Input
-              icon={"Search"}
-              value={search}
-              placeholder="Pesquisar..."
-              onChange={(e) => {
-                setSearch(e.currentTarget.value);
-              }}
-              fullWidth
-            />
-          </SearchContainer>
           {options?.filter((option) =>
             option.label
               .toLowerCase()
@@ -145,10 +144,12 @@ export function Select({
               .map((option) => (
                 <Option
                   key={option.value}
-                  $selected={selected == option.value}
+                  $selected={selected.value == option.value}
                   onClick={() => {
-                    setSelected(option.value);
                     setSearch("");
+                    setSelected(option);
+                    if (setOutsideSelected != undefined)
+                      setOutsideSelected(option);
                     if (openAnimation) {
                       setOpenAnimation(false);
                       setCloseAnimation(true);
@@ -156,7 +157,7 @@ export function Select({
                   }}
                 >
                   <OptionText
-                    $selected={selected == option.value}
+                    $selected={selected?.value == option.value}
                     $align="left"
                   >
                     {option.label}
@@ -166,7 +167,7 @@ export function Select({
         </OptionsContainer>
       </SelectContainer>
       {hasError && (
-        <ErrorMessageContainer>
+        <ErrorMessageContainer $fullWidth={fullWidth}>
           <CustomText $size="h5" $color="red_80">
             {errorMessage}
           </CustomText>

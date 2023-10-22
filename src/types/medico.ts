@@ -1,10 +1,10 @@
 import { Pessoa, RegisterPessoa } from "./pessoa";
-import { PlanosSaude } from "./planosSaude";
+import { PlanosSaudeResponse } from "./planosSaude";
 
 export type Medico = {
   idMedico: number;
   pessoa: Pessoa;
-  planosSaude: PlanosSaude[];
+  planosSaude: PlanosSaudeResponse;
 };
 
 export type MedicoResponse = Medico[];
@@ -12,6 +12,6 @@ export type MedicoResponse = Medico[];
 export type CreateMedico = {
   registerPessoa: RegisterPessoa;
   ufCrm: string;
-  numeroCrm: number;
+  numeroCrm: string;
   idsEspecialidades: number[];
 };

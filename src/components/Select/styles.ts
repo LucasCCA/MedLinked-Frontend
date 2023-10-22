@@ -184,7 +184,7 @@ const showOptions = keyframes`
   }
 
   to {
-    max-height: 190px;
+    max-height: 180px;
   }
 `;
 
@@ -266,13 +266,6 @@ export const NoOptionContainer = styled.div`
   > p {
     padding: 0.5rem 1rem;
   }
-`;
-
-export const SearchContainer = styled.div<SelectProps>`
-  max-width: 100%;
-  height: 100%;
-  margin: 5px;
-  display: ${(props) => (props.$readOnly ? "none" : "block")};
 `;
 
 export const OptionText = styled(CustomText)<OptionProps>`
