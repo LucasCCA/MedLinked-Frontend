@@ -67,7 +67,7 @@ export default function Page() {
   useEffect(() => {
     setValue("pessoa.cpf", cpfMask(cpfValue));
     setValue("pessoa.celular", phoneNumberMask(phoneNumberValue));
-  }, [cpfValue, phoneNumberValue, setValue]);
+  }, [cpfValue, phoneNumberValue]);
 
   return (
     <BlueBackground>

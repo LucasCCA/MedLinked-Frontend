@@ -62,11 +62,11 @@ export default function Page() {
     <>
       <Spacing>
         <FiltersContainer>
-          <Button icon="plus" href="/admin/pacientes/paciente/0" fullWidth>
+          <Button icon="Plus" href="/admin/pacientes/paciente/0" fullWidth>
             Paciente
           </Button>
           <Button
-            icon="pen"
+            icon="Pen"
             // eslint-disable-next-line max-len
             href={`/admin/pacientes/medico/${currentPaciente?.paciente.idPaciente}`}
             fullWidth
@@ -75,7 +75,7 @@ export default function Page() {
             Visualizar / Editar
           </Button>
           <Button
-            icon="trash"
+            icon="Trash"
             color="red_80"
             fullWidth
             disabled={currentPaciente == null}
@@ -83,7 +83,7 @@ export default function Page() {
             Deletar
           </Button>
           <Button
-            icon="calendar"
+            icon="Calendar"
             // eslint-disable-next-line max-len
             href={`/admin/pacientes/agendamento/${currentPaciente?.paciente.idPaciente}`}
             fullWidth

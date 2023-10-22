@@ -11,7 +11,7 @@ import {
   Spacing,
   Spinner,
 } from "@medlinked/components";
-import { Medico, SecretariaMedicoResponse, TokenData } from "@medlinked/types";
+import { SecretariaMedicoResponse, TokenData } from "@medlinked/types";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import { useCallback, useEffect, useState } from "react";
@@ -24,9 +24,9 @@ import {
 } from "./styles";
 
 const records = [
-  { label: "5", value: 5 },
-  { label: "10", value: 10 },
-  { label: "25", value: 25 },
+  { label: "5", value: "5" },
+  { label: "10", value: "10" },
+  { label: "25", value: "25" },
 ];
 
 export default function Page() {
@@ -37,15 +37,18 @@ export default function Page() {
     totalPages: 0,
   });
   const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
-  const [currentMedico, setCurrentMedico] = useState<Medico>();
+  const [selectedPageSize, setSelectedPageSize] = useState({
+    label: "5",
+    value: "5",
+  });
+  const [currentIdMedico, setCurrentIdMedico] = useState(0);
 
   const getMedicos = useCallback(() => {
     medlinked
       .get<SecretariaMedicoResponse>(
         `secretaria/medico/${
           jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
-        }?page=${pageNumber}&pageSize=${pageSize}`,
+        }?page=${pageNumber}&pageSize=${Number(selectedPageSize.value)}`,
       )
       .then((response) => setMedicos(response.data))
       .catch(() =>
@@ -54,11 +57,11 @@ export default function Page() {
         ),
       )
       .finally(() => setLoading(false));
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, selectedPageSize]);
 
   useEffect(() => {
     getMedicos();
-  }, [pageNumber, pageSize, getMedicos]);
+  }, [pageNumber, selectedPageSize]);
 
   function changePage(number: number) {
     setPageNumber(number);
@@ -68,22 +71,22 @@ export default function Page() {
     <>
       <Spacing>
         <FiltersContainer>
-          <Button icon="plus" href="/admin/medicos/medico/0" fullWidth>
+          <Button icon="Plus" href="/admin/medicos/medico/0" fullWidth>
             Médico
           </Button>
           <Button
-            icon="pen"
-            href={`/admin/medicos/medico/${currentMedico?.idMedico}`}
+            icon="Pen"
+            href={`/admin/medicos/medico/${currentIdMedico}`}
             fullWidth
-            disabled={currentMedico == null}
+            disabled={currentIdMedico == 0}
           >
             Visualizar / Editar
           </Button>
           <Button
-            icon="trash"
+            icon="Trash"
             color="red_80"
             fullWidth
-            disabled={currentMedico == null}
+            disabled={currentIdMedico == 0}
           >
             Deletar
           </Button>
@@ -96,15 +99,15 @@ export default function Page() {
             {medicos?.content.map((medico) => (
               <Card
                 $selectable
-                key={medico.medico.idMedico}
-                onClick={() => setCurrentMedico(medico.medico)}
-                $selected={currentMedico?.idMedico == medico.medico.idMedico}
+                key={medico.idMedico}
+                onClick={() => setCurrentIdMedico(medico.idMedico)}
+                $selected={currentIdMedico == medico.idMedico}
               >
-                <CustomText $size="h2">{medico.medico.pessoa.nome}</CustomText>
+                <CustomText $size="h2">{medico.nome}</CustomText>
                 <CardInfoContainer>
                   <CustomText $size="h3">CRM:</CustomText>
                   <CustomText $size="h3" $weight={300}>
-                    {`CRM/${medico.estado.uf} ${medico.numeroCrm.toString()}`}
+                    {`CRM/${medico.ufCrm} ${medico.numeroCrm.toString()}`}
                   </CustomText>
                 </CardInfoContainer>
                 <CardInfoContainer>
@@ -126,11 +129,11 @@ export default function Page() {
       ) : (
         !loading && <NoResults message={"Nenhum médico encontrado"} />
       )}
-      {!loading && (
+      {!loading && medicos.content.length > 0 && (
         <PaginationAndRecordsContainer>
           <Select
-            selected={pageSize}
-            setSelected={setPageSize}
+            outsideSelected={selectedPageSize}
+            setOutsideSelected={setSelectedPageSize}
             options={records}
             fullWidth
             readOnly
