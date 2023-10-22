@@ -42,6 +42,13 @@ export default function Page() {
   const [currentIdMedico, setCurrentIdMedico] = useState(0);
 
   function getMedicos() {
+    setMedicos({
+      content: [],
+      pageable: { pageNumber: 0, pageSize: 0 },
+      totalPages: 0,
+    });
+    setLoading(true);
+
     getAllMedicosSecretaria(pageNumber, Number(selectedPageSize.value))
       .then((response) => setMedicos(response.data))
       .catch(() =>
@@ -115,7 +122,7 @@ export default function Page() {
                 <CardInfoContainer>
                   <CustomText $size="h3">CRM:</CustomText>
                   <CustomText $size="h3" $weight={300}>
-                    {`CRM/${medico.ufCrm} ${medico.numeroCrm.toString()}`}
+                    {`CRM/${medico.estado.uf} ${medico.numeroCrm.toString()}`}
                   </CustomText>
                 </CardInfoContainer>
                 <CardInfoContainer>

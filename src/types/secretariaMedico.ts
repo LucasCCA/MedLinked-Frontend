@@ -1,4 +1,9 @@
-import { EspecializacaoResponse, Pageable, PlanosSaudeResponse } from ".";
+import {
+  EspecializacaoResponse,
+  Estado,
+  Pageable,
+  PlanosSaudeResponse,
+} from ".";
 
 export type SecretariaMedicoData = {
   idMedico: number;
@@ -7,8 +12,7 @@ export type SecretariaMedicoData = {
   email: string;
   celular: number;
   planosSaudeMedico: PlanosSaudeResponse;
-  ufCrm: string;
-  descricaoUf: string;
+  estado: Estado;
   numeroCrm: number;
   especialidades: EspecializacaoResponse;
 };

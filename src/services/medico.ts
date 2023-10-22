@@ -1,6 +1,7 @@
 import { medlinked } from "@medlinked/api";
 import {
   CreateMedico,
+  MedicoResponse,
   SecretariaMedicoData,
   TokenData,
 } from "@medlinked/types";
@@ -41,4 +42,8 @@ export function updateMedico(data: CreateMedico, idMedico: number) {
 
 export function deleteMedico(idMedico: number) {
   return medlinked.delete(`medico/delete/${idMedico}`);
+}
+
+export function getAllMedicos() {
+  return medlinked.get<MedicoResponse>("medico");
 }
