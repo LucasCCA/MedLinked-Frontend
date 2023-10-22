@@ -104,12 +104,12 @@ export default function Page() {
     <>
       <Spacing>
         <FiltersContainer>
-          <Button icon="Plus" href="/admin/medicos/medico/0" fullWidth>
+          <Button icon="Plus" href="/admin/medicos/0" fullWidth>
             Médico
           </Button>
           <Button
             icon="Pen"
-            href={`/admin/medicos/medico/${currentIdMedico}`}
+            href={`/admin/medicos/${currentIdMedico}`}
             fullWidth
             disabled={currentIdMedico == 0}
           >

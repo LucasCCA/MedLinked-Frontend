@@ -62,13 +62,12 @@ export default function Page() {
     <>
       <Spacing>
         <FiltersContainer>
-          <Button icon="Plus" href="/admin/pacientes/paciente/0" fullWidth>
+          <Button icon="Plus" href="/admin/pacientes/0" fullWidth>
             Paciente
           </Button>
           <Button
             icon="Pen"
-            // eslint-disable-next-line max-len
-            href={`/admin/pacientes/medico/${currentPaciente?.paciente.idPaciente}`}
+            href={`/admin/pacientes/${currentPaciente?.paciente.idPaciente}`}
             fullWidth
             disabled={currentPaciente == null}
           >
