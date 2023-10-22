@@ -6,6 +6,7 @@ export * from "./CustomText";
 export * from "./CustomText/CustomLink";
 export * from "./Header";
 export * from "./Input";
+export * from "./Modal";
 export * from "./Navbar";
 export * from "./NoResults";
 export * from "./Pagination";
