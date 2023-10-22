@@ -126,11 +126,6 @@ export default function Page() {
           );
           setValue("numeroCrm", response.data.numeroCrm.toString());
           setValue("ufCrm", response.data.ufCrm);
-          setCurrentUf(
-            estadosOptions.find(
-              (estado) => estado.value == response.data.ufCrm,
-            )!,
-          );
           setIdsPlanosSaude(
             response.data.planosSaudeMedico.map(
               (planoSaude) => planoSaude.idPlanoSaude,
