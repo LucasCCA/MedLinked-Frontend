@@ -73,7 +73,6 @@ export function Select({
         ))}
       </StyledSelect>
       <SelectContainer
-        {...register}
         $fullWidth={fullWidth}
         $error={hasError}
         $openAnimation={openAnimation}
