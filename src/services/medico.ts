@@ -38,3 +38,7 @@ export function updateMedico(data: CreateMedico, idMedico: number) {
     idsEspecialidades: data.idsEspecialidades,
   });
 }
+
+export function deleteMedico(idMedico: number) {
+  return medlinked.delete(`medico/delete/${idMedico}`);
+}
