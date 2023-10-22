@@ -16,7 +16,7 @@ import { MedicoResponse, SecretariaMedicoResponse } from "@medlinked/types";
 import { cpfMask, formatCpf } from "@medlinked/utils";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FieldsContainer } from "../styles";
+import { SingleFieldContainer } from "../styles";
 
 const breadcrumbItems = [
   {
@@ -116,7 +116,7 @@ export default function Page() {
         <Breadcrumb items={breadcrumbItems} />
       </Spacing>
       <Spacing>
-        <FieldsContainer>
+        <SingleFieldContainer>
           <Select
             placeholder="Escolha o médico *"
             fullWidth
@@ -125,10 +125,10 @@ export default function Page() {
             setOutsideSelected={setCurrentMedico}
             disabled={loading}
           />
-        </FieldsContainer>
+        </SingleFieldContainer>
       </Spacing>
       <Spacing>
-        <FieldsContainer>
+        <SingleFieldContainer>
           <Button
             textAlign="center"
             fullWidth
@@ -137,7 +137,7 @@ export default function Page() {
           >
             Vincular médico
           </Button>
-        </FieldsContainer>
+        </SingleFieldContainer>
       </Spacing>
     </>
   );

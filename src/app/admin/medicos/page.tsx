@@ -10,7 +10,11 @@ import {
   Spacing,
   Spinner,
 } from "@medlinked/components";
-import { deleteMedico, getAllMedicosSecretaria } from "@medlinked/services";
+import {
+  deleteMedico,
+  disassociateMedicoSecretaria,
+  getAllMedicosSecretaria,
+} from "@medlinked/services";
 import { SecretariaMedicoResponse } from "@medlinked/types";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -59,6 +63,21 @@ export default function Page() {
       .finally(() => setLoading(false));
   }
 
+  function handleDisassociate() {
+    disassociateMedicoSecretaria(currentIdMedico)
+      .then(() => {
+        setCurrentIdMedico(0);
+        getMedicos();
+        toast.success("Médico desvinculado com sucesso!");
+      })
+      .catch(() =>
+        toast.error(
+          // eslint-disable-next-line max-len
+          "Ocorreu um erro ao desvincular o médico. Tente novamente mais tarde.",
+        ),
+      );
+  }
+
   function handleDelete() {
     deleteMedico(currentIdMedico)
       .then(() => {
@@ -95,6 +114,15 @@ export default function Page() {
             disabled={currentIdMedico == 0}
           >
             Visualizar / Editar
+          </Button>
+          <Button
+            icon="Unlink"
+            color="red_80"
+            fullWidth
+            disabled={currentIdMedico == 0}
+            onClick={() => handleDisassociate()}
+          >
+            Desvincular
           </Button>
           <Button
             icon="Trash"

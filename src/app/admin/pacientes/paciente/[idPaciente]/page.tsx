@@ -105,7 +105,7 @@ export default function Page() {
             <CustomText $weight={500}>* Campo Obrigatório</CustomText>
           </Spacing>
           <Spacing>
-            <FieldsContainer>
+            <SingleFieldContainer>
               <Button
                 textAlign="center"
                 fullWidth
@@ -113,7 +113,7 @@ export default function Page() {
               >
                 Próximo
               </Button>
-            </FieldsContainer>
+            </SingleFieldContainer>
           </Spacing>
         </>
       ) : (
@@ -212,11 +212,11 @@ export default function Page() {
             <CustomText $weight={500}>* Campo Obrigatório</CustomText>
           </Spacing>
           <Spacing>
-            <FieldsContainer>
+            <SingleFieldContainer>
               <Button textAlign="center" fullWidth>
                 Vincular convênio
               </Button>
-            </FieldsContainer>
+            </SingleFieldContainer>
           </Spacing>
           <Spacing>
             <CustomText $size="h2">Convênios Vinculados</CustomText>
