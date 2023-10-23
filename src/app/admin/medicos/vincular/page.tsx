@@ -16,7 +16,7 @@ import { MedicoResponse, SecretariaMedicoResponse } from "@medlinked/types";
 import { cpfMask, formatCpf } from "@medlinked/utils";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { SingleFieldContainer } from "../styles";
+import { SingleFieldContainer } from "../../styles";
 
 const breadcrumbItems = [
   {

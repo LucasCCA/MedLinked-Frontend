@@ -46,7 +46,7 @@ import {
   CardContentContainer,
   FieldsContainer,
   SingleFieldContainer,
-} from "../styles";
+} from "../../styles";
 
 const tabsItems = [
   {
