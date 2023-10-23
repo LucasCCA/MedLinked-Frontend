@@ -14,7 +14,12 @@ import {
 } from "@medlinked/components";
 import { deletePaciente, getAllPacientes } from "@medlinked/services";
 import { PacienteResponse } from "@medlinked/types";
-import { cpfMask, formatPhoneNumber, onlyNumbers } from "@medlinked/utils";
+import {
+  cpfMask,
+  formatCpf,
+  formatPhoneNumber,
+  onlyNumbers,
+} from "@medlinked/utils";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
@@ -184,7 +189,7 @@ export default function Page() {
                 <CardInfoContainer>
                   <CustomText $size="h3">CPF:</CustomText>
                   <CustomText $size="h3" $weight={300}>
-                    {cpfMask(paciente.pessoa.cpf.toString())}
+                    {cpfMask(formatCpf(paciente.pessoa.cpf))}
                   </CustomText>
                 </CardInfoContainer>
                 <CardInfoContainer>
