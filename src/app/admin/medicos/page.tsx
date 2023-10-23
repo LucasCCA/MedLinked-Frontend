@@ -25,7 +25,7 @@ import {
   FiltersContainer,
   ModalButtonContainer,
   PaginationAndRecordsContainer,
-} from "./styles";
+} from "../styles";
 
 const records = [
   { label: "5", value: "5" },

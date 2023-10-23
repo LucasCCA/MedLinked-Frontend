@@ -94,8 +94,8 @@ export default function Page() {
             <Image
               src="/images/icon.png"
               alt="Logo Medlinked"
-              width={31}
-              height={31}
+              width={30}
+              height={30}
               quality={100}
               priority
             />

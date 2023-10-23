@@ -24,7 +24,7 @@ import {
   FieldsContainer,
   HealthInsuranceInfoContainer,
   SingleFieldContainer,
-} from "./styles";
+} from "../../styles";
 
 const tabsItems = [
   {
