@@ -71,8 +71,9 @@ export const PaginationAndRecordsContainer = styled.div`
 
 export const CardInfoContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 5px;
 `;
 
@@ -105,10 +106,25 @@ export const FieldsContainer = styled.div`
   }
 `;
 
+export const ModalButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+
+  @media ${breakpoints.sm} {
+    flex-direction: row;
+  }
+`;
+
 export const CardContentContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  gap: 15px;
   width: 100%;
 
   > svg {
@@ -118,5 +134,11 @@ export const CardContentContainer = styled.div`
       cursor: pointer;
       color: ${(props) => props.theme.colors.red_100};
     }
+  }
+
+  @media ${breakpoints.sm} {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
   }
 `;

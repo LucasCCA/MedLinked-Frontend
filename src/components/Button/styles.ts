@@ -11,8 +11,6 @@ export const StyledButton = styled.button<StyledButtonProps>`
   border-radius: ${(props) => props.theme.border_radius};
   background: ${(props) => props.theme.colors.dark_blue_80};
   border: none;
-  padding: ${(props) => (props.$hasLink ? 0 : "0.75rem 0")};
-  padding-left: ${(props) => (props.$hasLink ? 0 : "15px")};
   width: ${(props) => (props.$fullWidth ? "100%" : "240px")};
   display: flex;
   justify-content: ${(props) =>
@@ -23,13 +21,15 @@ export const StyledButton = styled.button<StyledButtonProps>`
   color: ${(props) => props.theme.colors.white};
   font-family: inherit;
   user-select: none;
+  padding: 0;
 
-  > a {
+  > a,
+  p {
     width: 100%;
-    padding: 0.75rem 0;
-    padding-left: 15px;
+    padding: 0.75rem 15px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: ${(props) =>
+      props.$textAlign == "center" ? "center" : "flex-start"};
     align-items: center;
     gap: 5px;
 
