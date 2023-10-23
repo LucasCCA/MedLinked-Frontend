@@ -2,6 +2,7 @@ export * from "./especialidade";
 export * from "./estado";
 export * from "./medico";
 export * from "./medicoPlanoSaude";
+export * from "./paciente";
 export * from "./pessoa";
 export * from "./planoSaude";
 export * from "./secretaria";

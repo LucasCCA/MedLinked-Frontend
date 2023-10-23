@@ -1,24 +1,27 @@
 "use client";
 
-import { medlinked } from "@medlinked/api";
 import {
   Button,
   Card,
   CustomText,
   Input,
+  Modal,
   NoResults,
   Pagination,
   Select,
   Spacing,
   Spinner,
 } from "@medlinked/components";
-import { Paciente, PacienteResponse } from "@medlinked/types";
-import { cpfMask } from "@medlinked/utils";
+import { deletePaciente, getAllPacientes } from "@medlinked/services";
+import { PacienteResponse } from "@medlinked/types";
+import { cpfMask, formatPhoneNumber, onlyNumbers } from "@medlinked/utils";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
+  CardInfoContainer,
   CardsContainer,
   FiltersContainer,
+  ModalButtonContainer,
   PaginationAndRecordsContainer,
 } from "../styles";
 
@@ -29,37 +32,96 @@ const records = [
 ];
 
 export default function Page() {
-  const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [pacientes, setPacientes] = useState<PacienteResponse>([]);
-  const [currentPaciente, setCurrentPaciente] = useState<Paciente>();
+  const [pacientes, setPacientes] = useState<PacienteResponse>({
+    content: [],
+    pageable: { pageNumber: 0, pageSize: 0 },
+    totalPages: 0,
+  });
+  const [pageNumber, setPageNumber] = useState(0);
+  const [selectedPageSize, setSelectedPageSize] = useState({
+    label: "5",
+    value: "5",
+  });
+  const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
+  const [filledCpf, setFilledCpf] = useState(false);
+  const [currentIdPaciente, setCurrentIdPaciente] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+
+  function getPacientes() {
+    setPacientes({
+      content: [],
+      pageable: { pageNumber: 0, pageSize: 0 },
+      totalPages: 0,
+    });
+    setLoading(true);
+
+    getAllPacientes(
+      pageNumber,
+      Number(selectedPageSize.value),
+      name,
+      onlyNumbers(cpf),
+    )
+      .then((response) => setPacientes(response.data))
+      .catch(() =>
+        toast.error(
+          "Ocorreu um erro ao buscar pacientes. Tente novamente mais tarde.",
+        ),
+      )
+      .finally(() => setLoading(false));
+  }
+
+  function handleDelete() {
+    deletePaciente(currentIdPaciente)
+      .then(() => {
+        setCurrentIdPaciente(0);
+        setOpenModal(false);
+        getPacientes();
+        toast.success("Paciente deletado com sucesso!");
+      })
+      .catch(() =>
+        toast.error(
+          "Ocorreu um erro ao deletar o paciente. Tente novamente mais tarde.",
+        ),
+      );
+  }
+
+  useEffect(() => {
+    getPacientes();
+  }, [pageNumber, selectedPageSize, name, filledCpf]);
+
+  useEffect(() => {
+    if (cpf.length == 14) setFilledCpf(true);
+    else setFilledCpf(false);
+  }, [cpf]);
 
   function changePage(number: number) {
     setPageNumber(number);
   }
 
-  useEffect(() => {
-    function getPacientes() {
-      medlinked
-        .get<Paciente>("paciente/4")
-        .then((response) => {
-          setPacientes([response.data]);
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-          toast.error(
-            "Ocorreu um erro ao buscar pacientes. Tente novamente mais tarde.",
-          );
-        });
-    }
-
-    getPacientes();
-  }, []);
-
   return (
     <>
+      <Modal title="Confirmação" open={openModal} setOpen={setOpenModal}>
+        <>
+          <CustomText $align="center">
+            Você realmente deseja deletar esse paciente?
+          </CustomText>
+          <ModalButtonContainer>
+            <Button fullWidth textAlign="center" onClick={() => handleDelete()}>
+              Sim
+            </Button>
+            <Button
+              fullWidth
+              textAlign="center"
+              onClick={() => setOpenModal(false)}
+              color="red_80"
+            >
+              Não
+            </Button>
+          </ModalButtonContainer>
+        </>
+      </Modal>
       <Spacing>
         <FiltersContainer>
           <Button icon="Plus" href="/admin/pacientes/0" fullWidth>
@@ -67,9 +129,9 @@ export default function Page() {
           </Button>
           <Button
             icon="Pen"
-            href={`/admin/pacientes/${currentPaciente?.paciente.idPaciente}`}
+            href={`/admin/pacientes/${currentIdPaciente}`}
             fullWidth
-            disabled={currentPaciente == null}
+            disabled={currentIdPaciente == 0}
           >
             Visualizar / Editar
           </Button>
@@ -77,18 +139,10 @@ export default function Page() {
             icon="Trash"
             color="red_80"
             fullWidth
-            disabled={currentPaciente == null}
+            disabled={currentIdPaciente == 0}
+            onClick={() => setOpenModal(true)}
           >
             Deletar
-          </Button>
-          <Button
-            icon="Calendar"
-            // eslint-disable-next-line max-len
-            href={`/admin/pacientes/agendamento/${currentPaciente?.paciente.idPaciente}`}
-            fullWidth
-            disabled={currentPaciente == null}
-          >
-            Agendamentos
           </Button>
         </FiltersContainer>
       </Spacing>
@@ -99,9 +153,14 @@ export default function Page() {
             fullWidth
             disabled={loading}
             maxLength={120}
+            onChange={(e) => {
+              if (e.currentTarget.value.length > 2)
+                setName(e.currentTarget.value);
+              else if (e.currentTarget.value.length == 0) setName("");
+            }}
           />
           <Input
-            placeholder="Digite o CPF *"
+            placeholder="Pesquise por CPF"
             fullWidth
             maxLength={14}
             value={cpf}
@@ -111,28 +170,29 @@ export default function Page() {
         </FiltersContainer>
       </Spacing>
       {loading && <Spinner />}
-      {pacientes.length > 0 ? (
+      {pacientes.content.length > 0 ? (
         <Spacing>
           <CardsContainer>
-            {pacientes.map((paciente) => (
+            {pacientes.content.map((paciente) => (
               <Card
                 $selectable
-                key={paciente.paciente.idPaciente}
-                onClick={() => setCurrentPaciente(paciente)}
-                $selected={
-                  currentPaciente?.paciente.idPaciente ==
-                  paciente.paciente.idPaciente
-                }
+                key={paciente.idPaciente}
+                onClick={() => setCurrentIdPaciente(paciente.idPaciente)}
+                $selected={currentIdPaciente == paciente.idPaciente}
               >
-                <CustomText $size="h2">
-                  {paciente.paciente.pessoa.nome}
-                </CustomText>
-                <CustomText $size="h3">
-                  CPF: {cpfMask(paciente.paciente.pessoa.cpf.toString())}
-                </CustomText>
-                <CustomText $size="h3">
-                  Convênios: Convênio X, Convênio Y
-                </CustomText>
+                <CustomText $size="h2">{paciente.pessoa.nome}</CustomText>
+                <CardInfoContainer>
+                  <CustomText $size="h3">CPF:</CustomText>
+                  <CustomText $size="h3" $weight={300}>
+                    {cpfMask(paciente.pessoa.cpf.toString())}
+                  </CustomText>
+                </CardInfoContainer>
+                <CardInfoContainer>
+                  <CustomText $size="h3">Telefone:</CustomText>
+                  <CustomText $size="h3" $weight={300}>
+                    {formatPhoneNumber(paciente.pessoa.celular.toString())}
+                  </CustomText>
+                </CardInfoContainer>
               </Card>
             ))}
           </CardsContainer>
@@ -140,18 +200,19 @@ export default function Page() {
       ) : (
         !loading && <NoResults message={"Nenhum paciente encontrado"} />
       )}
-      {!loading && (
+      {!loading && pacientes.content.length > 0 && (
         <PaginationAndRecordsContainer>
           <Select
+            outsideSelected={selectedPageSize}
+            setOutsideSelected={setSelectedPageSize}
             options={records}
-            defaultSelected={records[0]}
             fullWidth
             readOnly
           />
           <Pagination
             pageNumber={pageNumber}
             changePage={changePage}
-            numberOfPages={15}
+            numberOfPages={pacientes.totalPages}
           />
         </PaginationAndRecordsContainer>
       )}
