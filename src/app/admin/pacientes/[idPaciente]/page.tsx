@@ -21,8 +21,8 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import {
   CardContentContainer,
-  CardInfoContainer,
   FieldsContainer,
+  HealthInsuranceInfoContainer,
   SingleFieldContainer,
 } from "../../styles";
 
@@ -224,11 +224,11 @@ export default function Page() {
           <Spacing>
             <Card>
               <CardContentContainer>
-                <CardInfoContainer>
+                <HealthInsuranceInfoContainer>
                   <CustomText $size="h2">Convênio X</CustomText>
                   <CustomText $size="h3">Tipo: Tipo Y</CustomText>
                   <CustomText $size="h3">Carteirinha: 12345</CustomText>
-                </CardInfoContainer>
+                </HealthInsuranceInfoContainer>
                 <Trash />
               </CardContentContainer>
             </Card>

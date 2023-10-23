@@ -83,6 +83,15 @@ export const CardInfoContainer = styled.div`
   gap: 5px;
 `;
 
+export const HealthInsuranceInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 5px;
+`;
+
 export const SingleFieldContainer = styled.div`
   display: flex;
   flex-direction: column;
