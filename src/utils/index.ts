@@ -1,2 +1,2 @@
-export * from "./cpf";
+export * from "./format";
 export * from "./mascaras";

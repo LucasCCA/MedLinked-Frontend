@@ -1,4 +1,4 @@
-import { Pessoa } from ".";
+import { Pageable, Pessoa } from ".";
 import { Endereco } from "./endereco";
 
 export type PacienteData = {
@@ -11,4 +11,8 @@ export type Paciente = {
   endereco: Endereco;
 };
 
-export type PacienteResponse = Paciente[];
+export type PacienteResponse = {
+  content: PacienteData[];
+  pageable: Pageable;
+  totalPages: number;
+};

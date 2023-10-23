@@ -156,7 +156,7 @@ export default function Page() {
         {modalText == 3 && (
           <>
             <CustomText $align="center">
-              Você realmente deseja deletar desse médico?
+              Você realmente deseja deletar esse médico?
             </CustomText>
             <ModalButtonContainer>
               <Button
@@ -228,7 +228,7 @@ export default function Page() {
       {medicos.content.length > 0 ? (
         <Spacing>
           <CardsContainer>
-            {medicos?.content.map((medico) => (
+            {medicos.content.map((medico) => (
               <Card
                 $selectable
                 key={medico.idMedico}
