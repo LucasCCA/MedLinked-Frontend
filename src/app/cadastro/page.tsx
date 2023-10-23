@@ -9,9 +9,9 @@ import {
   Input,
 } from "@medlinked/components";
 import { registerSchema } from "@medlinked/schemas";
-import { createSecretaria } from "@medlinked/services";
+import { createSecretaria, getPessoaByCpf } from "@medlinked/services";
 import { RegisterSecretaria } from "@medlinked/types";
-import { cpfMask, phoneNumberMask } from "@medlinked/utils";
+import { cpfMask, onlyNumbers, phoneNumberMask } from "@medlinked/utils";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,9 @@ import {
 
 export default function Page() {
   const router = useRouter();
-  const [signingUp, setSigningUp] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [filledCpf, setFilledCpf] = useState(false);
+  const [personAlreadyRegistered, setPersonAlreadyRegistered] = useState(false);
 
   const {
     register,
@@ -37,18 +39,19 @@ export default function Page() {
     formState: { errors },
     setValue,
     watch,
+    resetField,
   } = useForm<RegisterSecretaria>({ resolver: yupResolver(registerSchema) });
 
   const onSubmit: SubmitHandler<RegisterSecretaria> = (data) => {
-    setSigningUp(true);
+    setLoading(true);
 
     createSecretaria(data)
       .then((response) => {
         Cookies.set("token", response.data.token);
         router.push("/admin");
       })
-      .catch(() => toast.error("Ocorreu um erro, tente novamente mais tarde."))
-      .finally(() => setSigningUp(false));
+      .catch((error) => toast.error(error.response.data))
+      .finally(() => setLoading(false));
   };
 
   const cpfValue = watch("pessoa.cpf");
@@ -57,7 +60,31 @@ export default function Page() {
   useEffect(() => {
     setValue("pessoa.cpf", cpfMask(cpfValue));
     setValue("pessoa.celular", phoneNumberMask(phoneNumberValue));
+    setFilledCpf(watch("pessoa.cpf").length == 14);
   }, [cpfValue, phoneNumberValue]);
+
+  useEffect(() => {
+    if (filledCpf) {
+      setPersonAlreadyRegistered(false);
+      resetField("pessoa.nome");
+      resetField("pessoa.email");
+      resetField("pessoa.celular");
+
+      setLoading(true);
+
+      getPessoaByCpf(Number(onlyNumbers(cpfValue)))
+        .then((response) => {
+          if (response.data.idPessoa) {
+            toast.info("Pessoa já cadastrada no sistema");
+            setPersonAlreadyRegistered(true);
+            setValue("pessoa.nome", response.data.nome);
+            setValue("pessoa.email", response.data.email);
+            setValue("pessoa.celular", String(response.data.celular));
+          }
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [filledCpf, cpfValue]);
 
   return (
     <BlueBackground>
@@ -86,17 +113,6 @@ export default function Page() {
             </CustomText>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Input
-                icon="User2"
-                placeholder="Digite seu nome *"
-                fullWidth
-                type="text"
-                maxLength={120}
-                register={{ ...register("pessoa.nome") }}
-                hasError={Boolean(errors.pessoa?.nome)}
-                errorMessage={errors.pessoa?.nome?.message}
-                autoComplete="off"
-              />
-              <Input
                 icon="Asterisk"
                 placeholder="Digite seu CPF *"
                 fullWidth
@@ -110,6 +126,18 @@ export default function Page() {
                 autoComplete="off"
               />
               <Input
+                icon="User2"
+                placeholder="Digite seu nome *"
+                fullWidth
+                type="text"
+                maxLength={120}
+                register={{ ...register("pessoa.nome") }}
+                hasError={Boolean(errors.pessoa?.nome)}
+                errorMessage={errors.pessoa?.nome?.message}
+                autoComplete="off"
+                disabled={personAlreadyRegistered || !filledCpf}
+              />
+              <Input
                 icon="Mail"
                 placeholder="Digite seu email *"
                 fullWidth
@@ -119,17 +147,19 @@ export default function Page() {
                 hasError={Boolean(errors.pessoa?.email)}
                 errorMessage={errors.pessoa?.email?.message}
                 autoComplete="on"
+                disabled={personAlreadyRegistered || !filledCpf}
               />
               <Input
                 icon="Phone"
                 type="text"
-                placeholder="Digite seu telefone"
+                placeholder="Digite seu telefone *"
                 fullWidth
                 maxLength={17}
                 register={{ ...register("pessoa.celular") }}
                 hasError={Boolean(errors.pessoa?.celular)}
                 errorMessage={errors.pessoa?.celular?.message}
                 autoComplete="on"
+                disabled={personAlreadyRegistered || !filledCpf}
               />
               <Input
                 icon="UserCircle2"
@@ -159,7 +189,7 @@ export default function Page() {
                 textAlign="center"
                 fullWidth
                 type="submit"
-                disabled={signingUp}
+                disabled={loading}
               >
                 Cadastrar
               </Button>

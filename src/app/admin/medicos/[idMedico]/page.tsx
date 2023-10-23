@@ -252,7 +252,7 @@ export default function Page() {
           .finally(() => setLoading(false));
       }
     }
-  }, [filledCpf]);
+  }, [filledCpf, cpfValue]);
 
   const onSubmit: SubmitHandler<CreateMedico> = (data) => {
     if (idMedico == 0) {
@@ -324,7 +324,7 @@ export default function Page() {
                   errorMessage={errors.registerPessoa?.email?.message}
                 />
                 <Input
-                  placeholder="Digite o celular *"
+                  placeholder="Digite o telefone *"
                   fullWidth
                   maxLength={17}
                   register={{ ...register("registerPessoa.celular") }}
