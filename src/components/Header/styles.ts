@@ -14,9 +14,11 @@ export const ContentContainer = styled.div`
 `;
 
 export const HeaderContainer = styled.section`
-  position: sticky;
+  position: fixed;
   max-width: 100%;
+  width: 100%;
   top: 0;
+  left: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;

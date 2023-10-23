@@ -6,14 +6,14 @@ type ContainerProps = {
 };
 
 export const ContainerStyles = styled.div<ContainerProps>`
-  margin: 1rem 1rem;
+  margin: calc(1rem + 78px) 1rem;
 
   @media ${breakpoints.md} {
-    margin: 1rem 1.5rem;
+    margin: calc(1rem + 78px) 1.5rem;
   }
 
   @media ${breakpoints.lg} {
-    margin: 1rem 3rem;
+    margin: calc(1rem + 78px) 3rem;
   }
 
   ${({ $header }) =>
