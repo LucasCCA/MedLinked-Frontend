@@ -91,7 +91,7 @@ export default function Page() {
               <Input placeholder="Digite o nome *" fullWidth maxLength={120} />
               <Input placeholder="Digite o email *" fullWidth maxLength={120} />
               <Input
-                placeholder="Digite o celular"
+                placeholder="Digite o telefone *"
                 fullWidth
                 maxLength={17}
                 value={phoneNumber}
