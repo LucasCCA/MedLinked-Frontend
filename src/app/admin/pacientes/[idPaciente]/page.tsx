@@ -387,6 +387,7 @@ export default function Page() {
                   disabled={loading}
                   hasError={Boolean(errors.registerPessoa?.cpf)}
                   errorMessage={errors.registerPessoa?.cpf?.message}
+                  autoComplete="off"
                 />
               </SingleFieldContainer>
               <FieldsContainer>
@@ -398,6 +399,7 @@ export default function Page() {
                   disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.nome)}
                   errorMessage={errors.registerPessoa?.nome?.message}
+                  autoComplete="off"
                 />
                 <Input
                   placeholder="Digite o email *"
@@ -407,6 +409,7 @@ export default function Page() {
                   disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.email)}
                   errorMessage={errors.registerPessoa?.email?.message}
+                  autoComplete="off"
                 />
                 <Input
                   placeholder="Digite o telefone *"
@@ -416,6 +419,7 @@ export default function Page() {
                   disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.celular)}
                   errorMessage={errors.registerPessoa?.celular?.message}
+                  autoComplete="off"
                 />
               </FieldsContainer>
             </Spacing>
@@ -479,6 +483,7 @@ export default function Page() {
                       hasError={Boolean(errors.createEndereco?.cidade)}
                       errorMessage={errors.createEndereco?.cidade?.message}
                       disabled={!filledCep || loading}
+                      maxLength={100}
                     />
                     <Input
                       placeholder="Digite o logradouro *"
@@ -487,6 +492,7 @@ export default function Page() {
                       hasError={Boolean(errors.createEndereco?.logradouro)}
                       errorMessage={errors.createEndereco?.logradouro?.message}
                       disabled={!filledCep || loading}
+                      maxLength={100}
                     />
                     <Input
                       placeholder="Digite o bairro *"
@@ -495,6 +501,7 @@ export default function Page() {
                       hasError={Boolean(errors.createEndereco?.bairro)}
                       errorMessage={errors.createEndereco?.bairro?.message}
                       disabled={!filledCep || loading}
+                      maxLength={120}
                     />
                     <Input
                       placeholder="Digite o número *"
@@ -511,6 +518,7 @@ export default function Page() {
                       hasError={Boolean(errors.createEndereco?.complemento)}
                       errorMessage={errors.createEndereco?.complemento?.message}
                       disabled={!filledCep || loading}
+                      maxLength={100}
                     />
                   </AddressFieldsContainer>
                 )}

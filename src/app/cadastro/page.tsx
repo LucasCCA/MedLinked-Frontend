@@ -181,6 +181,7 @@ export default function Page() {
                 register={{ ...register("usuario.password") }}
                 hasError={Boolean(errors.usuario?.password)}
                 errorMessage={errors.usuario?.password?.message}
+                autoComplete="off"
               />
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
