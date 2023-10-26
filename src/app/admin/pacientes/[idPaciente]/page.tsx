@@ -603,6 +603,7 @@ export default function Page() {
                 }
                 onClick={() => {
                   setLoading(true);
+                  setAssociatedConvenios([]);
 
                   associatePlanoSaudePaciente(
                     Number(currentConvenio.value),

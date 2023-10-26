@@ -8,8 +8,10 @@ import {
   CustomText,
   Input,
   OptionData,
+  Pagination,
   Select,
   Spacing,
+  Spinner,
   Tabs,
 } from "@medlinked/components";
 import { registerMedicoSchema } from "@medlinked/schemas";
@@ -19,6 +21,7 @@ import {
   getAllEspecialidades,
   getAllEstados,
   getAllPlanosSaude,
+  getAllPlanosSaudeMedico,
   getMedico,
   getPessoaByCpf,
   removePlanoSaudeMedico,
@@ -28,6 +31,7 @@ import {
   CreateMedico,
   EspecializacaoResponse,
   EstadoResponse,
+  MedicoPlanoSaudeResponse,
   PlanosSaudeResponse,
 } from "@medlinked/types";
 import {
@@ -38,13 +42,14 @@ import {
   phoneNumberMask,
 } from "@medlinked/utils";
 import { Trash } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {
   CardContentContainer,
   FieldsContainer,
+  PaginationAndRecordsContainer,
   SingleFieldContainer,
 } from "../../styles";
 
@@ -70,8 +75,15 @@ const breadcrumbItems = [
   },
 ];
 
+const records = [
+  { label: "5", value: "5" },
+  { label: "10", value: "10" },
+  { label: "25", value: "25" },
+];
+
 export default function Page() {
   const params = useParams();
+  const router = useRouter();
   const [idMedico, setIdMedico] = useState(Number(params.idMedico));
   const [currentItem, setCurrentItem] = useState(1);
   const [disabledItems, setDisabledItems] = useState(idMedico == 0 ? [2] : []);
@@ -92,11 +104,21 @@ export default function Page() {
     value: "",
   });
   const [convenios, setConvenios] = useState<PlanosSaudeResponse>([]);
+  const [associatedConvenios, setAssociatedConvenios] =
+    useState<MedicoPlanoSaudeResponse>({
+      content: [],
+      pageable: { pageNumber: 0, pageSize: 0 },
+      totalPages: 0,
+    });
   const [currentConvenio, setCurrentConvenio] = useState({
     label: "",
     value: "",
   });
-  const [idsPlanosSaude, setIdsPlanosSaude] = useState<number[]>([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [selectedPageSize, setSelectedPageSize] = useState({
+    label: "5",
+    value: "5",
+  });
 
   const {
     register,
@@ -112,39 +134,58 @@ export default function Page() {
   const phoneNumberValue = watch("registerPessoa.celular");
   const crmValue = watch("numeroCrm");
 
+  function getPlanosSaudeMedico() {
+    getAllPlanosSaudeMedico(
+      idMedico,
+      pageNumber,
+      Number(selectedPageSize.value),
+    )
+      .then((response) => setAssociatedConvenios(response.data))
+      .catch(() =>
+        toast.error(
+          // eslint-disable-next-line max-len
+          "Ocorreu um erro ao buscar os convênios do médico. Tente novamente mais tarde.",
+        ),
+      )
+      .finally(() => setLoading(false));
+  }
+
   useEffect(() => {
     function getExistingMedico() {
-      getMedico(idMedico).then((response) => {
-        setValue("registerPessoa.cpf", cpfMask(formatCpf(response.data.cpf)));
-        setValue(
-          "registerPessoa.celular",
-          phoneNumberMask(response.data.celular.toString()),
-        );
-        setValue("registerPessoa.email", response.data.email);
-        setValue("registerPessoa.nome", response.data.nome);
-        setValue(
-          "idsEspecialidades",
-          response.data.especialidades.map(
-            (especialidade) => especialidade.idEspecialidade,
-          ),
-        );
-        setIdsEspecialidades(
-          response.data.especialidades.map(
-            (especialidade) => especialidade.idEspecialidade,
-          ),
-        );
-        setValue("numeroCrm", response.data.numeroCrm.toString());
-        setValue("ufCrm", response.data.estado.uf);
-        setCurrentUf({
-          label: response.data.estado.descricao,
-          value: response.data.estado.uf,
+      getMedico(idMedico)
+        .then((response) => {
+          setValue("registerPessoa.cpf", cpfMask(formatCpf(response.data.cpf)));
+          setValue(
+            "registerPessoa.celular",
+            phoneNumberMask(response.data.celular.toString()),
+          );
+          setValue("registerPessoa.email", response.data.email);
+          setValue("registerPessoa.nome", response.data.nome);
+          setValue(
+            "idsEspecialidades",
+            response.data.especialidades.map(
+              (especialidade) => especialidade.idEspecialidade,
+            ),
+          );
+          setIdsEspecialidades(
+            response.data.especialidades.map(
+              (especialidade) => especialidade.idEspecialidade,
+            ),
+          );
+          setValue("numeroCrm", response.data.numeroCrm.toString());
+          setValue("ufCrm", response.data.estado.uf);
+          setCurrentUf({
+            label: response.data.estado.descricao,
+            value: response.data.estado.uf,
+          });
+        })
+        .catch(() => {
+          toast.error(
+            // eslint-disable-next-line max-len
+            "Ocorreu um erro ao buscar os dados do médico. Tente novamente mais tarde.",
+          );
+          router.push("/admin/medicos");
         });
-        setIdsPlanosSaude(
-          response.data.planosSaudeMedico.map(
-            (planoSaude) => planoSaude.idPlanoSaude,
-          ),
-        );
-      });
     }
 
     function getConvenios() {
@@ -192,8 +233,22 @@ export default function Page() {
     getConvenios();
     getEstados();
     getEspecialidades();
-    if (idMedico != 0) getExistingMedico();
+    if (idMedico != 0) {
+      getExistingMedico();
+      getPlanosSaudeMedico();
+    }
   }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    setAssociatedConvenios({
+      content: [],
+      pageable: { pageNumber: 0, pageSize: 0 },
+      totalPages: 0,
+    });
+
+    getPlanosSaudeMedico();
+  }, [pageNumber, selectedPageSize]);
 
   const estadosOptions: OptionData[] = [];
 
@@ -255,6 +310,8 @@ export default function Page() {
   }, [filledCpf, cpfValue]);
 
   const onSubmit: SubmitHandler<CreateMedico> = (data) => {
+    setLoading(true);
+
     if (idMedico == 0) {
       createMedico(data)
         .then((response) => {
@@ -262,16 +319,22 @@ export default function Page() {
           setIdMedico(response.data.idMedico);
           setDisabledItems([]);
         })
-        .catch((error) => toast.error(error.response.data));
+        .catch((error) => toast.error(error.response.data))
+        .finally(() => setLoading(false));
     } else {
       updateMedico(data, idMedico)
         .then((response) => {
           toast.success("Médico atualizado com sucesso!");
           setIdMedico(response.data.idMedico);
         })
-        .catch((error) => toast.error(error.response.data));
+        .catch((error) => toast.error(error.response.data))
+        .finally(() => setLoading(false));
     }
   };
+
+  function changePage(number: number) {
+    setPageNumber(number);
+  }
 
   return (
     <>
@@ -419,7 +482,8 @@ export default function Page() {
                     fullWidth
                     disabled={
                       currentEspecializacao.value == "" ||
-                      idsEspecialidades.length >= 2
+                      idsEspecialidades.length >= 2 ||
+                      loading
                     }
                     onClick={() => {
                       setCurrentEspecializacao({ label: "", value: "" });
@@ -487,7 +551,12 @@ export default function Page() {
                   >
                     Voltar
                   </Button>
-                  <Button textAlign="center" fullWidth type="submit">
+                  <Button
+                    textAlign="center"
+                    fullWidth
+                    type="submit"
+                    disabled={loading}
+                  >
                     {idMedico == 0 ? "Cadastrar" : "Atualizar"}
                   </Button>
                 </FieldsContainer>
@@ -508,8 +577,9 @@ export default function Page() {
                 fullWidth
                 options={conveniosOptions.filter(
                   (convenio) =>
-                    !idsPlanosSaude.find(
-                      (idPlanoSaude) => idPlanoSaude == Number(convenio.value),
+                    !associatedConvenios.content.find(
+                      (planoSaude) =>
+                        planoSaude.idPlanoSaude == Number(convenio.value),
                     ),
                 )}
                 outsideSelected={currentConvenio}
@@ -525,18 +595,22 @@ export default function Page() {
               <Button
                 textAlign="center"
                 fullWidth
-                disabled={currentConvenio.value == ""}
+                disabled={currentConvenio.value == "" || loading}
                 onClick={() => {
+                  setLoading(true);
+                  setAssociatedConvenios({
+                    content: [],
+                    pageable: { pageNumber: 0, pageSize: 0 },
+                    totalPages: 0,
+                  });
+
                   associatePlanoSaudeMedico(
                     Number(currentConvenio.value),
                     idMedico,
                   )
                     .then(() => {
                       setCurrentConvenio({ label: "", value: "" });
-                      setIdsPlanosSaude([
-                        ...idsPlanosSaude,
-                        Number(currentConvenio.value),
-                      ]);
+                      getPlanosSaudeMedico();
                       toast.success("Convênio vinculado com sucesso!");
                     })
                     .catch(() =>
@@ -544,53 +618,68 @@ export default function Page() {
                         // eslint-disable-next-line max-len
                         "Ocorreu um erro ao vincular o convênio. Tente novamente mais tarde.",
                       ),
-                    );
+                    )
+                    .finally(() => setLoading(false));
                 }}
               >
                 Vincular convênio
               </Button>
             </SingleFieldContainer>
           </Spacing>
-          {idsPlanosSaude.length > 0 && (
+          {loading && <Spinner />}
+          {associatedConvenios.content.length > 0 && (
             <Spacing>
               <CustomText $size="h2">Convênios Vinculados</CustomText>
             </Spacing>
           )}
-          {convenios
-            .filter((convenio) =>
-              idsPlanosSaude.find(
-                (idPlanoSaude) => idPlanoSaude == convenio.idPlanoSaude,
-              ),
-            )
-            .map((convenio) => (
-              <Spacing key={convenio.idPlanoSaude}>
-                <Card>
-                  <CardContentContainer>
-                    <CustomText $size="h2">{convenio.descricao}</CustomText>
-                    <Trash
-                      onClick={() => {
-                        removePlanoSaudeMedico(convenio.idPlanoSaude, idMedico)
-                          .then(() => {
-                            setIdsPlanosSaude(
-                              idsPlanosSaude.filter(
-                                (idPlanosSaude) =>
-                                  idPlanosSaude != convenio.idPlanoSaude,
-                              ),
-                            );
-                            toast.success("Convênio desvinculado com sucesso!");
-                          })
-                          .catch(() =>
-                            toast.error(
-                              // eslint-disable-next-line max-len
-                              "Ocorreu um erro ao desvincular o convênio. Tente novamente mais tarde.",
-                            ),
-                          );
-                      }}
-                    />
-                  </CardContentContainer>
-                </Card>
-              </Spacing>
-            ))}
+          {associatedConvenios.content.map((convenio) => (
+            <Spacing key={convenio.idPlanoSaude}>
+              <Card>
+                <CardContentContainer>
+                  <CustomText $size="h2">{convenio.descricao}</CustomText>
+                  <Trash
+                    onClick={() => {
+                      setLoading(true);
+                      setAssociatedConvenios({
+                        content: [],
+                        pageable: { pageNumber: 0, pageSize: 0 },
+                        totalPages: 0,
+                      });
+
+                      removePlanoSaudeMedico(convenio.idPlanoSaude, idMedico)
+                        .then(() => {
+                          toast.success("Convênio desvinculado com sucesso!");
+                          getPlanosSaudeMedico();
+                        })
+                        .catch(() =>
+                          toast.error(
+                            // eslint-disable-next-line max-len
+                            "Ocorreu um erro ao desvincular o convênio. Tente novamente mais tarde.",
+                          ),
+                        )
+                        .finally(() => setLoading(false));
+                    }}
+                  />
+                </CardContentContainer>
+              </Card>
+            </Spacing>
+          ))}
+          {!loading && associatedConvenios.content.length > 0 && (
+            <PaginationAndRecordsContainer>
+              <Select
+                outsideSelected={selectedPageSize}
+                setOutsideSelected={setSelectedPageSize}
+                options={records}
+                fullWidth
+                readOnly
+              />
+              <Pagination
+                pageNumber={pageNumber}
+                changePage={changePage}
+                numberOfPages={associatedConvenios.totalPages}
+              />
+            </PaginationAndRecordsContainer>
+          )}
         </>
       )}
     </>

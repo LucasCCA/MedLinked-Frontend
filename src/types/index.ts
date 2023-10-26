@@ -3,6 +3,7 @@ export * from "./endereco";
 export * from "./especializacao";
 export * from "./estado";
 export * from "./medico";
+export * from "./medicoPlanoSaude";
 export * from "./paciente";
 export * from "./pacientePlanoSaude";
 export * from "./pageable";
