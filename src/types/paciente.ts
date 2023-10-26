@@ -1,5 +1,5 @@
-import { Pageable, Pessoa } from ".";
-import { Endereco } from "./endereco";
+import { Pageable, Pessoa, RegisterPessoa } from ".";
+import { CreateEndereco, Endereco } from "./endereco";
 
 export type PacienteData = {
   idPaciente: number;
@@ -15,4 +15,9 @@ export type PacienteResponse = {
   content: PacienteData[];
   pageable: Pageable;
   totalPages: number;
+};
+
+export type CreatePaciente = {
+  registerPessoa: RegisterPessoa;
+  createEndereco: CreateEndereco;
 };
