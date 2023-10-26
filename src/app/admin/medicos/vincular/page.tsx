@@ -132,7 +132,7 @@ export default function Page() {
           <Button
             textAlign="center"
             fullWidth
-            disabled={currentMedico.value == "" || alreadyAssociated}
+            disabled={currentMedico.value == "" || alreadyAssociated || loading}
             onClick={() => associateMedico()}
           >
             Vincular médico

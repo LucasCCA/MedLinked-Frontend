@@ -302,6 +302,7 @@ export default function Page() {
                   disabled={loading}
                   hasError={Boolean(errors.registerPessoa?.cpf)}
                   errorMessage={errors.registerPessoa?.cpf?.message}
+                  autoComplete="off"
                 />
               </SingleFieldContainer>
               <FieldsContainer>
@@ -313,6 +314,7 @@ export default function Page() {
                   disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.nome)}
                   errorMessage={errors.registerPessoa?.nome?.message}
+                  autoComplete="off"
                 />
                 <Input
                   placeholder="Digite o email *"
@@ -322,6 +324,7 @@ export default function Page() {
                   disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.email)}
                   errorMessage={errors.registerPessoa?.email?.message}
+                  autoComplete="off"
                 />
                 <Input
                   placeholder="Digite o telefone *"
@@ -331,6 +334,7 @@ export default function Page() {
                   disabled={!filledCpf || loading || personAlreadyRegistered}
                   hasError={Boolean(errors.registerPessoa?.celular)}
                   errorMessage={errors.registerPessoa?.celular?.message}
+                  autoComplete="off"
                 />
               </FieldsContainer>
             </Spacing>
@@ -381,6 +385,7 @@ export default function Page() {
                     register={{ ...register("numeroCrm") }}
                     hasError={Boolean(errors.numeroCrm)}
                     errorMessage={errors.numeroCrm?.message}
+                    autoComplete="off"
                   />
                 </FieldsContainer>
               </Spacing>
