@@ -186,3 +186,13 @@ export const CardContentContainer = styled.div`
     gap: 0;
   }
 `;
+
+export const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 15px;
+`;

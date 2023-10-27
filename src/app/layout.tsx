@@ -29,6 +29,7 @@ export default function RootLayout({
         />
         <link rel="icon" type="image/x-icon" href="/images/icon.png" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta charSet="utf-8" />
       </head>
       <body>
         <ToastContainer />
