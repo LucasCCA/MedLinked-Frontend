@@ -75,12 +75,12 @@ export function Header({ username, children }: HeaderProps) {
                 <CustomText $color="black_80">Perfil</CustomText>
               </Option>
               <Option
-                href="/"
                 onClick={() => {
                   Cookies.remove("token");
                   setOpenAnimation(false);
                   setCloseAnimation(true);
                 }}
+                href="/"
               >
                 <LogOut />
                 <CustomText $color="black_80">Sair</CustomText>

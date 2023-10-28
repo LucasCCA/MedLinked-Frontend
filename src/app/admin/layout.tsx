@@ -14,7 +14,13 @@ export default function AdminLayout({
   return (
     <ContentContainer>
       <Navbar />
-      <Header username={jwt_decode<TokenData>(Cookies.get("token")!).nome}>
+      <Header
+        username={
+          Cookies.get("token")
+            ? jwt_decode<TokenData>(Cookies.get("token")!).nome
+            : ""
+        }
+      >
         <Container>{children}</Container>
       </Header>
     </ContentContainer>
