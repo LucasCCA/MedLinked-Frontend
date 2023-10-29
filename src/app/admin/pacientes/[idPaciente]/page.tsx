@@ -143,6 +143,8 @@ export default function Page() {
 
   useEffect(() => {
     function getExistingPaciente() {
+      setLoading(true);
+
       getPaciente(idPaciente)
         .then((response) => {
           setValue(
@@ -185,7 +187,8 @@ export default function Page() {
             "Ocorreu um erro ao buscar os dados do paciente. Tente novamente mais tarde.",
           );
           router.push("/admin/pacientes");
-        });
+        })
+        .finally(() => setLoading(false));
     }
 
     function getConvenios() {
