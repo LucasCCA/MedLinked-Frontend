@@ -32,3 +32,7 @@ export function updateSecretaria(data: RegisterPessoa, idSecretaria: number) {
     email: data.email,
   });
 }
+
+export function deleteSecretaria(idSecretaria: number) {
+  return medlinked.delete(`secretaria/delete/${idSecretaria}`);
+}

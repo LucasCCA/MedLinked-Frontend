@@ -1,9 +1,16 @@
 "use client";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, CustomText, Input, Spacing } from "@medlinked/components";
+import {
+  Button,
+  CustomText,
+  Input,
+  Modal,
+  Spacing,
+} from "@medlinked/components";
 import { updateSecretariaSchema } from "@medlinked/schemas";
 import {
+  deleteSecretaria,
   getSecretaria,
   updateSecretaria,
   updateUsuario,
@@ -12,12 +19,18 @@ import { RegisterPessoa, TokenData } from "@medlinked/types";
 import { cpfMask, formatCpf, phoneNumberMask } from "@medlinked/utils";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { FieldsContainer, SingleFieldContainer } from "../styles";
+import {
+  FieldsContainer,
+  ModalButtonContainer,
+  SingleFieldContainer,
+} from "../styles";
 
 export default function Page() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [idSecretaria, setIdSecretaria] = useState(0);
   const [oldPassword, setOldPassword] = useState("");
@@ -25,6 +38,7 @@ export default function Page() {
   const [repeatedNewPassword, setRepeatedNewPassword] = useState("");
   const [oldPasswordError, setOldPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     register,
@@ -95,8 +109,44 @@ export default function Page() {
     setLoading(false);
   }
 
+  function handleDelete() {
+    setLoading(true);
+
+    deleteSecretaria(idSecretaria)
+      .then(() => {
+        Cookies.remove("token");
+        toast.success("Conta deletada com sucesso!");
+        router.push("/");
+      })
+      .catch((error) => {
+        setOpenModal(false);
+        toast.error(error.response.data);
+      })
+      .finally(() => setLoading(false));
+  }
+
   return (
     <>
+      <Modal title="Confirmação" open={openModal} setOpen={setOpenModal}>
+        <>
+          <CustomText $align="center">
+            Você realmente deseja deletar sua conta?
+          </CustomText>
+          <ModalButtonContainer>
+            <Button fullWidth textAlign="center" onClick={() => handleDelete()}>
+              Sim
+            </Button>
+            <Button
+              fullWidth
+              textAlign="center"
+              onClick={() => setOpenModal(false)}
+              color="red_80"
+            >
+              Não
+            </Button>
+          </ModalButtonContainer>
+        </>
+      </Modal>
       <Spacing>
         <CustomText $size="h2">Dados da Conta</CustomText>
       </Spacing>
@@ -216,6 +266,22 @@ export default function Page() {
             onClick={() => changePassword()}
           >
             Atualizar Senha
+          </Button>
+        </SingleFieldContainer>
+      </Spacing>
+      <Spacing>
+        <CustomText $size="h2">Deletar Conta</CustomText>
+      </Spacing>
+      <Spacing>
+        <SingleFieldContainer>
+          <Button
+            textAlign="center"
+            color="red_80"
+            fullWidth
+            disabled={loading}
+            onClick={() => setOpenModal(true)}
+          >
+            Deletar
           </Button>
         </SingleFieldContainer>
       </Spacing>
