@@ -32,13 +32,13 @@ export default function RootLayout({
         <meta charSet="utf-8" />
       </head>
       <body>
-        <ToastContainer />
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
             {children}
           </ThemeProvider>
         </StyledComponentsRegistry>
+        <ToastContainer />
       </body>
     </html>
   );
