@@ -7,3 +7,14 @@ export function authenticate(data: Usuario) {
     password: data.password,
   });
 }
+
+export function updateUsuario(
+  oldPassword: string,
+  newPassword: string,
+  idUsuario: number,
+) {
+  return medlinked.put(`usuario/update/${idUsuario}`, {
+    oldPassword: oldPassword,
+    newPassword: newPassword,
+  });
+}
