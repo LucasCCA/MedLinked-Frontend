@@ -1,6 +1,7 @@
 import { Pessoa, RegisterPessoa, Usuario } from ".";
 
 export type Secretaria = {
+  idSecretaria: number;
   pessoa: Pessoa;
 };
 

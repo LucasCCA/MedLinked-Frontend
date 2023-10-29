@@ -64,11 +64,24 @@ export function Header({ username, children }: HeaderProps) {
               <NameContainer>
                 <CustomText $align="left">{username}</CustomText>
               </NameContainer>
-              <Option href="">
+              <Option
+                href="/admin/perfil"
+                onClick={() => {
+                  setOpenAnimation(false);
+                  setCloseAnimation(true);
+                }}
+              >
                 <UserCog2 />
                 <CustomText $color="black_80">Perfil</CustomText>
               </Option>
-              <Option href="/" onClick={() => Cookies.remove("token")}>
+              <Option
+                onClick={() => {
+                  Cookies.remove("token");
+                  setOpenAnimation(false);
+                  setCloseAnimation(true);
+                }}
+                href="/"
+              >
                 <LogOut />
                 <CustomText $color="black_80">Sair</CustomText>
               </Option>

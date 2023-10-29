@@ -152,6 +152,8 @@ export default function Page() {
 
   useEffect(() => {
     function getExistingMedico() {
+      setLoading(true);
+
       getMedico(idMedico)
         .then((response) => {
           setValue("registerPessoa.cpf", cpfMask(formatCpf(response.data.cpf)));
@@ -185,7 +187,8 @@ export default function Page() {
             "Ocorreu um erro ao buscar os dados do médico. Tente novamente mais tarde.",
           );
           router.push("/admin/medicos");
-        });
+        })
+        .finally(() => setLoading(false));
     }
 
     function getConvenios() {
