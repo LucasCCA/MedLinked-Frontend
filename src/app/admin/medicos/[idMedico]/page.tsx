@@ -90,7 +90,7 @@ export default function Page() {
   const [currentInfoStep, setCurrentInfoStep] = useState(1);
   const [filledCpf, setFilledCpf] = useState(false);
   const [personAlreadyRegistered, setPersonAlreadyRegistered] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [estados, setEstados] = useState<EstadoResponse>([]);
   const [especializacoes, setEspecializacoes] =
     useState<EspecializacaoResponse>([]);
@@ -578,13 +578,7 @@ export default function Page() {
               <Select
                 placeholder="Escolha um convênio *"
                 fullWidth
-                options={conveniosOptions.filter(
-                  (convenio) =>
-                    !associatedConvenios.content.find(
-                      (planoSaude) =>
-                        planoSaude.idPlanoSaude == Number(convenio.value),
-                    ),
-                )}
+                options={conveniosOptions}
                 outsideSelected={currentConvenio}
                 setOutsideSelected={setCurrentConvenio}
               />
