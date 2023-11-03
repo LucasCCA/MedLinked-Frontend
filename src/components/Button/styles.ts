@@ -22,6 +22,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   font-family: inherit;
   user-select: none;
   padding: 0;
+  height: fit-content;
 
   > a,
   p {
