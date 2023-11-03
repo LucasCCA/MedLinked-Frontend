@@ -196,3 +196,34 @@ export const StyledForm = styled.form`
   height: 100%;
   gap: 15px;
 `;
+
+export const CalendarPageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @media ${breakpoints.md} {
+    flex-direction: row;
+    gap: 3rem;
+  }
+`;
+
+export const CalendarFiltersContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+
+  div > p:first-child {
+    margin-top: 1rem;
+  }
+
+  @media ${breakpoints.lg} {
+    width: 50%;
+  }
+`;
