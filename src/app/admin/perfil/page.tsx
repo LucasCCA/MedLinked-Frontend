@@ -25,7 +25,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {
   FieldsContainer,
-  ModalButtonContainer,
+  ModalFieldsContainer,
   SingleFieldContainer,
 } from "../styles";
 
@@ -132,7 +132,7 @@ export default function Page() {
           <CustomText $align="center">
             Você realmente deseja deletar sua conta?
           </CustomText>
-          <ModalButtonContainer>
+          <ModalFieldsContainer>
             <Button fullWidth textAlign="center" onClick={() => handleDelete()}>
               Sim
             </Button>
@@ -144,7 +144,7 @@ export default function Page() {
             >
               Não
             </Button>
-          </ModalButtonContainer>
+          </ModalFieldsContainer>
         </>
       </Modal>
       <Spacing>

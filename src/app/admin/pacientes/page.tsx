@@ -26,7 +26,7 @@ import {
   CardInfoContainer,
   CardsContainer,
   FiltersContainer,
-  ModalButtonContainer,
+  ModalFieldsContainer,
   PaginationAndRecordsContainer,
 } from "../styles";
 
@@ -112,7 +112,7 @@ export default function Page() {
           <CustomText $align="center">
             Você realmente deseja deletar esse paciente?
           </CustomText>
-          <ModalButtonContainer>
+          <ModalFieldsContainer>
             <Button fullWidth textAlign="center" onClick={() => handleDelete()}>
               Sim
             </Button>
@@ -124,7 +124,7 @@ export default function Page() {
             >
               Não
             </Button>
-          </ModalButtonContainer>
+          </ModalFieldsContainer>
         </>
       </Modal>
       <Spacing>

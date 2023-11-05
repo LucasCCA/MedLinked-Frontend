@@ -23,7 +23,7 @@ import {
   CardInfoContainer,
   CardsContainer,
   FiltersContainer,
-  ModalButtonContainer,
+  ModalFieldsContainer,
   PaginationAndRecordsContainer,
 } from "../styles";
 
@@ -114,7 +114,7 @@ export default function Page() {
             <CustomText $align="center">
               Você deseja criar um novo médico ou se vincular a um existente?
             </CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button fullWidth href="/admin/medicos/0" textAlign="center">
                 Criar novo
               </Button>
@@ -125,7 +125,7 @@ export default function Page() {
               >
                 Vincular a existente
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </>
         )}
         {modalText == 2 && (
@@ -134,7 +134,7 @@ export default function Page() {
               Você realmente deseja se desvincular desse médico? Caso ele não
               esteja vinculado a nenhuma outra secretária ele será deletado
             </CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button
                 fullWidth
                 textAlign="center"
@@ -150,7 +150,7 @@ export default function Page() {
               >
                 Não
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </>
         )}
         {modalText == 3 && (
@@ -158,7 +158,7 @@ export default function Page() {
             <CustomText $align="center">
               Você realmente deseja deletar esse médico?
             </CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button
                 fullWidth
                 textAlign="center"
@@ -174,7 +174,7 @@ export default function Page() {
               >
                 Não
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </>
         )}
       </Modal>
