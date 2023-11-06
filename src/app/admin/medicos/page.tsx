@@ -14,9 +14,9 @@ import {
 import {
   deleteMedico,
   disassociateMedicoSecretaria,
-  getAllMedicosSecretaria,
+  getAllMedicosSecretariaPaginated,
 } from "@medlinked/services";
-import { SecretariaMedicoResponse } from "@medlinked/types";
+import { SecretariaMedicoPaginatedResponse } from "@medlinked/types";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
@@ -35,7 +35,7 @@ const records = [
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
-  const [medicos, setMedicos] = useState<SecretariaMedicoResponse>({
+  const [medicos, setMedicos] = useState<SecretariaMedicoPaginatedResponse>({
     content: [],
     pageable: { pageNumber: 0, pageSize: 0 },
     totalPages: 0,
@@ -57,7 +57,7 @@ export default function Page() {
     });
     setLoading(true);
 
-    getAllMedicosSecretaria(pageNumber, Number(selectedPageSize.value))
+    getAllMedicosSecretariaPaginated(pageNumber, Number(selectedPageSize.value))
       .then((response) => setMedicos(response.data))
       .catch(() =>
         toast.error(

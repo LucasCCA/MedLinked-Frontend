@@ -1,4 +1,5 @@
 import { theme } from "@medlinked/config";
+import { AgendamentoResponse } from "@medlinked/types";
 import { Bookmark, ChevronLeft, ChevronRight, Circle } from "lucide-react";
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { CustomText, Spacing, Tabs } from "..";
@@ -23,7 +24,7 @@ type CalendarProps = {
   setMonthFilter: Dispatch<SetStateAction<number>>;
   yearFilter: number;
   setYearFilter: Dispatch<SetStateAction<number>>;
-  scheduledDates?: Date[];
+  scheduledDates?: AgendamentoResponse;
 };
 
 export const monthsName = [
@@ -161,15 +162,21 @@ export function Calendar({
                     size={15}
                   />
                 )}
-                {scheduledDates.filter(
+                {scheduledDates.find(
                   (date) =>
-                    date.toDateString() ==
+                    new Date(
+                      date.dataHoraInicioAgendamento.slice(0, 9) +
+                        String(
+                          Number(date.dataHoraInicioAgendamento.slice(9, 10)) +
+                            1,
+                        ),
+                    ).toDateString() ==
                     new Date(
                       yearFilter,
                       monthFilter - 1,
                       currentDay,
                     ).toDateString(),
-                ).length > 1 && (
+                ) != undefined && (
                   <Bookmark
                     fill={theme.colors.yellow}
                     color={theme.colors.yellow}
@@ -187,11 +194,8 @@ export function Calendar({
               key={index}
               $selectable
               onClick={() => {
-                setMonth(index + 1);
                 setMonthFilter(index + 1);
-                setDay(0);
                 setCurrentItem(1);
-                if (year != yearFilter) setYear(yearFilter);
               }}
               $selected={index + 1 == month && year == yearFilter}
             >
@@ -209,11 +213,28 @@ export function Calendar({
                     size={15}
                   />
                 )}
-                {scheduledDates.filter(
+                {scheduledDates.find(
                   (date) =>
-                    date.toDateString() ==
-                    new Date(yearFilter, index, date.getDate()).toDateString(),
-                ).length > 1 && (
+                    new Date(
+                      date.dataHoraInicioAgendamento.slice(0, 9) +
+                        String(
+                          Number(date.dataHoraInicioAgendamento.slice(9, 10)) +
+                            1,
+                        ),
+                    ).toDateString() ==
+                    new Date(
+                      yearFilter,
+                      index,
+                      new Date(
+                        date.dataHoraInicioAgendamento.slice(0, 9) +
+                          String(
+                            Number(
+                              date.dataHoraInicioAgendamento.slice(9, 10),
+                            ) + 1,
+                          ),
+                      ).getDate(),
+                    ).toDateString(),
+                ) != undefined && (
                   <Bookmark
                     fill={theme.colors.yellow}
                     color={theme.colors.yellow}

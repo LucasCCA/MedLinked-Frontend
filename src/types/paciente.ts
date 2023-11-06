@@ -11,7 +11,9 @@ export type Paciente = {
   endereco: Endereco;
 };
 
-export type PacienteResponse = {
+export type PacienteResponse = PacienteData[];
+
+export type PacientePaginatedResponse = {
   content: PacienteData[];
   pageable: Pageable;
   totalPages: number;

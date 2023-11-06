@@ -1,3 +1,4 @@
+export * from "./agendamento";
 export * from "./cep";
 export * from "./endereco";
 export * from "./especializacao";

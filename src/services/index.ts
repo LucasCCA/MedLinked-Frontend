@@ -1,3 +1,4 @@
+export * from "./agendamento";
 export * from "./especialidade";
 export * from "./estado";
 export * from "./medico";

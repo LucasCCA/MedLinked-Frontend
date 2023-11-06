@@ -12,8 +12,8 @@ import {
   Spacing,
   Spinner,
 } from "@medlinked/components";
-import { deletePaciente, getAllPacientes } from "@medlinked/services";
-import { PacienteResponse } from "@medlinked/types";
+import { deletePaciente, getAllPacientesPaginated } from "@medlinked/services";
+import { PacientePaginatedResponse } from "@medlinked/types";
 import {
   cpfMask,
   formatCpf,
@@ -38,7 +38,7 @@ const records = [
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
-  const [pacientes, setPacientes] = useState<PacienteResponse>({
+  const [pacientes, setPacientes] = useState<PacientePaginatedResponse>({
     content: [],
     pageable: { pageNumber: 0, pageSize: 0 },
     totalPages: 0,
@@ -62,7 +62,7 @@ export default function Page() {
     });
     setLoading(true);
 
-    getAllPacientes(
+    getAllPacientesPaginated(
       pageNumber,
       Number(selectedPageSize.value),
       name,

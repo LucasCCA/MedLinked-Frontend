@@ -1,8 +1,13 @@
 import { medlinked } from "@medlinked/api";
-import { CreatePaciente, Paciente, PacienteResponse } from "@medlinked/types";
+import {
+  CreatePaciente,
+  Paciente,
+  PacientePaginatedResponse,
+  PacienteResponse,
+} from "@medlinked/types";
 import { onlyNumbers } from "@medlinked/utils";
 
-export function getAllPacientes(
+export function getAllPacientesPaginated(
   pageNumber: number,
   pageSize: number,
   nome?: string,
@@ -11,9 +16,14 @@ export function getAllPacientes(
   const nameFilter = nome ? `&nomePaciente=${nome}` : "";
   const cpfFilter = cpf && cpf.length == 11 ? `&cpf=${Number(cpf)}` : "";
 
-  return medlinked.get<PacienteResponse>(
-    `paciente?pageSize=${pageSize}&page=${pageNumber}${nameFilter}${cpfFilter}`,
+  return medlinked.get<PacientePaginatedResponse>(
+    // eslint-disable-next-line max-len
+    `paciente/paginado?pageSize=${pageSize}&page=${pageNumber}${nameFilter}${cpfFilter}`,
   );
+}
+
+export function getAllPacientes() {
+  return medlinked.get<PacienteResponse>("paciente");
 }
 
 export function getPaciente(idPaciente: number) {
