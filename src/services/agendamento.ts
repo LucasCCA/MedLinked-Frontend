@@ -23,3 +23,7 @@ export function getAllAgendamentos(
     }?${anoFilter}${mesFilter}${diaFilter}${medicoFilter}${pacienteFilter}`,
   );
 }
+
+export function deleteAgendamento(idAgendamento: number) {
+  return medlinked.delete(`agendamento/delete/${idAgendamento}`);
+}

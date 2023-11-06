@@ -16,6 +16,7 @@ import {
 } from "@medlinked/components";
 import { theme } from "@medlinked/config";
 import {
+  deleteAgendamento,
   getAllAgendamentos,
   getAllMedicosSecretaria,
   getAllPacientes,
@@ -61,6 +62,7 @@ export default function Page() {
   const [allAgendamentos, setAllAgendamentos] = useState<AgendamentoResponse>(
     [],
   );
+  const [currentAgendamento, setCurrentAgendamento] = useState(0);
 
   useEffect(() => {
     function getPacientes() {
@@ -93,48 +95,48 @@ export default function Page() {
     getMedicos();
   }, []);
 
-  useEffect(() => {
-    function getAgendamentos() {
-      setLoading(true);
+  function getAgendamentos() {
+    setLoading(true);
 
-      getAllAgendamentos(
-        Number(currentMedico.value),
-        Number(currentPaciente.value),
+    getAllAgendamentos(
+      Number(currentMedico.value),
+      Number(currentPaciente.value),
+    )
+      .then((response) => setAllAgendamentos(response.data))
+      .catch(() =>
+        toast.error(
+          // eslint-disable-next-line max-len
+          "Ocorreu um erro ao buscar agendamentos. Tente novamente mais tarde.",
+        ),
       )
-        .then((response) => setAllAgendamentos(response.data))
-        .catch(() =>
-          toast.error(
-            // eslint-disable-next-line max-len
-            "Ocorreu um erro ao buscar agendamentos. Tente novamente mais tarde.",
-          ),
-        )
-        .finally(() => setLoading(false));
-    }
+      .finally(() => setLoading(false));
+  }
 
+  useEffect(() => {
     getAgendamentos();
   }, [currentMedico, currentPaciente]);
 
-  useEffect(() => {
-    function getFilteredAgendamentos() {
-      setLoading(true);
+  function getFilteredAgendamentos() {
+    setLoading(true);
 
-      getAllAgendamentos(
-        Number(currentMedico.value),
-        Number(currentPaciente.value),
-        month,
-        year,
-        day,
+    getAllAgendamentos(
+      Number(currentMedico.value),
+      Number(currentPaciente.value),
+      month,
+      year,
+      day,
+    )
+      .then((response) => setAgendamentos(response.data))
+      .catch(() =>
+        toast.error(
+          // eslint-disable-next-line max-len
+          "Ocorreu um erro ao buscar agendamentos. Tente novamente mais tarde.",
+        ),
       )
-        .then((response) => setAgendamentos(response.data))
-        .catch(() =>
-          toast.error(
-            // eslint-disable-next-line max-len
-            "Ocorreu um erro ao buscar agendamentos. Tente novamente mais tarde.",
-          ),
-        )
-        .finally(() => setLoading(false));
-    }
+      .finally(() => setLoading(false));
+  }
 
+  useEffect(() => {
     getFilteredAgendamentos();
   }, [year, month, day, currentMedico, currentPaciente]);
 
@@ -180,6 +182,23 @@ export default function Page() {
       label: `${medicos[i].nome} - CPF ${cpfMask(formatCpf(medicos[i].cpf))}`,
       value: medicos[i].idMedico.toString(),
     });
+  }
+
+  function handleDelete() {
+    deleteAgendamento(currentAgendamento)
+      .then(() => {
+        setCurrentAgendamento(0);
+        setOpenModal(false);
+        getAgendamentos();
+        getFilteredAgendamentos();
+        toast.success("Agendamento deletado com sucesso!");
+      })
+      .catch(() =>
+        toast.error(
+          // eslint-disable-next-line max-len
+          "Ocorreu um erro ao deletar o agendamento. Tente novamente mais tarde.",
+        ),
+      );
   }
 
   return (
@@ -256,7 +275,7 @@ export default function Page() {
                 type="submit"
                 disabled={loading}
               >
-                Cadastrar
+                {modalText == 1 ? "Cadastrar" : "Atualizar"}
               </Button>
             </ModalFieldsContainer>
           </StyledForm>
@@ -270,7 +289,7 @@ export default function Page() {
               <Button
                 fullWidth
                 textAlign="center"
-                // onClick={() => handleDelete()}
+                onClick={() => handleDelete()}
               >
                 Sim
               </Button>
@@ -403,12 +422,14 @@ export default function Page() {
                     <div>
                       <Pen
                         onClick={() => {
+                          setCurrentAgendamento(agendamento.idAgendamento);
                           setOpenModal(true);
                           setModalText(2);
                         }}
                       />
                       <Trash
                         onClick={() => {
+                          setCurrentAgendamento(agendamento.idAgendamento);
                           setOpenModal(true);
                           setModalText(3);
                         }}
