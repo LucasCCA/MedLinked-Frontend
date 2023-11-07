@@ -9,5 +9,6 @@ export * from "./pessoa";
 export * from "./planoSaude";
 export * from "./secretaria";
 export * from "./secretariaMedico";
+export * from "./tipoAgendamento";
 export * from "./tipoPlanoSaude";
 export * from "./usuario";

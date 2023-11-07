@@ -20,9 +20,10 @@ export default function middleware(request: NextRequest) {
 
   if (
     request.nextUrl.pathname === "/" ||
-    request.nextUrl.pathname === "/cadastro"
+    request.nextUrl.pathname === "/cadastro" ||
+    request.nextUrl.pathname === "/admin"
   )
-    return NextResponse.redirect(new URL("/admin", request.url));
+    return NextResponse.redirect(new URL("/admin/agenda", request.url));
 }
 
 export const config = {

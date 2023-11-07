@@ -5,7 +5,6 @@ import {
   Calendar,
   Card,
   CustomText,
-  Input,
   Modal,
   NoResults,
   OptionData,
@@ -39,8 +38,7 @@ import {
   CardInfoContainer,
   ModalFieldsContainer,
   ResultsContainer,
-  StyledForm,
-} from "./styles";
+} from "../styles";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
@@ -50,11 +48,13 @@ export default function Page() {
   const [monthFilter, setMonthFilter] = useState(new Date().getMonth() + 1);
   const [yearFilter, setYearFilter] = useState(new Date().getFullYear());
   const [openModal, setOpenModal] = useState(false);
-  const [modalText, setModalText] = useState(0);
   const [pacientes, setPacientes] = useState<PacienteResponse>([]);
   const [medicos, setMedicos] = useState<SecretariaMedicoResponse>([]);
-  const [currentMedico, setCurrentMedico] = useState({ label: "", value: "" });
-  const [currentPaciente, setCurrentPaciente] = useState({
+  const [currentMedicoFilter, setCurrentMedicoFilter] = useState({
+    label: "",
+    value: "",
+  });
+  const [currentPacienteFilter, setCurrentPacienteFilter] = useState({
     label: "",
     value: "",
   });
@@ -99,8 +99,8 @@ export default function Page() {
     setLoading(true);
 
     getAllAgendamentos(
-      Number(currentMedico.value),
-      Number(currentPaciente.value),
+      Number(currentMedicoFilter.value),
+      Number(currentPacienteFilter.value),
     )
       .then((response) => setAllAgendamentos(response.data))
       .catch(() =>
@@ -114,14 +114,14 @@ export default function Page() {
 
   useEffect(() => {
     getAgendamentos();
-  }, [currentMedico, currentPaciente]);
+  }, [currentMedicoFilter, currentPacienteFilter]);
 
   function getFilteredAgendamentos() {
     setLoading(true);
 
     getAllAgendamentos(
-      Number(currentMedico.value),
-      Number(currentPaciente.value),
+      Number(currentMedicoFilter.value),
+      Number(currentPacienteFilter.value),
       month,
       year,
       day,
@@ -138,18 +138,7 @@ export default function Page() {
 
   useEffect(() => {
     getFilteredAgendamentos();
-  }, [year, month, day, currentMedico, currentPaciente]);
-
-  const pacientesOptions: OptionData[] = [];
-
-  for (let i = 0; i < pacientes.length; i++) {
-    pacientesOptions.push({
-      label: `${pacientes[i].pessoa.nome} - CPF ${cpfMask(
-        formatCpf(pacientes[i].pessoa.cpf),
-      )}`,
-      value: pacientes[i].idPaciente.toString(),
-    });
-  }
+  }, [year, month, day, currentMedicoFilter, currentPacienteFilter]);
 
   const pacientesFilterOptions: OptionData[] = [
     { label: "Todos os pacientes", value: "0" },
@@ -161,15 +150,6 @@ export default function Page() {
         formatCpf(pacientes[i].pessoa.cpf),
       )}`,
       value: pacientes[i].idPaciente.toString(),
-    });
-  }
-
-  const medicosOptions: OptionData[] = [];
-
-  for (let i = 0; i < medicos.length; i++) {
-    medicosOptions.push({
-      label: `${medicos[i].nome} - CPF ${cpfMask(formatCpf(medicos[i].cpf))}`,
-      value: medicos[i].idMedico.toString(),
     });
   }
 
@@ -187,7 +167,6 @@ export default function Page() {
   function handleDelete() {
     deleteAgendamento(currentAgendamento)
       .then(() => {
-        setCurrentAgendamento(0);
         setOpenModal(false);
         getAgendamentos();
         getFilteredAgendamentos();
@@ -203,118 +182,27 @@ export default function Page() {
 
   return (
     <>
-      <Modal
-        title={
-          modalText == 1
-            ? "Novo agendamento"
-            : modalText == 2
-            ? "Visualizar agendamento"
-            : "Confirmação"
-        }
-        open={openModal}
-        setOpen={setOpenModal}
-      >
-        {(modalText == 1 || modalText == 2) && (
-          <StyledForm>
-            <Select
-              options={medicosOptions}
-              fullWidth
-              placeholder="Selecione um médico *"
-              disabled={loading}
-            />
-            <Select
-              options={pacientesOptions}
-              fullWidth
-              placeholder="Selecione um paciente *"
-              disabled={loading}
-            />
-            <Input
-              placeholder="Data *"
-              fullWidth
-              autoComplete="off"
-              disabled={loading}
-            />
-            <ModalFieldsContainer>
-              <Input
-                placeholder="Horário Início *"
-                fullWidth
-                autoComplete="off"
-                disabled={loading}
-              />
-              <Input
-                placeholder="Horário Fim *"
-                fullWidth
-                autoComplete="off"
-                disabled={loading}
-              />
-            </ModalFieldsContainer>
-            <Select
-              options={[]}
-              fullWidth
-              placeholder="Selecione um tipo de consulta *"
-              disabled={loading}
-            />
-            <Select
-              options={[]}
-              fullWidth
-              placeholder="Selecione um convênio *"
-              disabled={loading}
-            />
-            <Input
-              placeholder="Descrição *"
-              fullWidth
-              maxLength={130}
-              autoComplete="off"
-              disabled={loading}
-            />
-            <CustomText $weight={500}>* Campo Obrigatório</CustomText>
-            <ModalFieldsContainer>
-              <Button
-                fullWidth
-                textAlign="center"
-                type="submit"
-                disabled={loading}
-              >
-                {modalText == 1 ? "Cadastrar" : "Atualizar"}
-              </Button>
-            </ModalFieldsContainer>
-          </StyledForm>
-        )}
-        {modalText == 3 && (
-          <>
-            <CustomText $align="center">
-              Você realmente deseja deletar esse agendamento?
-            </CustomText>
-            <ModalFieldsContainer>
-              <Button
-                fullWidth
-                textAlign="center"
-                onClick={() => handleDelete()}
-              >
-                Sim
-              </Button>
-              <Button
-                fullWidth
-                textAlign="center"
-                onClick={() => setOpenModal(false)}
-                color="red_80"
-              >
-                Não
-              </Button>
-            </ModalFieldsContainer>
-          </>
-        )}
+      <Modal title="Confirmação" open={openModal} setOpen={setOpenModal}>
+        <CustomText $align="center">
+          Você realmente deseja deletar esse agendamento?
+        </CustomText>
+        <ModalFieldsContainer>
+          <Button fullWidth textAlign="center" onClick={() => handleDelete()}>
+            Sim
+          </Button>
+          <Button
+            fullWidth
+            textAlign="center"
+            onClick={() => setOpenModal(false)}
+            color="red_80"
+          >
+            Não
+          </Button>
+        </ModalFieldsContainer>
       </Modal>
       <CalendarPageContainer>
         <CalendarFiltersContainer>
-          <Button
-            icon="Plus"
-            fullWidth
-            onClick={() => {
-              setOpenModal(true);
-              setModalText(1);
-            }}
-          >
+          <Button icon="Plus" fullWidth href="/admin/agenda/0">
             Agendamento
           </Button>
           <Select
@@ -322,16 +210,16 @@ export default function Page() {
             fullWidth
             placeholder="Pesquise por médico"
             disabled={loading}
-            outsideSelected={currentMedico}
-            setOutsideSelected={setCurrentMedico}
+            outsideSelected={currentMedicoFilter}
+            setOutsideSelected={setCurrentMedicoFilter}
           />
           <Select
             options={pacientesFilterOptions}
             fullWidth
             placeholder="Pesquise por paciente"
             disabled={loading}
-            outsideSelected={currentPaciente}
-            setOutsideSelected={setCurrentPaciente}
+            outsideSelected={currentPacienteFilter}
+            setOutsideSelected={setCurrentPacienteFilter}
           />
           <CalendarLegendContainer>
             <CustomText $size="h3" $align="left">
@@ -420,18 +308,11 @@ export default function Page() {
                       </CardInfoContainer>
                     </div>
                     <div>
-                      <Pen
-                        onClick={() => {
-                          setCurrentAgendamento(agendamento.idAgendamento);
-                          setOpenModal(true);
-                          setModalText(2);
-                        }}
-                      />
+                      <Pen />
                       <Trash
                         onClick={() => {
                           setCurrentAgendamento(agendamento.idAgendamento);
                           setOpenModal(true);
-                          setModalText(3);
                         }}
                       />
                     </div>
