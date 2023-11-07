@@ -14,16 +14,16 @@ import {
 import {
   deleteMedico,
   disassociateMedicoSecretaria,
-  getAllMedicosSecretaria,
+  getAllMedicosSecretariaPaginated,
 } from "@medlinked/services";
-import { SecretariaMedicoResponse } from "@medlinked/types";
+import { SecretariaMedicoPaginatedResponse } from "@medlinked/types";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   CardInfoContainer,
   CardsContainer,
   FiltersContainer,
-  ModalButtonContainer,
+  ModalFieldsContainer,
   PaginationAndRecordsContainer,
 } from "../styles";
 
@@ -35,7 +35,7 @@ const records = [
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
-  const [medicos, setMedicos] = useState<SecretariaMedicoResponse>({
+  const [medicos, setMedicos] = useState<SecretariaMedicoPaginatedResponse>({
     content: [],
     pageable: { pageNumber: 0, pageSize: 0 },
     totalPages: 0,
@@ -57,7 +57,7 @@ export default function Page() {
     });
     setLoading(true);
 
-    getAllMedicosSecretaria(pageNumber, Number(selectedPageSize.value))
+    getAllMedicosSecretariaPaginated(pageNumber, Number(selectedPageSize.value))
       .then((response) => setMedicos(response.data))
       .catch(() =>
         toast.error(
@@ -114,7 +114,7 @@ export default function Page() {
             <CustomText $align="center">
               Você deseja criar um novo médico ou se vincular a um existente?
             </CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button fullWidth href="/admin/medicos/0" textAlign="center">
                 Criar novo
               </Button>
@@ -125,7 +125,7 @@ export default function Page() {
               >
                 Vincular a existente
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </>
         )}
         {modalText == 2 && (
@@ -134,7 +134,7 @@ export default function Page() {
               Você realmente deseja se desvincular desse médico? Caso ele não
               esteja vinculado a nenhuma outra secretária ele será deletado
             </CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button
                 fullWidth
                 textAlign="center"
@@ -150,7 +150,7 @@ export default function Page() {
               >
                 Não
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </>
         )}
         {modalText == 3 && (
@@ -158,7 +158,7 @@ export default function Page() {
             <CustomText $align="center">
               Você realmente deseja deletar esse médico?
             </CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button
                 fullWidth
                 textAlign="center"
@@ -174,7 +174,7 @@ export default function Page() {
               >
                 Não
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </>
         )}
       </Modal>

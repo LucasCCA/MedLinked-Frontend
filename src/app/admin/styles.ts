@@ -78,7 +78,7 @@ export const PaginationAndRecordsContainer = styled.div`
 export const CardInfoContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   flex-wrap: wrap;
   gap: 5px;
 `;
@@ -150,7 +150,7 @@ export const AddressFieldsContainer = styled.div`
   }
 `;
 
-export const ModalButtonContainer = styled.div`
+export const ModalFieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -191,7 +191,7 @@ export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
   gap: 15px;
@@ -219,11 +219,86 @@ export const CalendarFiltersContainer = styled.div`
   gap: 10px;
   width: 100%;
 
-  div > p:first-child {
-    margin-top: 1rem;
-  }
-
   @media ${breakpoints.lg} {
     width: 50%;
+  }
+`;
+
+export const CalendarLegendContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 5px;
+
+  > p {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+`;
+
+export const CalendarAndResultsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  gap: 1rem;
+`;
+
+export const ResultsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 1rem;
+`;
+
+export const CalendarResultContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 15px;
+
+  > div {
+    display: flex;
+  }
+
+  > div:first-child {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  > div:last-child {
+    gap: 20px;
+  }
+
+  a > svg {
+    color: ${(props) => props.theme.colors.dark_blue_80};
+
+    &:hover {
+      cursor: pointer;
+      color: ${(props) => props.theme.colors.dark_blue_100};
+    }
+  }
+
+  svg {
+    color: ${(props) => props.theme.colors.red_80};
+
+    &:hover {
+      cursor: pointer;
+      color: ${(props) => props.theme.colors.red_100};
+    }
+  }
+
+  @media ${breakpoints.sm} {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
   }
 `;

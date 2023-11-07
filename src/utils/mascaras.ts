@@ -44,3 +44,22 @@ export function cepMask(cep: string) {
 
   return cep.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1 - $2");
 }
+
+export function dateMask(date: string) {
+  if (!date) return "";
+
+  return date
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "$1/$2")
+    .replace(/(\d{2})(\d)/, "$1/$2")
+    .replace(/(\d{4})/, "$1");
+}
+
+export function timeMask(time: string) {
+  if (!time) return "";
+
+  return time
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "$1:$2")
+    .replace(/(\d{2})/, "$1");
+}

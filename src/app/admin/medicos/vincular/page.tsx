@@ -10,9 +10,12 @@ import {
 import {
   associateMedicoSecretaria,
   getAllMedicos,
-  getAllMedicosSecretaria,
+  getAllMedicosSecretariaPaginated,
 } from "@medlinked/services";
-import { MedicoResponse, SecretariaMedicoResponse } from "@medlinked/types";
+import {
+  MedicoResponse,
+  SecretariaMedicoPaginatedResponse,
+} from "@medlinked/types";
 import { cpfMask, formatCpf } from "@medlinked/utils";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -34,7 +37,7 @@ export default function Page() {
   const [alreadyAssociated, setAlreadyAssociated] = useState(false);
   const [currentMedico, setCurrentMedico] = useState({ label: "", value: "" });
   const [medicosSecretaria, setMedicosSecretaria] =
-    useState<SecretariaMedicoResponse>({
+    useState<SecretariaMedicoPaginatedResponse>({
       content: [],
       pageable: { pageNumber: 0, pageSize: 0 },
       totalPages: 0,
@@ -44,7 +47,7 @@ export default function Page() {
   function getMedicosSecretaria() {
     setLoading(true);
 
-    getAllMedicosSecretaria(0, 100)
+    getAllMedicosSecretariaPaginated(0, 100)
       .then((response) => setMedicosSecretaria(response.data))
       .catch(() =>
         toast.error(

@@ -48,7 +48,7 @@ export default function Page() {
     createSecretaria(data)
       .then((response) => {
         Cookies.set("token", response.data.token);
-        router.push("/admin");
+        router.push("/admin/agenda");
       })
       .catch((error) => toast.error(error.response.data))
       .finally(() => setLoading(false));

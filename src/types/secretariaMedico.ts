@@ -17,7 +17,9 @@ export type SecretariaMedicoData = {
   especialidades: EspecializacaoResponse;
 };
 
-export type SecretariaMedicoResponse = {
+export type SecretariaMedicoResponse = SecretariaMedicoData[];
+
+export type SecretariaMedicoPaginatedResponse = {
   content: SecretariaMedicoData[];
   pageable: Pageable;
   totalPages: number;

@@ -29,7 +29,7 @@ import { toast } from "react-toastify";
 import {
   CardsContainer,
   FiltersContainer,
-  ModalButtonContainer,
+  ModalFieldsContainer,
   PaginationAndRecordsContainer,
   StyledForm,
 } from "../styles";
@@ -141,7 +141,7 @@ export default function Page() {
               autoComplete="off"
             />
             <CustomText $weight={500}>* Campo Obrigatório</CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button
                 fullWidth
                 textAlign="center"
@@ -150,7 +150,7 @@ export default function Page() {
               >
                 Cadastrar
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </StyledForm>
         )}
         {modalText == 2 && (
@@ -158,7 +158,7 @@ export default function Page() {
             <CustomText $align="center">
               Você realmente deseja deletar esse convênio?
             </CustomText>
-            <ModalButtonContainer>
+            <ModalFieldsContainer>
               <Button
                 fullWidth
                 textAlign="center"
@@ -174,7 +174,7 @@ export default function Page() {
               >
                 Não
               </Button>
-            </ModalButtonContainer>
+            </ModalFieldsContainer>
           </>
         )}
       </Modal>

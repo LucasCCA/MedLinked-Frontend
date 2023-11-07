@@ -60,7 +60,10 @@ export function Navbar() {
           <Menu size={30} onClick={() => setExpanded(!expanded)} />
         </BlueContainer>
         <NavigationContainer $expanded={expanded}>
-          <CustomLink href="/admin" $color={getLinkColor("/admin")}>
+          <CustomLink
+            href="/admin/agenda"
+            $color={getLinkColor("/admin/agenda")}
+          >
             <Calendar size={25} />
             {expanded && <>Agenda</>}
           </CustomLink>

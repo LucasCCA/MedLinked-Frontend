@@ -44,7 +44,7 @@ export default function Page() {
     authenticate(data)
       .then((response) => {
         Cookies.set("token", response.data.token);
-        router.push("/admin");
+        router.push("/admin/agenda");
       })
       .catch(() => {
         toast.error("Usuário ou senha incorretos.");
