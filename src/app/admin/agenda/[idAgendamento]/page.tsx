@@ -210,6 +210,7 @@ export default function Page() {
     getPacientes();
     getMedicos();
     if (idAgendamento != 0) getExistingAgendamento();
+    else setIsInformationReady(true);
   }, []);
 
   useEffect(() => {
