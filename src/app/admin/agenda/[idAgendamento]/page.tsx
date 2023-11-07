@@ -12,10 +12,13 @@ import {
 } from "@medlinked/components";
 import { registerAgendamentoSchema } from "@medlinked/schemas";
 import {
+  createAgendamento,
+  getAgendamento,
   getAllMedicosSecretaria,
   getAllPacientes,
   getAllPlanosSaudePaciente,
   getAllTiposAgendamento,
+  updateAgendamento,
 } from "@medlinked/services";
 import {
   CreateAgendamento,
@@ -24,7 +27,7 @@ import {
   SecretariaMedicoResponse,
 } from "@medlinked/types";
 import { cpfMask, dateMask, formatCpf, timeMask } from "@medlinked/utils";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -43,6 +46,7 @@ const breadcrumbItems = [
 
 export default function Page() {
   const params = useParams();
+  const router = useRouter();
   const [idAgendamento, setidAgendamento] = useState(
     Number(params.idAgendamento),
   );
@@ -68,6 +72,7 @@ export default function Page() {
     label: "",
     value: "",
   });
+  const [isInformationReady, setIsInformationReady] = useState(false);
 
   const {
     register,
@@ -80,6 +85,87 @@ export default function Page() {
   });
 
   useEffect(() => {
+    function getExistingAgendamento() {
+      setLoading(true);
+
+      getAgendamento(idAgendamento)
+        .then((response) => {
+          setValue(
+            "data",
+            `${response.data.dataHoraInicioAgendamento.slice(
+              8,
+              10,
+            )}${response.data.dataHoraInicioAgendamento.slice(
+              5,
+              7,
+            )}${response.data.dataHoraInicioAgendamento.slice(0, 4)}`,
+          );
+          setValue("descricao", response.data.descricao);
+          setValue(
+            "horaFim",
+            `${response.data.dataHoraFimAgendamento.slice(
+              11,
+              13,
+            )}${response.data.dataHoraFimAgendamento.slice(14, 16)}`,
+          );
+          setValue(
+            "horaInicio",
+            `${response.data.dataHoraInicioAgendamento.slice(
+              11,
+              13,
+            )}${response.data.dataHoraInicioAgendamento.slice(14, 16)}`,
+          );
+          setValue("idMedico", response.data.medico.idMedico);
+          setCurrentMedico({
+            label: `${response.data.medico.pessoa.nome} - CPF ${cpfMask(
+              formatCpf(response.data.medico.pessoa.cpf),
+            )}`,
+            value: response.data.medico.idMedico.toString(),
+          });
+          setValue("idPaciente", response.data.paciente.idPaciente);
+          setCurrentPaciente({
+            label: `${response.data.paciente.pessoa.nome} - CPF ${cpfMask(
+              formatCpf(response.data.paciente.pessoa.cpf),
+            )}`,
+            value: response.data.paciente.idPaciente.toString(),
+          });
+          if (response.data.planoSaude != null) {
+            setValue("idPlanoSaude", response.data.planoSaude.idPlanoSaude);
+            setCurrentConvenio({
+              label: response.data.planoSaude.descricao,
+              value: response.data.planoSaude.idPlanoSaude.toString(),
+            });
+          }
+          setValue(
+            "tipoAgendamento",
+            `${response.data.tipoAgendamento
+              .charAt(0)
+              .toUpperCase()}${response.data.tipoAgendamento
+              .slice(1)
+              .toLowerCase()}`,
+          );
+          setCurrentTipoAgendamento({
+            label: `${response.data.tipoAgendamento
+              .charAt(0)
+              .toUpperCase()}${response.data.tipoAgendamento
+              .slice(1)
+              .toLowerCase()}`,
+            value: response.data.tipoAgendamento,
+          });
+        })
+        .catch(() => {
+          toast.error(
+            // eslint-disable-next-line max-len
+            "Ocorreu um erro ao buscar os dados do agendamento. Tente novamente mais tarde.",
+          );
+          router.push("/admin/agenda");
+        })
+        .finally(() => {
+          setLoading(false);
+          setIsInformationReady(true);
+        });
+    }
+
     function getPacientes() {
       setLoading(true);
 
@@ -123,6 +209,7 @@ export default function Page() {
     getTiposAgendamento();
     getPacientes();
     getMedicos();
+    if (idAgendamento != 0) getExistingAgendamento();
   }, []);
 
   useEffect(() => {
@@ -209,7 +296,24 @@ export default function Page() {
   ]);
 
   const onSubmit: SubmitHandler<CreateAgendamento> = (data) => {
-    console.log(data);
+    setLoading(true);
+
+    if (idAgendamento == 0)
+      createAgendamento(data)
+        .then((response) => {
+          toast.success("Agendamento cadastrado com sucesso!");
+          setidAgendamento(response.data.idAgendamento);
+        })
+        .catch((error) => toast.error(error.response.data))
+        .finally(() => setLoading(false));
+    else
+      updateAgendamento(data, idAgendamento)
+        .then((response) => {
+          toast.success("Agendamento atualizado com sucesso!");
+          setidAgendamento(response.data.idAgendamento);
+        })
+        .catch((error) => toast.error(error.response.data))
+        .finally(() => setLoading(false));
   };
 
   return (
@@ -220,106 +324,113 @@ export default function Page() {
       <Spacing>
         <CustomText $size="h2">Dados do Agendamento</CustomText>
       </Spacing>
-      <Spacing>
+      {isInformationReady && (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FieldsContainer>
-            <Select
-              options={medicosOptions}
-              fullWidth
-              placeholder="Selecione um médico *"
-              disabled={loading}
-              outsideSelected={currentMedico}
-              setOutsideSelected={setCurrentMedico}
-              register={{ ...register("idMedico") }}
-              hasError={Boolean(errors.idMedico)}
-              errorMessage={errors.idMedico?.message}
-            />
-            <Select
-              options={pacientesOptions}
-              fullWidth
-              placeholder="Selecione um paciente *"
-              disabled={loading}
-              outsideSelected={currentPaciente}
-              setOutsideSelected={setCurrentPaciente}
-              register={{ ...register("idPaciente") }}
-              hasError={Boolean(errors.idPaciente)}
-              errorMessage={errors.idPaciente?.message}
-            />
-            <Input
-              placeholder="Data *"
-              fullWidth
-              autoComplete="off"
-              maxLength={10}
-              disabled={loading}
-              register={{ ...register("data") }}
-              hasError={Boolean(errors.data)}
-              errorMessage={errors.data?.message}
-            />
-            <Input
-              placeholder="Horário Início *"
-              fullWidth
-              autoComplete="off"
-              maxLength={5}
-              disabled={loading}
-              register={{ ...register("horaInicio") }}
-              hasError={Boolean(errors.horaInicio)}
-              errorMessage={errors.horaInicio?.message}
-            />
-            <Input
-              placeholder="Horário Fim *"
-              fullWidth
-              autoComplete="off"
-              maxLength={5}
-              disabled={loading}
-              register={{ ...register("horaFim") }}
-              hasError={Boolean(errors.horaFim)}
-              errorMessage={errors.horaFim?.message}
-            />
-            <Select
-              options={tiposAgendamentoOptions}
-              fullWidth
-              placeholder="Selecione um tipo de agendamento *"
-              disabled={loading}
-              outsideSelected={currentTipoAgendamento}
-              setOutsideSelected={setCurrentTipoAgendamento}
-              register={{ ...register("tipoAgendamento") }}
-              hasError={Boolean(errors.tipoAgendamento)}
-              errorMessage={errors.tipoAgendamento?.message}
-            />
-            <Select
-              options={conveniosOptions}
-              fullWidth
-              placeholder="Selecione um convênio"
-              disabled={loading || currentPaciente.value == ""}
-              outsideSelected={currentConvenio}
-              setOutsideSelected={setCurrentConvenio}
-              register={{ ...register("idPlanoSaude") }}
-              hasError={Boolean(errors.idPlanoSaude)}
-              errorMessage={errors.idPlanoSaude?.message}
-            />
-            <Input
-              placeholder="Descrição"
-              fullWidth
-              autoComplete="off"
-              maxLength={200}
-              disabled={loading}
-              register={{ ...register("descricao") }}
-              hasError={Boolean(errors.descricao)}
-              errorMessage={errors.descricao?.message}
-            />
-          </FieldsContainer>
+          <Spacing>
+            <FieldsContainer>
+              <Select
+                options={medicosOptions}
+                fullWidth
+                placeholder="Selecione um médico *"
+                disabled={loading}
+                outsideSelected={currentMedico}
+                setOutsideSelected={setCurrentMedico}
+                register={{ ...register("idMedico") }}
+                hasError={Boolean(errors.idMedico)}
+                errorMessage={errors.idMedico?.message}
+              />
+              <Select
+                options={pacientesOptions}
+                fullWidth
+                placeholder="Selecione um paciente *"
+                disabled={loading}
+                outsideSelected={currentPaciente}
+                setOutsideSelected={setCurrentPaciente}
+                register={{ ...register("idPaciente") }}
+                hasError={Boolean(errors.idPaciente)}
+                errorMessage={errors.idPaciente?.message}
+              />
+              <Input
+                placeholder="Data *"
+                fullWidth
+                autoComplete="off"
+                maxLength={10}
+                disabled={loading}
+                register={{ ...register("data") }}
+                hasError={Boolean(errors.data)}
+                errorMessage={errors.data?.message}
+              />
+              <Input
+                placeholder="Horário Início *"
+                fullWidth
+                autoComplete="off"
+                maxLength={5}
+                disabled={loading}
+                register={{ ...register("horaInicio") }}
+                hasError={Boolean(errors.horaInicio)}
+                errorMessage={errors.horaInicio?.message}
+              />
+              <Input
+                placeholder="Horário Fim *"
+                fullWidth
+                autoComplete="off"
+                maxLength={5}
+                disabled={loading}
+                register={{ ...register("horaFim") }}
+                hasError={Boolean(errors.horaFim)}
+                errorMessage={errors.horaFim?.message}
+              />
+              <Select
+                options={tiposAgendamentoOptions}
+                fullWidth
+                placeholder="Selecione um tipo de agendamento *"
+                disabled={loading}
+                outsideSelected={currentTipoAgendamento}
+                setOutsideSelected={setCurrentTipoAgendamento}
+                register={{ ...register("tipoAgendamento") }}
+                hasError={Boolean(errors.tipoAgendamento)}
+                errorMessage={errors.tipoAgendamento?.message}
+              />
+              <Select
+                options={conveniosOptions}
+                fullWidth
+                placeholder="Selecione um convênio"
+                disabled={loading || currentPaciente.value == ""}
+                outsideSelected={currentConvenio}
+                setOutsideSelected={setCurrentConvenio}
+                register={{ ...register("idPlanoSaude") }}
+                hasError={Boolean(errors.idPlanoSaude)}
+                errorMessage={errors.idPlanoSaude?.message}
+              />
+              <Input
+                placeholder="Descrição"
+                fullWidth
+                autoComplete="off"
+                maxLength={200}
+                disabled={loading}
+                register={{ ...register("descricao") }}
+                hasError={Boolean(errors.descricao)}
+                errorMessage={errors.descricao?.message}
+              />
+            </FieldsContainer>
+          </Spacing>
+          <Spacing>
+            <CustomText $weight={500}>* Campo Obrigatório</CustomText>
+          </Spacing>
+          <Spacing>
+            <SingleFieldContainer>
+              <Button
+                fullWidth
+                textAlign="center"
+                type="submit"
+                disabled={loading}
+              >
+                {idAgendamento == 0 ? "Cadastrar" : "Atualizar"}
+              </Button>
+            </SingleFieldContainer>
+          </Spacing>
         </form>
-      </Spacing>
-      <Spacing>
-        <CustomText $weight={500}>* Campo Obrigatório</CustomText>
-      </Spacing>
-      <Spacing>
-        <SingleFieldContainer>
-          <Button fullWidth textAlign="center" type="submit" disabled={loading}>
-            {idAgendamento == 0 ? "Cadastrar" : "Atualizar"}
-          </Button>
-        </SingleFieldContainer>
-      </Spacing>
+      )}
     </>
   );
 }

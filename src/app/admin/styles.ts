@@ -278,7 +278,7 @@ export const CalendarResultContentContainer = styled.div`
     gap: 20px;
   }
 
-  svg {
+  a > svg {
     color: ${(props) => props.theme.colors.dark_blue_80};
 
     &:hover {
@@ -287,7 +287,7 @@ export const CalendarResultContentContainer = styled.div`
     }
   }
 
-  svg:last-child {
+  svg {
     color: ${(props) => props.theme.colors.red_80};
 
     &:hover {

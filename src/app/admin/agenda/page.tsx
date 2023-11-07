@@ -4,6 +4,7 @@ import {
   Button,
   Calendar,
   Card,
+  CustomLink,
   CustomText,
   Modal,
   NoResults,
@@ -308,7 +309,11 @@ export default function Page() {
                       </CardInfoContainer>
                     </div>
                     <div>
-                      <Pen />
+                      <CustomLink
+                        href={`/admin/agenda/${agendamento.idAgendamento}`}
+                      >
+                        <Pen />
+                      </CustomLink>
                       <Trash
                         onClick={() => {
                           setCurrentAgendamento(agendamento.idAgendamento);
