@@ -89,7 +89,7 @@ export default function Page() {
   return (
     <BlueBackground>
       <HeaderContainer>
-        <CustomLink href="">
+        <CustomLink href="/">
           <LogoContainer>
             <Image
               src="/images/icon.png"
