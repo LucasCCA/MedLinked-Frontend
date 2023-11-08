@@ -1,3 +1,5 @@
+"use client";
+
 import { theme } from "@medlinked/config";
 import { AgendamentoResponse } from "@medlinked/types";
 import { Bookmark, ChevronLeft, ChevronRight, Circle } from "lucide-react";
