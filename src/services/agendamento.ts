@@ -65,7 +65,10 @@ export function createAgendamento(data: CreateAgendamento) {
   return medlinked.post<AgendamentoData>("agendamento/create", {
     idMedico: data.idMedico,
     idPaciente: data.idPaciente,
-    idPlanoSaude: data.idPlanoSaude || null,
+    idPlanoSaude:
+      data.idPlanoSaude != 0 && data.idPlanoSaude != undefined
+        ? data.idPlanoSaude
+        : null,
     descricao: data.descricao,
     tipoAgendamento: data.tipoAgendamento,
     dataHoraInicioAgendamento: startDateString,
@@ -101,7 +104,10 @@ export function updateAgendamento(
   return medlinked.put<AgendamentoData>(`agendamento/update/${idAgendamento}`, {
     idMedico: data.idMedico,
     idPaciente: data.idPaciente,
-    idPlanoSaude: data.idPlanoSaude || null,
+    idPlanoSaude:
+      data.idPlanoSaude != 0 && data.idPlanoSaude != undefined
+        ? data.idPlanoSaude
+        : null,
     descricao: data.descricao,
     tipoAgendamento: data.tipoAgendamento,
     dataHoraInicioAgendamento: startDateString,

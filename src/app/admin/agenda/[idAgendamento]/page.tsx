@@ -251,7 +251,9 @@ export default function Page() {
     });
   }
 
-  const conveniosOptions: OptionData[] = [];
+  const conveniosOptions: OptionData[] = [
+    { label: "Sem convênio", value: "0" },
+  ];
 
   for (let i = 0; i < conveniosPaciente.length; i++) {
     conveniosOptions.push({
