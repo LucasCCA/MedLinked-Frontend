@@ -1,5 +1,6 @@
 import { medlinked } from "@medlinked/api";
+import { CreateResetToken } from "@medlinked/types";
 
-export function sendEmail(username: string) {
-  return medlinked.post(`password/reset?username${username}`);
+export function sendEmail(data: CreateResetToken) {
+  return medlinked.post(`password/reset?username=${data.username}`);
 }

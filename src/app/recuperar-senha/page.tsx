@@ -9,10 +9,13 @@ import {
   Input,
 } from "@medlinked/components";
 import { passwordResetTokenSchema } from "@medlinked/schemas";
+import { sendEmail } from "@medlinked/services";
 import { CreateResetToken } from "@medlinked/types";
+import Cookies from "js-cookie";
 import Image from "next/image";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import {
   BlueBackground,
   Form,
@@ -36,17 +39,16 @@ export default function Page() {
 
   const onSubmit: SubmitHandler<CreateResetToken> = (data) => {
     setLoading(true);
-    console.log(data);
 
-    // authenticate(data)
-    //   .then((response) => {
-    //     Cookies.set("token", response.data.token);
-    //     router.push("/admin/agenda");
-    //   })
-    //   .catch(() => {
-    //     toast.error("Usuário ou senha incorretos.");
-    //   })
-    //   .finally(() => setLoading(false));
+    sendEmail(data)
+      .then((response) => {
+        Cookies.set("resetToken", response.data);
+        toast.success("Email de recuperação enviado!");
+      })
+      .catch(() => {
+        toast.error("Usuário não existe.");
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
