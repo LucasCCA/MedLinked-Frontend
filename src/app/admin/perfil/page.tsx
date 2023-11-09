@@ -94,7 +94,7 @@ export default function Page() {
     setLoading(true);
 
     if (newPassword != repeatedNewPassword)
-      setNewPasswordError("Os campos de nova senha não batem");
+      setNewPasswordError("Os campos de nova senha devem ser iguais");
     else {
       setNewPasswordError("");
       setOldPasswordError("");

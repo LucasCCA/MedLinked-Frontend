@@ -1,5 +1,6 @@
 "use client";
 
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
   Container,
@@ -7,6 +8,7 @@ import {
   CustomText,
   Input,
 } from "@medlinked/components";
+import { newPasswordSchema } from "@medlinked/schemas";
 import { CreateNewPassword } from "@medlinked/types";
 import Image from "next/image";
 import { useState } from "react";
@@ -29,7 +31,7 @@ export default function Page() {
     handleSubmit,
     formState: { errors },
   } = useForm<CreateNewPassword>({
-    // resolver: yupResolver(passwordResetTokenSchema),
+    resolver: yupResolver(newPasswordSchema),
   });
 
   const onSubmit: SubmitHandler<CreateNewPassword> = (data) => {
