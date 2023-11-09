@@ -8,15 +8,11 @@ import {
   CustomText,
   Input,
 } from "@medlinked/components";
-import { loginSchema } from "@medlinked/schemas";
-import { authenticate } from "@medlinked/services";
-import { Usuario } from "@medlinked/types";
-import Cookies from "js-cookie";
+import { passwordResetTokenSchema } from "@medlinked/schemas";
+import { CreateResetToken } from "@medlinked/types";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import {
   BlueBackground,
   Form,
@@ -28,29 +24,29 @@ import {
 } from "../styles";
 
 export default function Page() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Usuario>({
-    resolver: yupResolver(loginSchema),
+  } = useForm<CreateResetToken>({
+    resolver: yupResolver(passwordResetTokenSchema),
   });
 
-  const onSubmit: SubmitHandler<Usuario> = (data) => {
+  const onSubmit: SubmitHandler<CreateResetToken> = (data) => {
     setLoading(true);
+    console.log(data);
 
-    authenticate(data)
-      .then((response) => {
-        Cookies.set("token", response.data.token);
-        router.push("/admin/agenda");
-      })
-      .catch(() => {
-        toast.error("Usuário ou senha incorretos.");
-      })
-      .finally(() => setLoading(false));
+    // authenticate(data)
+    //   .then((response) => {
+    //     Cookies.set("token", response.data.token);
+    //     router.push("/admin/agenda");
+    //   })
+    //   .catch(() => {
+    //     toast.error("Usuário ou senha incorretos.");
+    //   })
+    //   .finally(() => setLoading(false));
   };
 
   return (
