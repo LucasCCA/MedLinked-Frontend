@@ -9,10 +9,14 @@ import {
   Input,
 } from "@medlinked/components";
 import { newPasswordSchema } from "@medlinked/schemas";
+import { changePassword, verifyResetToken } from "@medlinked/services";
 import { CreateNewPassword } from "@medlinked/types";
+import Cookies from "js-cookie";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import {
   BlueBackground,
   Form,
@@ -24,6 +28,7 @@ import {
 } from "../../styles";
 
 export default function Page() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -34,19 +39,35 @@ export default function Page() {
     resolver: yupResolver(newPasswordSchema),
   });
 
+  useEffect(() => {
+    function verifyToken() {
+      verifyResetToken(Cookies.get("resetToken") || "").catch(() => {
+        toast.error(
+          // eslint-disable-next-line max-len
+          "Não é possível alterar sua senha no momento. Tente novamente mais tarde.",
+        );
+        router.push("/");
+      });
+    }
+
+    verifyToken();
+  }, []);
+
   const onSubmit: SubmitHandler<CreateNewPassword> = (data) => {
     setLoading(true);
-    console.log(data);
 
-    // sendEmail(data)
-    //   .then((response) => {
-    //     Cookies.set("resetToken", response.data);
-    //     toast.success("Email de recuperação enviado!");
-    //   })
-    //   .catch(() => {
-    //     toast.error("Usuário não existe.");
-    //   })
-    //   .finally(() => setLoading(false));
+    changePassword(data, Cookies.get("resetToken") || "")
+      .then(() => {
+        Cookies.remove("resetToken");
+        toast.success("Senha alterada com sucesso!");
+        router.push("/");
+      })
+      .catch(() => {
+        toast.error(
+          "Ocorreu um erro ao alterar sua senha. Tente novamente mais tarde.",
+        );
+      })
+      .finally(() => setLoading(false));
   };
 
   return (

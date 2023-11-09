@@ -79,8 +79,8 @@ export default function Page() {
             <Form onSubmit={handleSubmit(onSubmit)}>
               <CustomText $align="center">
                 Para recuperar sua senha informe o usuário cadastrado na sua
-                conta. Um email com instruções de recuperação será enviado para
-                a conta de email vinculada a esse usuário
+                conta. Um email com o link de recuperação será enviado para a
+                conta de email vinculada a esse usuário
               </CustomText>
               <Input
                 icon="UserCircle2"

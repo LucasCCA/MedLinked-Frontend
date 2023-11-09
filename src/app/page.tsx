@@ -102,9 +102,7 @@ export default function Page() {
                   errorMessage={errors.password?.message}
                   autoComplete="off"
                 />
-                <CustomLink href="/recuperar-senha">
-                  Esqueceu sua senha?
-                </CustomLink>
+                <CustomLink href="/senha">Esqueceu sua senha?</CustomLink>
               </PasswordContainer>
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
