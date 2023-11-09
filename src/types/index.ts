@@ -8,6 +8,7 @@ export * from "./medicoPlanoSaude";
 export * from "./paciente";
 export * from "./pacientePlanoSaude";
 export * from "./pageable";
+export * from "./passwordResetToken";
 export * from "./pessoa";
 export * from "./planosSaude";
 export * from "./secretaria";

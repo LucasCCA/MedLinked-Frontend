@@ -5,6 +5,7 @@ export * from "./medico";
 export * from "./medicoPlanoSaude";
 export * from "./paciente";
 export * from "./pacientePlanoSaude";
+export * from "./passwordResetToken";
 export * from "./pessoa";
 export * from "./planoSaude";
 export * from "./secretaria";
