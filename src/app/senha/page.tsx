@@ -8,12 +8,11 @@ import {
   CustomText,
   Input,
 } from "@medlinked/components";
-import { loginSchema } from "@medlinked/schemas";
-import { authenticate } from "@medlinked/services";
-import { Usuario } from "@medlinked/types";
+import { passwordResetTokenSchema } from "@medlinked/schemas";
+import { sendEmail } from "@medlinked/services";
+import { CreateResetToken } from "@medlinked/types";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -21,36 +20,35 @@ import {
   BlueBackground,
   Form,
   HeaderContainer,
+  LinkContainer,
   LogoContainer,
   PageContentContainer,
-  PasswordContainer,
   WhiteContainer,
-} from "./styles";
+} from "../styles";
 
 export default function Page() {
-  const router = useRouter();
-  const [loggingIn, setLoggingIn] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Usuario>({
-    resolver: yupResolver(loginSchema),
+  } = useForm<CreateResetToken>({
+    resolver: yupResolver(passwordResetTokenSchema),
   });
 
-  const onSubmit: SubmitHandler<Usuario> = (data) => {
-    setLoggingIn(true);
+  const onSubmit: SubmitHandler<CreateResetToken> = (data) => {
+    setLoading(true);
 
-    authenticate(data)
+    sendEmail(data)
       .then((response) => {
-        Cookies.set("token", response.data.token);
-        router.push("/admin/agenda");
+        Cookies.set("resetToken", response.data);
+        toast.success("Email de recuperação enviado!");
       })
       .catch(() => {
-        toast.error("Usuário ou senha incorretos.");
+        toast.error("Usuário não existe.");
       })
-      .finally(() => setLoggingIn(false));
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -76,9 +74,14 @@ export default function Page() {
         <Container>
           <WhiteContainer>
             <CustomText $size="h2" $align="center">
-              Login
+              Recuperar senha
             </CustomText>
             <Form onSubmit={handleSubmit(onSubmit)}>
+              <CustomText $align="center">
+                Para recuperar sua senha informe o usuário cadastrado na sua
+                conta. Um email com o link de recuperação será enviado para a
+                conta de email vinculada a esse usuário
+              </CustomText>
               <Input
                 icon="UserCircle2"
                 placeholder="Digite seu usuário *"
@@ -90,20 +93,6 @@ export default function Page() {
                 errorMessage={errors.username?.message}
                 autoComplete="off"
               />
-              <PasswordContainer>
-                <Input
-                  icon="KeyRound"
-                  placeholder="Digite sua senha *"
-                  fullWidth
-                  type="password"
-                  maxLength={200}
-                  register={{ ...register("password") }}
-                  hasError={Boolean(errors.password)}
-                  errorMessage={errors.password?.message}
-                  autoComplete="off"
-                />
-                <CustomLink href="/senha">Esqueceu sua senha?</CustomLink>
-              </PasswordContainer>
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
               </CustomText>
@@ -111,15 +100,16 @@ export default function Page() {
                 textAlign="center"
                 fullWidth
                 type="submit"
-                disabled={loggingIn}
+                disabled={loading}
               >
-                Entrar
+                Enviar email
               </Button>
             </Form>
-            <CustomText $weight={500} $align="center">
-              Ainda não possui cadastro?{" "}
-              <CustomLink href="/cadastro">Cadastre-se agora!</CustomLink>
-            </CustomText>
+            <LinkContainer>
+              <CustomLink href="/" $align="center">
+                Voltar ao login
+              </CustomLink>
+            </LinkContainer>
           </WhiteContainer>
         </Container>
       </PageContentContainer>

@@ -8,12 +8,13 @@ import {
   CustomText,
   Input,
 } from "@medlinked/components";
-import { passwordResetTokenSchema } from "@medlinked/schemas";
-import { sendEmail } from "@medlinked/services";
-import { CreateResetToken } from "@medlinked/types";
+import { newPasswordSchema } from "@medlinked/schemas";
+import { changePassword, verifyResetToken } from "@medlinked/services";
+import { CreateNewPassword } from "@medlinked/types";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {
@@ -24,29 +25,47 @@ import {
   LogoContainer,
   PageContentContainer,
   WhiteContainer,
-} from "../styles";
+} from "../../styles";
 
 export default function Page() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateResetToken>({
-    resolver: yupResolver(passwordResetTokenSchema),
+  } = useForm<CreateNewPassword>({
+    resolver: yupResolver(newPasswordSchema),
   });
 
-  const onSubmit: SubmitHandler<CreateResetToken> = (data) => {
+  useEffect(() => {
+    function verifyToken() {
+      verifyResetToken(Cookies.get("resetToken") || "").catch(() => {
+        toast.error(
+          // eslint-disable-next-line max-len
+          "Não é possível alterar sua senha no momento. Tente novamente mais tarde.",
+        );
+        router.push("/");
+      });
+    }
+
+    verifyToken();
+  }, []);
+
+  const onSubmit: SubmitHandler<CreateNewPassword> = (data) => {
     setLoading(true);
 
-    sendEmail(data)
-      .then((response) => {
-        Cookies.set("resetToken", response.data);
-        toast.success("Email de recuperação enviado!");
+    changePassword(data, Cookies.get("resetToken") || "")
+      .then(() => {
+        Cookies.remove("resetToken");
+        toast.success("Senha alterada com sucesso!");
+        router.push("/");
       })
       .catch(() => {
-        toast.error("Usuário não existe.");
+        toast.error(
+          "Ocorreu um erro ao alterar sua senha. Tente novamente mais tarde.",
+        );
       })
       .finally(() => setLoading(false));
   };
@@ -74,23 +93,29 @@ export default function Page() {
         <Container>
           <WhiteContainer>
             <CustomText $size="h2" $align="center">
-              Recuperar senha
+              Alterar senha
             </CustomText>
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <CustomText $align="center">
-                Para recuperar sua senha informe o usuário cadastrado na sua
-                conta. Um email com instruções de recuperação será enviado para
-                a conta de email vinculada a esse usuário
-              </CustomText>
               <Input
-                icon="UserCircle2"
-                placeholder="Digite seu usuário *"
+                icon="KeyRound"
+                placeholder="Digite sua nova senha *"
                 fullWidth
-                type="text"
-                maxLength={120}
-                register={{ ...register("username") }}
-                hasError={Boolean(errors.username)}
-                errorMessage={errors.username?.message}
+                type="password"
+                maxLength={200}
+                register={{ ...register("password") }}
+                hasError={Boolean(errors.password)}
+                errorMessage={errors.password?.message}
+                autoComplete="off"
+              />
+              <Input
+                icon="KeyRound"
+                placeholder="Repita sua nova senha *"
+                fullWidth
+                type="password"
+                maxLength={200}
+                register={{ ...register("repeatedPassword") }}
+                hasError={Boolean(errors.repeatedPassword)}
+                errorMessage={errors.repeatedPassword?.message}
                 autoComplete="off"
               />
               <CustomText $weight={500} $align="center">
@@ -102,7 +127,7 @@ export default function Page() {
                 type="submit"
                 disabled={loading}
               >
-                Enviar email
+                Alterar senha
               </Button>
             </Form>
             <LinkContainer>
