@@ -216,7 +216,7 @@ export default function Page() {
       <Spacing>
         <SingleFieldContainer>
           <Input
-            placeholder="Senha antiga *"
+            placeholder="Digite sua atual senha *"
             fullWidth
             maxLength={200}
             type="password"
@@ -228,7 +228,7 @@ export default function Page() {
         </SingleFieldContainer>
         <FieldsContainer>
           <Input
-            placeholder="Senha nova *"
+            placeholder="Digite sua nova senha *"
             fullWidth
             maxLength={200}
             type="password"
@@ -238,7 +238,7 @@ export default function Page() {
             errorMessage={newPasswordError}
           />
           <Input
-            placeholder="Repetir senha nova *"
+            placeholder="Repita sua nova senha *"
             fullWidth
             maxLength={200}
             type="password"
