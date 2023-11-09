@@ -167,16 +167,12 @@ export function Calendar({
                 {scheduledDates.find(
                   (date) =>
                     new Date(
-                      date.dataHoraInicioAgendamento.slice(0, 9) +
-                        String(
-                          Number(date.dataHoraInicioAgendamento.slice(9, 10)) +
-                            1,
-                        ),
+                      date.dataHoraInicioAgendamento.slice(0, 10),
                     ).toDateString() ==
                     new Date(
                       yearFilter,
                       monthFilter - 1,
-                      currentDay,
+                      currentDay - 1,
                     ).toDateString(),
                 ) != undefined && (
                   <Bookmark
@@ -217,25 +213,10 @@ export function Calendar({
                 )}
                 {scheduledDates.find(
                   (date) =>
-                    new Date(
-                      date.dataHoraInicioAgendamento.slice(0, 9) +
-                        String(
-                          Number(date.dataHoraInicioAgendamento.slice(9, 10)) +
-                            1,
-                        ),
-                    ).toDateString() ==
-                    new Date(
+                    Number(date.dataHoraInicioAgendamento.slice(5, 7)) ==
+                      index + 1 &&
+                    Number(date.dataHoraInicioAgendamento.slice(0, 4)) ==
                       yearFilter,
-                      index,
-                      new Date(
-                        date.dataHoraInicioAgendamento.slice(0, 9) +
-                          String(
-                            Number(
-                              date.dataHoraInicioAgendamento.slice(9, 10),
-                            ) + 1,
-                          ),
-                      ).getDate(),
-                    ).toDateString(),
                 ) != undefined && (
                   <Bookmark
                     fill={theme.colors.yellow}
