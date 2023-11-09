@@ -21,15 +21,15 @@ import {
   BlueBackground,
   Form,
   HeaderContainer,
+  LinkContainer,
   LogoContainer,
   PageContentContainer,
-  PasswordContainer,
   WhiteContainer,
-} from "./styles";
+} from "../styles";
 
 export default function Page() {
   const router = useRouter();
-  const [loggingIn, setLoggingIn] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -40,7 +40,7 @@ export default function Page() {
   });
 
   const onSubmit: SubmitHandler<Usuario> = (data) => {
-    setLoggingIn(true);
+    setLoading(true);
 
     authenticate(data)
       .then((response) => {
@@ -50,7 +50,7 @@ export default function Page() {
       .catch(() => {
         toast.error("Usuário ou senha incorretos.");
       })
-      .finally(() => setLoggingIn(false));
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -76,9 +76,14 @@ export default function Page() {
         <Container>
           <WhiteContainer>
             <CustomText $size="h2" $align="center">
-              Login
+              Recuperar senha
             </CustomText>
             <Form onSubmit={handleSubmit(onSubmit)}>
+              <CustomText $align="center">
+                Para recuperar sua senha informe o usuário cadastrado na sua
+                conta. Um email com instruções de recuperação será enviado para
+                a conta de email vinculada a esse usuário
+              </CustomText>
               <Input
                 icon="UserCircle2"
                 placeholder="Digite seu usuário *"
@@ -90,22 +95,6 @@ export default function Page() {
                 errorMessage={errors.username?.message}
                 autoComplete="off"
               />
-              <PasswordContainer>
-                <Input
-                  icon="KeyRound"
-                  placeholder="Digite sua senha *"
-                  fullWidth
-                  type="password"
-                  maxLength={200}
-                  register={{ ...register("password") }}
-                  hasError={Boolean(errors.password)}
-                  errorMessage={errors.password?.message}
-                  autoComplete="off"
-                />
-                <CustomLink href="/recuperar-senha">
-                  Esqueceu sua senha?
-                </CustomLink>
-              </PasswordContainer>
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
               </CustomText>
@@ -113,15 +102,16 @@ export default function Page() {
                 textAlign="center"
                 fullWidth
                 type="submit"
-                disabled={loggingIn}
+                disabled={loading}
               >
-                Entrar
+                Enviar email
               </Button>
             </Form>
-            <CustomText $weight={500} $align="center">
-              Ainda não possui cadastro?{" "}
-              <CustomLink href="/cadastro">Cadastre-se agora!</CustomLink>
-            </CustomText>
+            <LinkContainer>
+              <CustomLink href="/" $align="center">
+                Voltar ao login
+              </CustomLink>
+            </LinkContainer>
           </WhiteContainer>
         </Container>
       </PageContentContainer>

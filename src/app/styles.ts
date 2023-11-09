@@ -64,7 +64,30 @@ export const WhiteContainer = styled.div`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  margin: 2.5rem 0;
+  margin: 2.5rem 0 2rem 0;
   gap: 20px;
   width: 100%;
+`;
+
+export const PasswordContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 5px;
+
+  a {
+    width: fit-content;
+  }
+`;
+
+export const LinkContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  a {
+    width: fit-content;
+  }
 `;
