@@ -60,10 +60,14 @@ export const DaysGridContainer = styled.div`
   }
 
   @media ${breakpoints.md} {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media ${breakpoints.lg} {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  @media ${breakpoints.xl} {
     grid-template-columns: repeat(7, 1fr);
   }
 `;
