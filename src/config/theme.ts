@@ -23,7 +23,8 @@ export const theme: DefaultTheme = {
     red_100: "rgba(189, 0, 0, 1.0)",
     red_80: "rgba(189, 0, 0, 0.8)",
     red_60: "rgba(189, 0, 0, 0.6)",
-    yellow: "rgba(255, 223, 107, 1.0)",
+    yellow: "rgba(255, 208, 43, 1.0)",
+    green: "rgba(4, 175, 0, 1.0)",
   },
   font_sizes: {
     h1: "2rem",

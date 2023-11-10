@@ -25,6 +25,7 @@ declare module "styled-components" {
       red_80: string;
       red_60: string;
       yellow: string;
+      green: string;
     };
     font_sizes: {
       h1: string;

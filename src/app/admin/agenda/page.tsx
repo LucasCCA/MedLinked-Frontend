@@ -260,6 +260,14 @@ export default function Page() {
             </CustomText>
             <CustomText $align="left">
               <Bookmark
+                fill={theme.colors.green}
+                color={theme.colors.green}
+                size={15}
+              />{" "}
+              Dia/Mês com horário disponível
+            </CustomText>
+            <CustomText $align="left">
+              <Bookmark
                 fill={theme.colors.yellow}
                 color={theme.colors.yellow}
                 size={15}

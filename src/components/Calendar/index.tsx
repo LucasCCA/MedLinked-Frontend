@@ -169,15 +169,32 @@ export function Calendar({
                     new Date(
                       date.dataHoraInicioAgendamento.slice(0, 10),
                     ).toDateString() ==
-                    new Date(
-                      yearFilter,
-                      monthFilter - 1,
-                      currentDay - 1,
-                    ).toDateString(),
+                      new Date(
+                        yearFilter,
+                        monthFilter - 1,
+                        currentDay - 1,
+                      ).toDateString() && date.tipoAgendamento != "AUTOMATICO",
                 ) != undefined && (
                   <Bookmark
                     fill={theme.colors.yellow}
                     color={theme.colors.yellow}
+                    size={15}
+                  />
+                )}
+                {scheduledDates.find(
+                  (date) =>
+                    new Date(
+                      date.dataHoraInicioAgendamento.slice(0, 10),
+                    ).toDateString() ==
+                      new Date(
+                        yearFilter,
+                        monthFilter - 1,
+                        currentDay - 1,
+                      ).toDateString() && date.tipoAgendamento == "AUTOMATICO",
+                ) != undefined && (
+                  <Bookmark
+                    fill={theme.colors.green}
+                    color={theme.colors.green}
                     size={15}
                   />
                 )}
@@ -216,11 +233,26 @@ export function Calendar({
                     Number(date.dataHoraInicioAgendamento.slice(5, 7)) ==
                       index + 1 &&
                     Number(date.dataHoraInicioAgendamento.slice(0, 4)) ==
-                      yearFilter,
+                      yearFilter &&
+                    date.tipoAgendamento != "AUTOMATICO",
                 ) != undefined && (
                   <Bookmark
                     fill={theme.colors.yellow}
                     color={theme.colors.yellow}
+                    size={15}
+                  />
+                )}
+                {scheduledDates.find(
+                  (date) =>
+                    Number(date.dataHoraInicioAgendamento.slice(5, 7)) ==
+                      index + 1 &&
+                    Number(date.dataHoraInicioAgendamento.slice(0, 4)) ==
+                      yearFilter &&
+                    date.tipoAgendamento == "AUTOMATICO",
+                ) != undefined && (
+                  <Bookmark
+                    fill={theme.colors.green}
+                    color={theme.colors.green}
                     size={15}
                   />
                 )}
