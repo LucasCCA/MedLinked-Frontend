@@ -1,5 +1,6 @@
 "use client";
 
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Breadcrumb,
   Button,
@@ -11,9 +12,19 @@ import {
   Select,
   Spacing,
 } from "@medlinked/components";
+import { registerAgendamentoAutomaticoSchema } from "@medlinked/schemas";
 import { getAllMedicosSecretaria } from "@medlinked/services";
-import { CreateAgendamento, SecretariaMedicoResponse } from "@medlinked/types";
-import { cpfMask, dateMask, formatCpf, timeMask } from "@medlinked/utils";
+import {
+  CreateAgendamentoAutomatico,
+  SecretariaMedicoResponse,
+} from "@medlinked/types";
+import {
+  cpfMask,
+  dateMask,
+  formatCpf,
+  onlyNumbers,
+  timeMask,
+} from "@medlinked/utils";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -42,6 +53,7 @@ export default function Page() {
     label: "",
     value: "",
   });
+  const [onlyWorkingDays, setOnlyWorkingDays] = useState(true);
 
   const {
     register,
@@ -49,8 +61,8 @@ export default function Page() {
     handleSubmit,
     setValue,
     watch,
-  } = useForm<CreateAgendamento>({
-    // resolver: yupResolver(registerAgendamentoSchema),
+  } = useForm<CreateAgendamentoAutomatico>({
+    resolver: yupResolver(registerAgendamentoAutomaticoSchema),
   });
 
   useEffect(() => {
@@ -79,18 +91,31 @@ export default function Page() {
     });
   }
 
-  const dateValue = watch("data");
+  const startDateValue = watch("dataInicio");
+  const endDateValue = watch("dataFim");
   const startTimeValue = watch("horaInicio");
   const endTimeValue = watch("horaFim");
+  const consultationTimeValue = watch("tempoIntervalo");
 
   useEffect(() => {
     setValue("idMedico", Number(currentMedico?.value));
-    setValue("data", dateMask(dateValue));
+    setValue("dataInicio", dateMask(startDateValue));
+    setValue("dataFim", dateMask(endDateValue));
     setValue("horaInicio", timeMask(startTimeValue));
     setValue("horaFim", timeMask(endTimeValue));
-  }, [currentMedico, dateValue, startTimeValue, endTimeValue]);
+    setValue("tempoIntervalo", onlyNumbers(consultationTimeValue));
+    setValue("apenasDiasUteis", onlyWorkingDays);
+  }, [
+    currentMedico,
+    startDateValue,
+    endDateValue,
+    startTimeValue,
+    endTimeValue,
+    consultationTimeValue,
+    onlyWorkingDays,
+  ]);
 
-  const onSubmit: SubmitHandler<CreateAgendamento> = (data) => {
+  const onSubmit: SubmitHandler<CreateAgendamentoAutomatico> = (data) => {
     // setLoading(true);
     console.log(data);
 
@@ -131,9 +156,9 @@ export default function Page() {
               autoComplete="off"
               maxLength={10}
               disabled={loading}
-              register={{ ...register("data") }}
-              hasError={Boolean(errors.data)}
-              errorMessage={errors.data?.message}
+              register={{ ...register("dataInicio") }}
+              hasError={Boolean(errors.dataInicio)}
+              errorMessage={errors.dataInicio?.message}
             />
             <Input
               placeholder="Data fim *"
@@ -141,9 +166,9 @@ export default function Page() {
               autoComplete="off"
               maxLength={10}
               disabled={loading}
-              register={{ ...register("data") }}
-              hasError={Boolean(errors.data)}
-              errorMessage={errors.data?.message}
+              register={{ ...register("dataFim") }}
+              hasError={Boolean(errors.dataFim)}
+              errorMessage={errors.dataFim?.message}
             />
             <Input
               placeholder="Horário Início *"
@@ -171,11 +196,19 @@ export default function Page() {
               autoComplete="off"
               maxLength={200}
               disabled={loading}
-              register={{ ...register("descricao") }}
-              hasError={Boolean(errors.descricao)}
-              errorMessage={errors.descricao?.message}
+              register={{ ...register("tempoIntervalo") }}
+              hasError={Boolean(errors.tempoIntervalo)}
+              errorMessage={errors.tempoIntervalo?.message}
             />
-            <Checkbox label="Apenas dias úteis" />
+            <Checkbox
+              label="Apenas de segunda-feira a sexta-feira"
+              disabled={loading}
+              register={{ ...register("apenasDiasUteis") }}
+              hasError={Boolean(errors.apenasDiasUteis)}
+              errorMessage={errors.apenasDiasUteis?.message}
+              outsideSelected={onlyWorkingDays}
+              setOutsideSelected={setOnlyWorkingDays}
+            />
           </FieldsContainer>
         </Spacing>
         <Spacing>

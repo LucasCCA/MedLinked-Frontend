@@ -1,5 +1,6 @@
 export * from "./loginSchema";
 export * from "./passwordResetTokenSchema";
+export * from "./registerAgendamentoAutomaticoSchema";
 export * from "./registerAgendamentoSchema";
 export * from "./registerMedicoSchema";
 export * from "./registerPacienteSchema";
