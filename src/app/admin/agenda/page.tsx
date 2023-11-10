@@ -330,7 +330,7 @@ export default function Page() {
                       <CardInfoContainer>
                         <CustomText $size="h3">Paciente:</CustomText>
                         <CustomText $size="h3" $weight={300}>
-                          {agendamento.paciente.pessoa.nome}
+                          {agendamento.paciente?.pessoa?.nome || ""}
                         </CustomText>
                       </CardInfoContainer>
                       <CardInfoContainer>

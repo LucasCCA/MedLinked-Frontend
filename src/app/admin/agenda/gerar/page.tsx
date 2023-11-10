@@ -13,8 +13,12 @@ import {
   Spacing,
 } from "@medlinked/components";
 import { registerAgendamentoAutomaticoSchema } from "@medlinked/schemas";
-import { getAllMedicosSecretaria } from "@medlinked/services";
 import {
+  createAgendamentoAutomatico,
+  getAllMedicosSecretaria,
+} from "@medlinked/services";
+import {
+  AgendamentoAutomaticoResponse,
   CreateAgendamentoAutomatico,
   SecretariaMedicoResponse,
 } from "@medlinked/types";
@@ -53,7 +57,9 @@ export default function Page() {
     label: "",
     value: "",
   });
-  const [onlyWorkingDays, setOnlyWorkingDays] = useState(true);
+  const [mondayToFriday, setMondayToFriday] = useState(true);
+  const [failedToSchedule, setFailedToSchedule] =
+    useState<AgendamentoAutomaticoResponse>([]);
 
   const {
     register,
@@ -104,7 +110,7 @@ export default function Page() {
     setValue("horaInicio", timeMask(startTimeValue));
     setValue("horaFim", timeMask(endTimeValue));
     setValue("tempoIntervalo", onlyNumbers(consultationTimeValue));
-    setValue("apenasDiasUteis", onlyWorkingDays);
+    setValue("apenasSegundaASexta", mondayToFriday);
   }, [
     currentMedico,
     startDateValue,
@@ -112,20 +118,23 @@ export default function Page() {
     startTimeValue,
     endTimeValue,
     consultationTimeValue,
-    onlyWorkingDays,
+    mondayToFriday,
   ]);
 
   const onSubmit: SubmitHandler<CreateAgendamentoAutomatico> = (data) => {
-    // setLoading(true);
-    console.log(data);
+    setLoading(true);
 
-    // createAgendamento(data)
-    //   .then((response) => {
-    //     toast.success("Agendamento cadastrado com sucesso!");
-    //     setidAgendamento(response.data.idAgendamento);
-    //   })
-    //   .catch((error) => toast.error(error.response.data))
-    //   .finally(() => setLoading(false));
+    createAgendamentoAutomatico(data)
+      .then((response) => {
+        toast.success("Agenda gerada com sucesso!");
+        setFailedToSchedule(response.data);
+      })
+      .catch(() =>
+        toast.error(
+          "Ocorreu um erro ao gerar a agenda. Tente novamente mais tarde.",
+        ),
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -203,11 +212,11 @@ export default function Page() {
             <Checkbox
               label="Apenas de segunda-feira a sexta-feira"
               disabled={loading}
-              register={{ ...register("apenasDiasUteis") }}
-              hasError={Boolean(errors.apenasDiasUteis)}
-              errorMessage={errors.apenasDiasUteis?.message}
-              outsideSelected={onlyWorkingDays}
-              setOutsideSelected={setOnlyWorkingDays}
+              register={{ ...register("apenasSegundaASexta") }}
+              hasError={Boolean(errors.apenasSegundaASexta)}
+              errorMessage={errors.apenasSegundaASexta?.message}
+              outsideSelected={mondayToFriday}
+              setOutsideSelected={setMondayToFriday}
             />
           </FieldsContainer>
         </Spacing>
@@ -227,56 +236,44 @@ export default function Page() {
           </SingleFieldContainer>
         </Spacing>
       </form>
-      <Spacing>
-        <CustomText $size="h2">
-          Os agendamentos abaixo não foram criados por conta de conflitos de
-          horário com agendamentos já existentes para esse médico
-        </CustomText>
-      </Spacing>
-      <Spacing>
-        <FailedSchedulesContainer>
-          <Card>
-            <CalendarResultContentContainer>
-              <div>
-                <CustomText $size="h2">01/01/2023</CustomText>
-                <CustomText $size="h2" $weight={300}>
-                  08:00 - 09:00
-                </CustomText>
-              </div>
-            </CalendarResultContentContainer>
-          </Card>
-          <Card>
-            <CalendarResultContentContainer>
-              <div>
-                <CustomText $size="h2">01/01/2023</CustomText>
-                <CustomText $size="h2" $weight={300}>
-                  08:00 - 09:00
-                </CustomText>
-              </div>
-            </CalendarResultContentContainer>
-          </Card>
-          <Card>
-            <CalendarResultContentContainer>
-              <div>
-                <CustomText $size="h2">01/01/2023</CustomText>
-                <CustomText $size="h2" $weight={300}>
-                  08:00 - 09:00
-                </CustomText>
-              </div>
-            </CalendarResultContentContainer>
-          </Card>
-          <Card>
-            <CalendarResultContentContainer>
-              <div>
-                <CustomText $size="h2">01/01/2023</CustomText>
-                <CustomText $size="h2" $weight={300}>
-                  08:00 - 09:00
-                </CustomText>
-              </div>
-            </CalendarResultContentContainer>
-          </Card>
-        </FailedSchedulesContainer>
-      </Spacing>
+      {failedToSchedule.length > 0 && (
+        <>
+          <Spacing>
+            <CustomText $size="h2">
+              Os agendamentos abaixo não foram criados por conta de conflitos de
+              horário com agendamentos já existentes para esse médico
+            </CustomText>
+          </Spacing>
+
+          <Spacing>
+            <FailedSchedulesContainer>
+              {failedToSchedule.map((schedule, index) => (
+                <Card key={index}>
+                  <CalendarResultContentContainer>
+                    <div>
+                      <CustomText $size="h2">
+                        {`${schedule.dataHoraInicioAgendamento.slice(
+                          8,
+                          10,
+                        )}/${schedule.dataHoraInicioAgendamento.slice(
+                          5,
+                          7,
+                        )}/${schedule.dataHoraInicioAgendamento.slice(0, 4)}`}
+                      </CustomText>
+                      <CustomText $size="h2" $weight={300}>
+                        {`${schedule.dataHoraInicioAgendamento.slice(
+                          11,
+                          16,
+                        )} - ${schedule.dataHoraFimAgendamento.slice(11, 16)}`}
+                      </CustomText>
+                    </div>
+                  </CalendarResultContentContainer>
+                </Card>
+              ))}
+            </FailedSchedulesContainer>
+          </Spacing>
+        </>
+      )}
     </>
   );
 }

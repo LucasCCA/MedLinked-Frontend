@@ -26,7 +26,7 @@ export const registerAgendamentoAutomaticoSchema = yup
     tempoIntervalo: yup
       .string()
       .required("O campo tempo de consulta é obrigatório"),
-    apenasDiasUteis: yup
+    apenasSegundaASexta: yup
       .boolean()
       .required("O campo apenas dias úteis é obrigatório"),
   })

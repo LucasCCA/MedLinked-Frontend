@@ -5,5 +5,12 @@ export type CreateAgendamentoAutomatico = {
   horaInicio: string;
   horaFim: string;
   tempoIntervalo: string;
-  apenasDiasUteis: boolean;
+  apenasSegundaASexta: boolean;
 };
+
+export type FailedAgendamentoAutomatico = {
+  dataHoraInicioAgendamento: string;
+  dataHoraFimAgendamento: string;
+};
+
+export type AgendamentoAutomaticoResponse = FailedAgendamentoAutomatico[];
