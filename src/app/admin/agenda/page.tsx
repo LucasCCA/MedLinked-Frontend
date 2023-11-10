@@ -20,6 +20,7 @@ import {
   getAllAgendamentos,
   getAllMedicosSecretaria,
   getAllPacientes,
+  getAllTiposAgendamento,
 } from "@medlinked/services";
 import {
   AgendamentoResponse,
@@ -65,6 +66,12 @@ export default function Page() {
     [],
   );
   const [currentAgendamento, setCurrentAgendamento] = useState(0);
+  const [tiposAgendamento, setTiposAgendamento] = useState<string[]>([]);
+  const [currentTipoAgendamentoFilter, setCurrentTipoAgendamentoFilter] =
+    useState({
+      label: "",
+      value: "",
+    });
 
   useEffect(() => {
     function getPacientes() {
@@ -93,6 +100,21 @@ export default function Page() {
         .finally(() => setLoading(false));
     }
 
+    function getTiposAgendamento() {
+      setLoading(true);
+
+      getAllTiposAgendamento()
+        .then((response) => setTiposAgendamento(response.data))
+        .catch(() =>
+          toast.error(
+            // eslint-disable-next-line max-len
+            "Ocorreu um erro ao buscar tipos de agendamento. Tente novamente mais tarde.",
+          ),
+        )
+        .finally(() => setLoading(false));
+    }
+
+    getTiposAgendamento();
     getPacientes();
     getMedicos();
   }, []);
@@ -163,6 +185,17 @@ export default function Page() {
     medicosFilterOptions.push({
       label: `${medicos[i].nome} - CPF ${cpfMask(formatCpf(medicos[i].cpf))}`,
       value: medicos[i].idMedico.toString(),
+    });
+  }
+
+  const tiposAgendamentoOptions: OptionData[] = [];
+
+  for (let i = 0; i < tiposAgendamento.length; i++) {
+    tiposAgendamentoOptions.push({
+      label:
+        tiposAgendamento[i].charAt(0).toUpperCase() +
+        tiposAgendamento[i].slice(1).toLowerCase(),
+      value: tiposAgendamento[i],
     });
   }
 
@@ -253,6 +286,14 @@ export default function Page() {
             disabled={loading}
             outsideSelected={currentPacienteFilter}
             setOutsideSelected={setCurrentPacienteFilter}
+          />
+          <Select
+            options={tiposAgendamentoOptions}
+            fullWidth
+            placeholder="Pesquise tipo de agendamento"
+            disabled={loading}
+            outsideSelected={currentTipoAgendamentoFilter}
+            setOutsideSelected={setCurrentTipoAgendamentoFilter}
           />
           <CalendarLegendContainer>
             <CustomText $size="h3" $align="left">
