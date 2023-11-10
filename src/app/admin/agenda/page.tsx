@@ -49,6 +49,7 @@ export default function Page() {
   const [monthFilter, setMonthFilter] = useState(new Date().getMonth() + 1);
   const [yearFilter, setYearFilter] = useState(new Date().getFullYear());
   const [openModal, setOpenModal] = useState(false);
+  const [modalText, setModalText] = useState(0);
   const [pacientes, setPacientes] = useState<PacienteResponse>([]);
   const [medicos, setMedicos] = useState<SecretariaMedicoResponse>([]);
   const [currentMedicoFilter, setCurrentMedicoFilter] = useState({
@@ -184,26 +185,57 @@ export default function Page() {
   return (
     <>
       <Modal title="Confirmação" open={openModal} setOpen={setOpenModal}>
-        <CustomText $align="center">
-          Você realmente deseja deletar esse agendamento?
-        </CustomText>
-        <ModalFieldsContainer>
-          <Button fullWidth textAlign="center" onClick={() => handleDelete()}>
-            Sim
-          </Button>
-          <Button
-            fullWidth
-            textAlign="center"
-            onClick={() => setOpenModal(false)}
-            color="red_80"
-          >
-            Não
-          </Button>
-        </ModalFieldsContainer>
+        {modalText == 1 && (
+          <>
+            <CustomText $align="center">
+              Você deseja criar um único agendamento ou gerar uma agenda para um
+              médico?
+            </CustomText>
+            <ModalFieldsContainer>
+              <Button fullWidth href="/admin/agenda/0" textAlign="center">
+                Criar único
+              </Button>
+              <Button fullWidth href="/admin/agenda/gerar" textAlign="center">
+                Gerar agenda
+              </Button>
+            </ModalFieldsContainer>
+          </>
+        )}
+        {modalText == 2 && (
+          <>
+            <CustomText $align="center">
+              Você realmente deseja deletar esse agendamento?
+            </CustomText>
+            <ModalFieldsContainer>
+              <Button
+                fullWidth
+                textAlign="center"
+                onClick={() => handleDelete()}
+              >
+                Sim
+              </Button>
+              <Button
+                fullWidth
+                textAlign="center"
+                onClick={() => setOpenModal(false)}
+                color="red_80"
+              >
+                Não
+              </Button>
+            </ModalFieldsContainer>
+          </>
+        )}
       </Modal>
       <CalendarPageContainer>
         <CalendarFiltersContainer>
-          <Button icon="Plus" fullWidth href="/admin/agenda/0">
+          <Button
+            icon="Plus"
+            fullWidth
+            onClick={() => {
+              setModalText(1);
+              setOpenModal(true);
+            }}
+          >
             Agendamento
           </Button>
           <Select
@@ -298,7 +330,7 @@ export default function Page() {
                       <CardInfoContainer>
                         <CustomText $size="h3">Paciente:</CustomText>
                         <CustomText $size="h3" $weight={300}>
-                          {agendamento.paciente.pessoa.nome}
+                          {agendamento.paciente?.pessoa?.nome || ""}
                         </CustomText>
                       </CardInfoContainer>
                       <CardInfoContainer>
@@ -317,6 +349,7 @@ export default function Page() {
                       <Trash
                         onClick={() => {
                           setCurrentAgendamento(agendamento.idAgendamento);
+                          setModalText(2);
                           setOpenModal(true);
                         }}
                       />
