@@ -2,6 +2,7 @@ export * from "./Breadcrumb";
 export * from "./Button";
 export * from "./Calendar";
 export * from "./Card";
+export * from "./Checkbox";
 export * from "./Container";
 export * from "./CustomText";
 export * from "./CustomText/CustomLink";
