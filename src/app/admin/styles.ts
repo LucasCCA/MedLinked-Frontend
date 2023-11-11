@@ -26,10 +26,30 @@ export const FiltersContainer = styled.section`
   @media ${breakpoints.xl} {
     display: flex;
     flex-direction: row;
+    max-width: 92%;
   }
 
   @media ${breakpoints.xxl} {
     max-width: 80%;
+  }
+`;
+
+export const SingleFilterContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+  @media ${breakpoints.md} {
+    display: grid;
+    grid-template-columns: 55%;
+  }
+
+  @media ${breakpoints.xl} {
+    display: flex;
+    flex-direction: row;
+    max-width: 40%;
   }
 `;
 
