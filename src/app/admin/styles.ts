@@ -274,7 +274,6 @@ export const ResultsContainer = styled.div`
   flex-direction: column;
   width: 100%;
   gap: 10px;
-  margin-bottom: 1rem;
 `;
 
 export const CalendarResultContentContainer = styled.div`
