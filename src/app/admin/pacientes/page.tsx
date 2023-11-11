@@ -114,7 +114,8 @@ export default function Page() {
       <Modal title="Confirmação" open={openModal} setOpen={setOpenModal}>
         <>
           <CustomText $align="center">
-            Você realmente deseja deletar esse paciente?
+            Você realmente deseja deletar esse paciente? Todos os agendamentos
+            vinculados a ele também serão deletados
           </CustomText>
           <ModalFieldsContainer>
             <Button fullWidth textAlign="center" onClick={() => handleDelete()}>

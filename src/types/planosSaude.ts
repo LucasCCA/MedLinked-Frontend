@@ -1,14 +1,14 @@
 import { Pageable } from ".";
 
-export type PlanosSaude = {
+export type PlanoSaude = {
   idPlanoSaude: number;
   descricao: string;
 };
 
-export type PlanosSaudeResponse = PlanosSaude[];
+export type PlanosSaudeResponse = PlanoSaude[];
 
 export type PlanosSaudePaginatedResponse = {
-  content: PlanosSaude[];
+  content: PlanoSaude[];
   pageable: Pageable;
   totalPages: number;
 };

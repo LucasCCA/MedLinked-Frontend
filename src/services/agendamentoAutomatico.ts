@@ -19,7 +19,7 @@ export function createAgendamentoAutomatico(data: CreateAgendamentoAutomatico) {
   )}-${endDateWithoutSlash.slice(2, 4)}-${endDateWithoutSlash.slice(0, 2)}`;
 
   return medlinked.post<AgendamentoAutomaticoResponse>(
-    "agendamento-automatico",
+    "agendamento-automatico/create",
     {
       idMedico: data.idMedico,
       dataInicioAgendamentoAutomatico: formattedStartDate,

@@ -1,5 +1,5 @@
 import { Maybe } from "yup";
-import { Medico, PacienteData, Pageable, PlanosSaude } from ".";
+import { Medico, PacienteData, Pageable, PlanoSaude } from ".";
 
 export type AgendamentoData = {
   idAgendamento: number;
@@ -9,7 +9,7 @@ export type AgendamentoData = {
   tipoAgendamento: string;
   medico: Medico;
   paciente: PacienteData;
-  planoSaude: PlanosSaude;
+  planoSaude: PlanoSaude;
 };
 
 export type AgendamentoResponse = AgendamentoData[];

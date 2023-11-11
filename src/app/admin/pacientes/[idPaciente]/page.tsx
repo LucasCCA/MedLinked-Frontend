@@ -30,7 +30,7 @@ import {
   CepResponse,
   CreatePaciente,
   EstadoResponse,
-  PacientePlanoSaudeResponse,
+  PlanoSaudePaciente,
   PlanosSaudeResponse,
   TipoPlanoSaudeResponse,
 } from "@medlinked/types";
@@ -99,8 +99,9 @@ export default function Page() {
     value: "",
   });
   const [convenios, setConvenios] = useState<PlanosSaudeResponse>([]);
-  const [associatedConvenios, setAssociatedConvenios] =
-    useState<PacientePlanoSaudeResponse>([]);
+  const [associatedConvenios, setAssociatedConvenios] = useState<
+    PlanoSaudePaciente[]
+  >([]);
   const [currentConvenio, setCurrentConvenio] = useState({
     label: "",
     value: "",
@@ -132,7 +133,9 @@ export default function Page() {
 
   function getPlanosSaudePaciente() {
     getAllPlanosSaudePaciente(idPaciente)
-      .then((response) => setAssociatedConvenios(response.data))
+      .then((response) =>
+        setAssociatedConvenios(response.data.planosSaudePaciente),
+      )
       .catch(() =>
         toast.error(
           // eslint-disable-next-line max-len
@@ -632,14 +635,12 @@ export default function Page() {
             </Spacing>
           )}
           {associatedConvenios.map((convenio) => (
-            <Spacing
-              key={convenio.idPlanoSaudePaciente.planoSaude.idPlanoSaude}
-            >
+            <Spacing key={convenio.planoSaude.idPlanoSaude}>
               <Card>
                 <CardContentContainer>
                   <HealthInsuranceInfoContainer>
                     <CustomText $size="h2">
-                      {convenio.idPlanoSaudePaciente.planoSaude.descricao}
+                      {convenio.planoSaude.descricao}
                     </CustomText>
                     <CardInfoContainer>
                       <CustomText $size="h3">Tipo:</CustomText>
@@ -660,7 +661,7 @@ export default function Page() {
                       setAssociatedConvenios([]);
 
                       removePlanoSaudePaciente(
-                        convenio.idPlanoSaudePaciente.planoSaude.idPlanoSaude,
+                        convenio.planoSaude.idPlanoSaude,
                         idPaciente,
                       )
                         .then(() => {
