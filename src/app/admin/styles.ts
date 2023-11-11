@@ -26,7 +26,7 @@ export const FiltersContainer = styled.section`
   @media ${breakpoints.xl} {
     display: flex;
     flex-direction: row;
-    max-width: 85%;
+    max-width: 92%;
   }
 
   @media ${breakpoints.xxl} {
