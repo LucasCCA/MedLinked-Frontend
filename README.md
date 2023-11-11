@@ -39,31 +39,17 @@
   Para rodar o projeto em modo de desenvolvimento
 </h1>
 
-<ul>
-  <li>
-    <code>
-      npm run dev
-    </code>
-  </li>
-  <br>
-  ou
-  <br>
-  <br>
-  <li>
-    <code>
-      yarn dev
-    </code>
-  </li>
-  <br>
-  ou
-  <br>
-  <br>
-  <li>
-    <code>
-      pnpm dev
-    </code>
-  </li>
-</ul>
+<code>
+npm run dev
+
+ou
+
+yarn dev
+
+ou
+
+pnpm dev
+</code>
 
 <p style="text-align: justify;">
   Após executar o comando de sua preferência abra o link <a href="http://localhost:3000">http://localhost:3000</a> para ver o resultado.
@@ -71,8 +57,8 @@
 
 <h1>Imagens do projeto</h1>
 
-<img src="https://drive.google.com/file/d/1aHqC6ttc_ZJtOv2om6GtbZwsDnPY_RGh/preview" alt="Tela de login" />
+<img src="https://drive.google.com/file/d/1aHqC6ttc_ZJtOv2om6GtbZwsDnPY_RGh/view?usp=drive_link" alt="Tela de login" />
 <p style="text-align: center;">Imagem da tela de login</p>
 
-<img src="https://drive.google.com/file/d/158N0uXZ73xEF8MBiuSh8982XCn_mbe0V/preview" alt="Imagem da tela inicial do sistema / tela da agenda" />
+<img src="https://drive.google.com/file/d/158N0uXZ73xEF8MBiuSh8982XCn_mbe0V/view?usp=drive_link" alt="Imagem da tela inicial do sistema / tela da agenda" />
 <p style="text-align: center;">Imagem da tela inicial do sistema / tela da agenda</p>
