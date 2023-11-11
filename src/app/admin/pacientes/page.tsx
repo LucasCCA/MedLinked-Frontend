@@ -141,6 +141,14 @@ export default function Page() {
             Visualizar / Editar
           </Button>
           <Button
+            icon="Calendar"
+            href={`/admin/pacientes/agendamentos/${currentIdPaciente}`}
+            fullWidth
+            disabled={currentIdPaciente == 0}
+          >
+            Agendamentos
+          </Button>
+          <Button
             icon="Trash"
             color="red_80"
             fullWidth
