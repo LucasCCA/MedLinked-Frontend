@@ -16,14 +16,14 @@ import {
   getAgendamento,
   getAllMedicosSecretaria,
   getAllPacientes,
-  getAllPlanosSaudePaciente,
+  getAllPlanosSaudePacienteMedico,
   getAllTiposAgendamento,
   updateAgendamento,
 } from "@medlinked/services";
 import {
   CreateAgendamento,
   PacienteResponse,
-  PlanoSaudePaciente,
+  PlanosSaudeResponse,
   SecretariaMedicoResponse,
 } from "@medlinked/types";
 import { cpfMask, dateMask, formatCpf, timeMask } from "@medlinked/utils";
@@ -61,9 +61,8 @@ export default function Page() {
     label: "",
     value: "",
   });
-  const [conveniosPaciente, setConveniosPaciente] = useState<
-    PlanoSaudePaciente[]
-  >([]);
+  const [conveniosPacienteMedico, setConveniosPacienteMedico] =
+    useState<PlanosSaudeResponse>([]);
   const [currentConvenio, setCurrentConvenio] = useState({
     label: "",
     value: "",
@@ -220,10 +219,11 @@ export default function Page() {
     function getConvenios() {
       setLoading(true);
 
-      getAllPlanosSaudePaciente(Number(currentPaciente.value))
-        .then((response) =>
-          setConveniosPaciente(response.data.planosSaudePaciente),
-        )
+      getAllPlanosSaudePacienteMedico(
+        Number(currentPaciente.value),
+        Number(currentMedico.value),
+      )
+        .then((response) => setConveniosPacienteMedico(response.data))
         .catch(() =>
           toast.error(
             // eslint-disable-next-line max-len
@@ -233,8 +233,9 @@ export default function Page() {
         .finally(() => setLoading(false));
     }
 
-    if (currentPaciente.value != "") getConvenios();
-  }, [currentPaciente]);
+    if (currentPaciente.value != "" && currentMedico.value != "")
+      getConvenios();
+  }, [currentPaciente, currentMedico]);
 
   const pacientesOptions: OptionData[] = [];
 
@@ -260,10 +261,10 @@ export default function Page() {
     { label: "Sem convênio", value: "0" },
   ];
 
-  for (let i = 0; i < conveniosPaciente.length; i++) {
+  for (let i = 0; i < conveniosPacienteMedico.length; i++) {
     conveniosOptions.push({
-      label: conveniosPaciente[i].planoSaude.descricao,
-      value: conveniosPaciente[i].planoSaude.idPlanoSaude.toString(),
+      label: conveniosPacienteMedico[i].descricao,
+      value: conveniosPacienteMedico[i].idPlanoSaude.toString(),
     });
   }
 
@@ -402,7 +403,11 @@ export default function Page() {
                 options={conveniosOptions}
                 fullWidth
                 placeholder="Selecione um convênio"
-                disabled={loading || currentPaciente.value == ""}
+                disabled={
+                  loading ||
+                  currentPaciente.value == "" ||
+                  currentMedico.value == ""
+                }
                 outsideSelected={currentConvenio}
                 setOutsideSelected={setCurrentConvenio}
                 register={{ ...register("idPlanoSaude") }}
