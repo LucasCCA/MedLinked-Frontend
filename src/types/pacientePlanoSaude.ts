@@ -1,12 +1,12 @@
-import { PacienteData, PlanosSaude, TipoPlanoSaude } from ".";
+import { PacienteData, PlanoSaude, TipoPlanoSaude } from ".";
 
-export type PacientePlanoSaude = {
-  idPlanoSaudePaciente: {
-    planoSaude: PlanosSaude;
-    paciente: PacienteData;
-  };
+export type PlanoSaudePaciente = {
+  planoSaude: PlanoSaude;
   numeroCarteirinha: number;
   tipoPlanoSaude: TipoPlanoSaude;
 };
 
-export type PacientePlanoSaudeResponse = PacientePlanoSaude[];
+export type PacientePlanoSaudeResponse = {
+  paciente: PacienteData;
+  planosSaudePaciente: PlanoSaudePaciente[];
+};

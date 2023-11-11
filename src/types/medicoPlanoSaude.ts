@@ -1,7 +1,7 @@
-import { Pageable, PlanosSaude } from ".";
+import { Pageable, PlanoSaude } from ".";
 
 export type MedicoPlanoSaudeResponse = {
-  content: PlanosSaude[];
+  content: PlanoSaude[];
   pageable: Pageable;
   totalPages: number;
 };

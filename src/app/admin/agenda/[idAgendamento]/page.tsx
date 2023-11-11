@@ -22,8 +22,8 @@ import {
 } from "@medlinked/services";
 import {
   CreateAgendamento,
-  PacientePlanoSaudeResponse,
   PacienteResponse,
+  PlanoSaudePaciente,
   SecretariaMedicoResponse,
 } from "@medlinked/types";
 import { cpfMask, dateMask, formatCpf, timeMask } from "@medlinked/utils";
@@ -61,8 +61,9 @@ export default function Page() {
     label: "",
     value: "",
   });
-  const [conveniosPaciente, setConveniosPaciente] =
-    useState<PacientePlanoSaudeResponse>([]);
+  const [conveniosPaciente, setConveniosPaciente] = useState<
+    PlanoSaudePaciente[]
+  >([]);
   const [currentConvenio, setCurrentConvenio] = useState({
     label: "",
     value: "",
@@ -220,7 +221,9 @@ export default function Page() {
       setLoading(true);
 
       getAllPlanosSaudePaciente(Number(currentPaciente.value))
-        .then((response) => setConveniosPaciente(response.data))
+        .then((response) =>
+          setConveniosPaciente(response.data.planosSaudePaciente),
+        )
         .catch(() =>
           toast.error(
             // eslint-disable-next-line max-len
@@ -259,11 +262,8 @@ export default function Page() {
 
   for (let i = 0; i < conveniosPaciente.length; i++) {
     conveniosOptions.push({
-      label: conveniosPaciente[i].idPlanoSaudePaciente.planoSaude.descricao,
-      value:
-        conveniosPaciente[
-          i
-        ].idPlanoSaudePaciente.planoSaude.idPlanoSaude.toString(),
+      label: conveniosPaciente[i].planoSaude.descricao,
+      value: conveniosPaciente[i].planoSaude.idPlanoSaude.toString(),
     });
   }
 
