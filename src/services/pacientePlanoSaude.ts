@@ -1,5 +1,8 @@
 import { medlinked } from "@medlinked/api";
-import { PacientePlanoSaudeResponse } from "@medlinked/types";
+import {
+  PacientePlanoSaudeResponse,
+  PlanosSaudeResponse,
+} from "@medlinked/types";
 
 export function associatePlanoSaudePaciente(
   idPlanoSaude: number,
@@ -28,5 +31,14 @@ export function removePlanoSaudePaciente(
 export function getAllPlanosSaudePaciente(idPaciente: number) {
   return medlinked.get<PacientePlanoSaudeResponse>(
     `plano-saude/paciente/${idPaciente}`,
+  );
+}
+
+export function getAllPlanosSaudePacienteMedico(
+  idPaciente: number,
+  idMedico: number,
+) {
+  return medlinked.get<PlanosSaudeResponse>(
+    `plano-saude/paciente/medico/${idPaciente}/${idMedico}`,
   );
 }
