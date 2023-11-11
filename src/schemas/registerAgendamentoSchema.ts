@@ -18,7 +18,11 @@ export const registerAgendamentoSchema = yup
       .max(200, "O tamanho máximo da descrição deve ser de 200 caracteres"),
     tipoAgendamento: yup
       .string()
-      .required("O campo tipo de agendamento é obrigatório"),
+      .required("O campo tipo de agendamento é obrigatório")
+      .notOneOf(
+        ["AUTOMATICO"],
+        "O campo tipo de agendamento não deve ser automático",
+      ),
     data: yup
       .string()
       .required("O campo data é obrigatório")
