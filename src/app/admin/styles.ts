@@ -43,11 +43,7 @@ export const SingleFilterContainer = styled.section`
 
   @media ${breakpoints.md} {
     display: grid;
-    grid-template-columns: 48%;
-  }
-
-  @media ${breakpoints.lg} {
-    grid-template-columns: 32%;
+    grid-template-columns: 55%;
   }
 
   @media ${breakpoints.xl} {
