@@ -122,13 +122,15 @@ export default function Page() {
             )}`,
             value: response.data.medico.idMedico.toString(),
           });
-          setValue("idPaciente", response.data.paciente.idPaciente);
-          setCurrentPaciente({
-            label: `${response.data.paciente.pessoa.nome} - CPF ${cpfMask(
-              formatCpf(response.data.paciente.pessoa.cpf),
-            )}`,
-            value: response.data.paciente.idPaciente.toString(),
-          });
+          if (response.data.paciente != null) {
+            setValue("idPaciente", response.data.paciente.idPaciente);
+            setCurrentPaciente({
+              label: `${response.data.paciente.pessoa.nome} - CPF ${cpfMask(
+                formatCpf(response.data.paciente.pessoa.cpf),
+              )}`,
+              value: response.data.paciente.idPaciente.toString(),
+            });
+          }
           if (response.data.planoSaude != null) {
             setValue("idPlanoSaude", response.data.planoSaude.idPlanoSaude);
             setCurrentConvenio({
