@@ -173,7 +173,7 @@ export default function Page() {
             onChange={(e) => {
               if (e.currentTarget.value.length > 2)
                 setName(e.currentTarget.value);
-              else if (e.currentTarget.value.length == 0) setName("");
+              else setName("");
             }}
           />
           <Input
