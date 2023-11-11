@@ -1,5 +1,5 @@
 import { Maybe } from "yup";
-import { Medico, PacienteData, PlanosSaude } from ".";
+import { Medico, PacienteData, Pageable, PlanosSaude } from ".";
 
 export type AgendamentoData = {
   idAgendamento: number;
@@ -23,4 +23,10 @@ export type CreateAgendamento = {
   data: string;
   horaInicio: string;
   horaFim: string;
+};
+
+export type AgendamentoPaginatedResponse = {
+  content: AgendamentoData[];
+  pageable: Pageable;
+  totalPages: number;
 };

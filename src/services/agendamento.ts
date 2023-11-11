@@ -1,6 +1,7 @@
 import { medlinked } from "@medlinked/api";
 import {
   AgendamentoData,
+  AgendamentoPaginatedResponse,
   AgendamentoResponse,
   CreateAgendamento,
   TokenData,
@@ -12,6 +13,7 @@ import jwt_decode from "jwt-decode";
 export function getAllAgendamentos(
   idMedico?: number,
   idPaciente?: number,
+  tipoAgendamento?: string,
   mes?: number,
   ano?: number,
   dia?: number,
@@ -22,11 +24,45 @@ export function getAllAgendamentos(
   const medicoFilter = idMedico && idMedico != 0 ? `&idMedico=${idMedico}` : "";
   const pacienteFilter =
     idPaciente && idPaciente != 0 ? `&idPaciente=${idPaciente}` : "";
+  const tipoAgendamentoFilter =
+    tipoAgendamento && tipoAgendamento != "0"
+      ? `&tipoAgendamento=${tipoAgendamento}`
+      : "";
 
   return medlinked.get<AgendamentoResponse>(
     `agendamento/${
       jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
-    }?${anoFilter}${mesFilter}${diaFilter}${medicoFilter}${pacienteFilter}`,
+    }?${anoFilter}${mesFilter}${diaFilter}${medicoFilter}
+    ${pacienteFilter}${tipoAgendamentoFilter}`,
+  );
+}
+
+export function getAllAgendamentosPaginated(
+  pageNumber: number,
+  pageSize: number,
+  idMedico?: number,
+  idPaciente?: number,
+  tipoAgendamento?: string,
+  mes?: number,
+  ano?: number,
+  dia?: number,
+) {
+  const anoFilter = ano ? `ano=${ano}` : "";
+  const mesFilter = mes ? `&mes=${mes}` : "";
+  const diaFilter = dia ? `&dia=${dia}` : "";
+  const medicoFilter = idMedico && idMedico != 0 ? `&idMedico=${idMedico}` : "";
+  const pacienteFilter =
+    idPaciente && idPaciente != 0 ? `&idPaciente=${idPaciente}` : "";
+  const tipoAgendamentoFilter =
+    tipoAgendamento && tipoAgendamento != "0"
+      ? `&tipoAgendamento=${tipoAgendamento}`
+      : "";
+
+  return medlinked.get<AgendamentoPaginatedResponse>(
+    `agendamento/paginado/${
+      jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
+    }?${anoFilter}${mesFilter}${diaFilter}${medicoFilter}${pacienteFilter}
+    ${tipoAgendamentoFilter}&page=${pageNumber}&pageSize=${pageSize}`,
   );
 }
 

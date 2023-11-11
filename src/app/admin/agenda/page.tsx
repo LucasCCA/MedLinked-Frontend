@@ -9,6 +9,7 @@ import {
   Modal,
   NoResults,
   OptionData,
+  Pagination,
   Select,
   Spinner,
   daysOfTheWeek,
@@ -18,11 +19,13 @@ import { theme } from "@medlinked/config";
 import {
   deleteAgendamento,
   getAllAgendamentos,
+  getAllAgendamentosPaginated,
   getAllMedicosSecretaria,
   getAllPacientes,
   getAllTiposAgendamento,
 } from "@medlinked/services";
 import {
+  AgendamentoPaginatedResponse,
   AgendamentoResponse,
   PacienteResponse,
   SecretariaMedicoResponse,
@@ -39,8 +42,15 @@ import {
   CalendarResultContentContainer,
   CardInfoContainer,
   ModalFieldsContainer,
+  PaginationAndRecordsContainer,
   ResultsContainer,
 } from "../styles";
+
+const records = [
+  { label: "5", value: "5" },
+  { label: "10", value: "10" },
+  { label: "25", value: "25" },
+];
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
@@ -61,7 +71,12 @@ export default function Page() {
     label: "",
     value: "",
   });
-  const [agendamentos, setAgendamentos] = useState<AgendamentoResponse>([]);
+  const [agendamentos, setAgendamentos] =
+    useState<AgendamentoPaginatedResponse>({
+      content: [],
+      pageable: { pageNumber: 0, pageSize: 0 },
+      totalPages: 0,
+    });
   const [allAgendamentos, setAllAgendamentos] = useState<AgendamentoResponse>(
     [],
   );
@@ -72,6 +87,11 @@ export default function Page() {
       label: "",
       value: "",
     });
+  const [pageNumber, setPageNumber] = useState(0);
+  const [selectedPageSize, setSelectedPageSize] = useState({
+    label: "5",
+    value: "5",
+  });
 
   useEffect(() => {
     function getPacientes() {
@@ -125,6 +145,7 @@ export default function Page() {
     getAllAgendamentos(
       Number(currentMedicoFilter.value),
       Number(currentPacienteFilter.value),
+      currentTipoAgendamentoFilter.value,
     )
       .then((response) => setAllAgendamentos(response.data))
       .catch(() =>
@@ -138,14 +159,25 @@ export default function Page() {
 
   useEffect(() => {
     getAgendamentos();
-  }, [currentMedicoFilter, currentPacienteFilter]);
+  }, [
+    currentMedicoFilter,
+    currentPacienteFilter,
+    currentTipoAgendamentoFilter,
+  ]);
+
+  useEffect(() => {
+    setPageNumber(0);
+  }, [selectedPageSize]);
 
   function getFilteredAgendamentos() {
     setLoading(true);
 
-    getAllAgendamentos(
+    getAllAgendamentosPaginated(
+      pageNumber,
+      Number(selectedPageSize.value),
       Number(currentMedicoFilter.value),
       Number(currentPacienteFilter.value),
+      currentTipoAgendamentoFilter.value,
       month,
       year,
       day,
@@ -162,7 +194,16 @@ export default function Page() {
 
   useEffect(() => {
     getFilteredAgendamentos();
-  }, [year, month, day, currentMedicoFilter, currentPacienteFilter]);
+  }, [
+    pageNumber,
+    selectedPageSize,
+    year,
+    month,
+    day,
+    currentMedicoFilter,
+    currentPacienteFilter,
+    currentTipoAgendamentoFilter,
+  ]);
 
   const pacientesFilterOptions: OptionData[] = [
     { label: "Todos os pacientes", value: "0" },
@@ -188,7 +229,9 @@ export default function Page() {
     });
   }
 
-  const tiposAgendamentoOptions: OptionData[] = [];
+  const tiposAgendamentoOptions: OptionData[] = [
+    { label: "Todos os tipos de agendamento", value: "0" },
+  ];
 
   for (let i = 0; i < tiposAgendamento.length; i++) {
     tiposAgendamentoOptions.push({
@@ -213,6 +256,10 @@ export default function Page() {
           "Ocorreu um erro ao deletar o agendamento. Tente novamente mais tarde.",
         ),
       );
+  }
+
+  function changePage(number: number) {
+    setPageNumber(number);
   }
 
   return (
@@ -353,9 +400,9 @@ export default function Page() {
             }, ${day} de ${monthsName[month - 1]} de ${year}`}
           </CustomText>
           {loading && <Spinner />}
-          {agendamentos.length > 0 ? (
+          {agendamentos.content.length > 0 ? (
             <ResultsContainer>
-              {agendamentos.map((agendamento) => (
+              {agendamentos.content.map((agendamento) => (
                 <Card key={agendamento.idAgendamento}>
                   <CalendarResultContentContainer>
                     <div>
@@ -409,6 +456,22 @@ export default function Page() {
             </ResultsContainer>
           ) : (
             !loading && <NoResults message={"Nenhum agendamento encontrado"} />
+          )}
+          {!loading && agendamentos.content.length > 0 && (
+            <PaginationAndRecordsContainer>
+              <Select
+                outsideSelected={selectedPageSize}
+                setOutsideSelected={setSelectedPageSize}
+                options={records}
+                fullWidth
+                readOnly
+              />
+              <Pagination
+                pageNumber={pageNumber}
+                changePage={changePage}
+                numberOfPages={agendamentos.totalPages}
+              />
+            </PaginationAndRecordsContainer>
           )}
         </CalendarAndResultsContainer>
       </CalendarPageContainer>
