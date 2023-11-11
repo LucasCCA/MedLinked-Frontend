@@ -1,3 +1,4 @@
+import { Maybe } from "yup";
 import { Medico, PacienteData, PlanosSaude } from ".";
 
 export type AgendamentoData = {
@@ -17,7 +18,7 @@ export type CreateAgendamento = {
   idMedico: number;
   idPaciente: number;
   idPlanoSaude?: number;
-  descricao?: string;
+  descricao?: Maybe<string | undefined>;
   tipoAgendamento: string;
   data: string;
   horaInicio: string;
