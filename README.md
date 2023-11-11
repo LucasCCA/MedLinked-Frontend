@@ -13,7 +13,7 @@
 </p>
 
 <p style="text-align: justify;">
-  <a href="https://github.com/JuliaVasconcelos161/medlinked-backend">
+  <a href="https://github.com/JuliaVasconcelos161/medlinked-backend" target="_blank">
     Clique aqui para ver o repositório do backend
   </a>
 </p>
@@ -39,26 +39,24 @@
   Para rodar o projeto em modo de desenvolvimento
 </h1>
 
-<code>
-npm run dev
+<code>npm run dev</code>
 
 ou
 
-yarn dev
+<code>yarn dev</code>
 
 ou
 
-pnpm dev
-</code>
+<code>pnpm dev</code>
 
 <p style="text-align: justify;">
-  Após executar o comando de sua preferência abra o link <a href="http://localhost:3000">http://localhost:3000</a> para ver o resultado.
+  Após executar o comando de sua preferência abra o link <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> para ver o resultado.
 </p>
 
 <h1>Imagens do projeto</h1>
 
-<img src="https://drive.google.com/file/d/1aHqC6ttc_ZJtOv2om6GtbZwsDnPY_RGh/view?usp=drive_link" alt="Tela de login" />
+<img src="./public/images/readme/login.png" alt="Tela de login" />
 <p style="text-align: center;">Imagem da tela de login</p>
 
-<img src="https://drive.google.com/file/d/158N0uXZ73xEF8MBiuSh8982XCn_mbe0V/view?usp=drive_link" alt="Imagem da tela inicial do sistema / tela da agenda" />
+<img src="./public/images/readme/agenda.png" alt="Imagem da tela inicial do sistema / tela da agenda" />
 <p style="text-align: center;">Imagem da tela inicial do sistema / tela da agenda</p>
