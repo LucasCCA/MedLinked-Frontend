@@ -9,17 +9,18 @@ import {
   Modal,
   NoResults,
   OptionData,
+  Pagination,
   Select,
   Spacing,
   Spinner,
 } from "@medlinked/components";
 import {
   deleteAgendamento,
-  getAllAgendamentos,
+  getAllAgendamentosPaginated,
   getAllMedicosSecretaria,
 } from "@medlinked/services";
 import {
-  AgendamentoResponse,
+  AgendamentoPaginatedResponse,
   SecretariaMedicoResponse,
 } from "@medlinked/types";
 import { cpfMask, formatCpf } from "@medlinked/utils";
@@ -32,6 +33,7 @@ import {
   CardInfoContainer,
   CardsContainer,
   ModalFieldsContainer,
+  PaginationAndRecordsContainer,
   SingleFilterContainer,
 } from "../../../styles";
 
@@ -46,6 +48,12 @@ const breadcrumbItems = [
   },
 ];
 
+const records = [
+  { label: "5", value: "5" },
+  { label: "10", value: "10" },
+  { label: "25", value: "25" },
+];
+
 export default function Page() {
   const params = useParams();
   const [medicos, setMedicos] = useState<SecretariaMedicoResponse>([]);
@@ -55,13 +63,25 @@ export default function Page() {
   });
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [agendamentos, setAgendamentos] = useState<AgendamentoResponse>([]);
+  const [agendamentos, setAgendamentos] =
+    useState<AgendamentoPaginatedResponse>({
+      content: [],
+      pageable: { pageNumber: 0, pageSize: 0 },
+      totalPages: 0,
+    });
   const [currentAgendamento, setCurrentAgendamento] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [selectedPageSize, setSelectedPageSize] = useState({
+    label: "5",
+    value: "5",
+  });
 
   function getAgendamentos() {
     setLoading(true);
 
-    getAllAgendamentos(
+    getAllAgendamentosPaginated(
+      pageNumber,
+      Number(selectedPageSize.value),
       Number(currentMedicoFilter.value),
       Number(params.idPaciente),
     )
@@ -93,8 +113,12 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    setPageNumber(0);
+  }, [selectedPageSize]);
+
+  useEffect(() => {
     getAgendamentos();
-  }, [currentMedicoFilter]);
+  }, [pageNumber, selectedPageSize, currentMedicoFilter]);
 
   const medicosFilterOptions: OptionData[] = [
     { label: "Todos os médicos", value: "0" },
@@ -120,6 +144,10 @@ export default function Page() {
           "Ocorreu um erro ao deletar o agendamento. Tente novamente mais tarde.",
         ),
       );
+  }
+
+  function changePage(number: number) {
+    setPageNumber(number);
   }
 
   return (
@@ -158,10 +186,10 @@ export default function Page() {
         </SingleFilterContainer>
       </Spacing>
       {loading && <Spinner />}
-      {agendamentos.length > 0 ? (
+      {agendamentos.content.length > 0 ? (
         <Spacing>
           <CardsContainer>
-            {agendamentos.map((agendamento) => (
+            {agendamentos.content.map((agendamento) => (
               <Card key={agendamento.idAgendamento}>
                 <CalendarResultContentContainer>
                   <div>
@@ -228,6 +256,22 @@ export default function Page() {
             message={"Nenhum agendamento encontrado para esse paciente"}
           />
         )
+      )}
+      {!loading && agendamentos.content.length > 0 && (
+        <PaginationAndRecordsContainer>
+          <Select
+            outsideSelected={selectedPageSize}
+            setOutsideSelected={setSelectedPageSize}
+            options={records}
+            fullWidth
+            readOnly
+          />
+          <Pagination
+            pageNumber={pageNumber}
+            changePage={changePage}
+            numberOfPages={agendamentos.totalPages}
+          />
+        </PaginationAndRecordsContainer>
       )}
     </>
   );
