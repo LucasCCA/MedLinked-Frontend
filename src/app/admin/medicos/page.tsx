@@ -160,7 +160,8 @@ export default function Page() {
         {modalText == 3 && (
           <>
             <CustomText $align="center">
-              Você realmente deseja deletar esse médico?
+              Você realmente deseja deletar esse médico? Todos os agendamentos
+              vinculados a ele também serão deletados
             </CustomText>
             <ModalFieldsContainer>
               <Button
