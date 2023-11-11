@@ -90,6 +90,9 @@ export default function Page() {
     }
 
     getMedicos();
+  }, []);
+
+  useEffect(() => {
     getAgendamentos();
   }, [currentMedicoFilter]);
 
