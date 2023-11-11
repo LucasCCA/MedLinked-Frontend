@@ -268,6 +268,8 @@ export default function Page() {
   const tiposAgendamentoOptions: OptionData[] = [];
 
   for (let i = 0; i < tiposAgendamento.length; i++) {
+    if (tiposAgendamento[i] == "AUTOMATICO") continue;
+
     tiposAgendamentoOptions.push({
       label:
         tiposAgendamento[i].charAt(0).toUpperCase() +
