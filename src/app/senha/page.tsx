@@ -45,8 +45,8 @@ export default function Page() {
         Cookies.set("resetToken", response.data);
         toast.success("Email de recuperação enviado!");
       })
-      .catch(() => {
-        toast.error("Usuário não existe.");
+      .catch((error) => {
+        toast.error(error.response.data);
       })
       .finally(() => setLoading(false));
   };
