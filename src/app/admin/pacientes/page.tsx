@@ -93,6 +93,10 @@ export default function Page() {
   }
 
   useEffect(() => {
+    setPageNumber(0);
+  }, [selectedPageSize]);
+
+  useEffect(() => {
     getPacientes();
   }, [pageNumber, selectedPageSize, name, filledCpf]);
 

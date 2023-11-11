@@ -99,6 +99,10 @@ export default function Page() {
   }
 
   useEffect(() => {
+    setPageNumber(0);
+  }, [selectedPageSize]);
+
+  useEffect(() => {
     getMedicos();
   }, [pageNumber, selectedPageSize]);
 
