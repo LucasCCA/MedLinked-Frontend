@@ -12,7 +12,10 @@ export const registerAgendamentoSchema = yup
       .required("O campo paciente é obrigatório")
       .min(1, "O campo paciente é obrigatório"),
     idPlanoSaude: yup.number(),
-    descricao: yup.string(),
+    descricao: yup
+      .string()
+      .notRequired()
+      .max(200, "O tamanho máximo da descrição deve ser de 200 caracteres"),
     tipoAgendamento: yup
       .string()
       .required("O campo tipo de agendamento é obrigatório"),
