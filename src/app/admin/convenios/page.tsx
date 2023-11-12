@@ -160,7 +160,9 @@ export default function Page() {
         {modalText == 2 && (
           <>
             <CustomText $align="center">
-              Você realmente deseja deletar esse convênio?
+              Você realmente deseja deletar esse convênio? Todos os
+              agendamentos, pacientes e médicos vínculados a esse convênio
+              perderão o vínculo
             </CustomText>
             <ModalFieldsContainer>
               <Button
