@@ -13,7 +13,7 @@ export function updateUsuario(
   newPassword: string,
   idUsuario: number,
 ) {
-  return medlinked.put(`usuario/update/${idUsuario}`, {
+  return medlinked.put(`usuario/update-senha/${idUsuario}`, {
     oldPassword: oldPassword,
     newPassword: newPassword,
   });

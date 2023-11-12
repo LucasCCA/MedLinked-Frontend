@@ -46,7 +46,11 @@ export default function Page() {
         toast.success("Email de recuperação enviado!");
       })
       .catch((error) => {
-        toast.error(error.response.data);
+        if (error.response?.data) toast.error(error.response.data);
+        else
+          toast.error(
+            "Ocorreu um erro no envio do email. Tente novamente mais tarde.",
+          );
       })
       .finally(() => setLoading(false));
   };

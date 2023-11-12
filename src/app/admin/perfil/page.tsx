@@ -36,7 +36,6 @@ export default function Page() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatedNewPassword, setRepeatedNewPassword] = useState("");
-  const [oldPasswordError, setOldPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
@@ -86,7 +85,14 @@ export default function Page() {
 
     updateSecretaria(data, idSecretaria)
       .then(() => toast.success("Dados atualizados com sucesso!"))
-      .catch((error) => toast.error(error.response.data))
+      .catch((error) => {
+        if (error.response?.data) toast.error(error.response.data);
+        else
+          toast.error(
+            // eslint-disable-next-line max-len
+            "Ocorreu um erro ao atualizar seus dados. Tente novamente mais tarde.",
+          );
+      })
       .finally(() => setLoading(false));
   };
 
@@ -97,13 +103,18 @@ export default function Page() {
       setNewPasswordError("Os campos de nova senha devem ser iguais");
     else {
       setNewPasswordError("");
-      setOldPasswordError("");
 
       updateUsuario(oldPassword, newPassword, idSecretaria)
         .then(() => {
           toast.success("Senha alterada com sucesso!");
         })
-        .catch((error) => setOldPasswordError(error.response.data));
+        .catch((error) => {
+          if (error.response?.data) toast.error(error.response.data);
+          else
+            toast.error(
+              "Ocorreu um erro ao alterar a senha. Tente novamente mais tarde.",
+            );
+        });
     }
 
     setLoading(false);
@@ -120,7 +131,11 @@ export default function Page() {
       })
       .catch((error) => {
         setOpenModal(false);
-        toast.error(error.response.data);
+        if (error.response?.data) toast.error(error.response.data);
+        else
+          toast.error(
+            "Ocorreu um erro ao deletar sua conta. Tente novamente mais tarde.",
+          );
       })
       .finally(() => setLoading(false));
   }
@@ -222,8 +237,6 @@ export default function Page() {
             type="password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.currentTarget.value)}
-            hasError={oldPasswordError != ""}
-            errorMessage={oldPasswordError}
           />
         </SingleFieldContainer>
         <FieldsContainer>
