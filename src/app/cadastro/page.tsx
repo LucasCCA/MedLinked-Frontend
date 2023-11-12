@@ -50,7 +50,13 @@ export default function Page() {
         Cookies.set("token", response.data.token);
         router.push("/admin/agenda");
       })
-      .catch((error) => toast.error(error.response.data))
+      .catch((error) => {
+        if (error.response?.data) toast.error(error.response.data);
+        else
+          toast.error(
+            "Ocorreu um erro durante o cadastro. Tente novamente mais tarde.",
+          );
+      })
       .finally(() => setLoading(false));
   };
 

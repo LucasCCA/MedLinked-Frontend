@@ -114,7 +114,14 @@ export default function Page() {
         toast.success("Convênio cadastrado com sucesso!");
         getConvenios();
       })
-      .catch((error) => toast.error(error.response.data))
+      .catch((error) => {
+        if (error.response?.data) toast.error(error.response.data);
+        else
+          toast.error(
+            // eslint-disable-next-line max-len
+            "Ocorreu um erro ao cadastrar o convênio. Tente novamente mais tarde.",
+          );
+      })
       .finally(() => {
         setOpenModal(false);
         resetField("descricao");

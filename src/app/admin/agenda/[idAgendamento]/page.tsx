@@ -227,7 +227,7 @@ export default function Page() {
         .catch(() =>
           toast.error(
             // eslint-disable-next-line max-len
-            "Ocorreu um erro ao buscar convênios do paciente. Tente novamente mais tarde.",
+            "Ocorreu um erro ao buscar convênios. Tente novamente mais tarde.",
           ),
         )
         .finally(() => setLoading(false));
@@ -312,7 +312,14 @@ export default function Page() {
           toast.success("Agendamento cadastrado com sucesso!");
           setidAgendamento(response.data.idAgendamento);
         })
-        .catch((error) => toast.error(error.response.data))
+        .catch((error) => {
+          if (error.response?.data) toast.error(error.response.data);
+          else
+            toast.error(
+              // eslint-disable-next-line max-len
+              "Ocorreu um erro ao cadastrar o agendamento. Tente novamente mais tarde.",
+            );
+        })
         .finally(() => setLoading(false));
     else
       updateAgendamento(data, idAgendamento)
@@ -320,7 +327,14 @@ export default function Page() {
           toast.success("Agendamento atualizado com sucesso!");
           setidAgendamento(response.data.idAgendamento);
         })
-        .catch((error) => toast.error(error.response.data))
+        .catch((error) => {
+          if (error.response?.data) toast.error(error.response.data);
+          else
+            toast.error(
+              // eslint-disable-next-line max-len
+              "Ocorreu um erro ao atualizar o agendamento. Tente novamente mais tarde.",
+            );
+        })
         .finally(() => setLoading(false));
   };
 

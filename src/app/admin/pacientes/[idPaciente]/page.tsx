@@ -351,7 +351,14 @@ export default function Page() {
           setIdPaciente(response.data.paciente.idPaciente);
           setDisabledItems([]);
         })
-        .catch((error) => toast.error(error.response.data))
+        .catch((error) => {
+          if (error.response?.data) toast.error(error.response.data);
+          else
+            toast.error(
+              // eslint-disable-next-line max-len
+              "Ocorreu um erro ao cadastrar o paciente. Tente novamente mais tarde.",
+            );
+        })
         .finally(() => setLoading(false));
     } else {
       updatePaciente(data, idPaciente)
@@ -359,7 +366,14 @@ export default function Page() {
           toast.success("Paciente atualizado com sucesso!");
           setIdPaciente(response.data.paciente.idPaciente);
         })
-        .catch((error) => toast.error(error.response.data))
+        .catch((error) => {
+          if (error.response?.data) toast.error(error.response.data);
+          else
+            toast.error(
+              // eslint-disable-next-line max-len
+              "Ocorreu um erro ao atualizar o paciente. Tente novamente mais tarde.",
+            );
+        })
         .finally(() => setLoading(false));
     }
   };

@@ -326,7 +326,14 @@ export default function Page() {
           setIdMedico(response.data.idMedico);
           setDisabledItems([]);
         })
-        .catch((error) => toast.error(error.response.data))
+        .catch((error) => {
+          if (error.response?.data) toast.error(error.response.data);
+          else
+            toast.error(
+              // eslint-disable-next-line max-len
+              "Ocorreu um erro ao cadastrar o médico. Tente novamente mais tarde.",
+            );
+        })
         .finally(() => setLoading(false));
     } else {
       updateMedico(data, idMedico)
@@ -334,7 +341,14 @@ export default function Page() {
           toast.success("Médico atualizado com sucesso!");
           setIdMedico(response.data.idMedico);
         })
-        .catch((error) => toast.error(error.response.data))
+        .catch((error) => {
+          if (error.response?.data) toast.error(error.response.data);
+          else
+            toast.error(
+              // eslint-disable-next-line max-len
+              "Ocorreu um erro ao atualizar o médico. Tente novamente mais tarde.",
+            );
+        })
         .finally(() => setLoading(false));
     }
   };
