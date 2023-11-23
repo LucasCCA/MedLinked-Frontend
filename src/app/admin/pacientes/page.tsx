@@ -82,6 +82,7 @@ export default function Page() {
       .then(() => {
         setCurrentIdPaciente(0);
         setOpenModal(false);
+        setPageNumber(0);
         getPacientes();
         toast.success("Paciente deletado com sucesso!");
       })

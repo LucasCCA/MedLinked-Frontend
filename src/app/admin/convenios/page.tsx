@@ -88,6 +88,7 @@ export default function Page() {
       .then(() => {
         setCurrentIdConvenio(0);
         setOpenModal(false);
+        setPageNumber(0);
         getConvenios();
         toast.success("Convênio deletado com sucesso!");
       })
@@ -111,6 +112,8 @@ export default function Page() {
 
     createPlanoSaude(data)
       .then(() => {
+        setOpenModal(false);
+        resetField("descricao");
         toast.success("Convênio cadastrado com sucesso!");
         getConvenios();
       })
@@ -123,8 +126,6 @@ export default function Page() {
           );
       })
       .finally(() => {
-        setOpenModal(false);
-        resetField("descricao");
         setLoading(false);
       });
   };
