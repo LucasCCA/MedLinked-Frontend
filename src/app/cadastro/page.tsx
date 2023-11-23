@@ -177,6 +177,7 @@ export default function Page() {
                 hasError={Boolean(errors.usuario?.username)}
                 errorMessage={errors.usuario?.username?.message}
                 autoComplete="off"
+                disabled={!filledCpf}
               />
               <Input
                 icon="KeyRound"
@@ -188,6 +189,7 @@ export default function Page() {
                 hasError={Boolean(errors.usuario?.password)}
                 errorMessage={errors.usuario?.password?.message}
                 autoComplete="off"
+                disabled={!filledCpf}
               />
               <CustomText $weight={500} $align="center">
                 * Campo Obrigatório
