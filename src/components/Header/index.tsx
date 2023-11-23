@@ -2,6 +2,7 @@
 
 import Cookies from "js-cookie";
 import { ChevronDown, LogOut, UserCircle2, UserCog2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { Container, CustomText } from "..";
@@ -22,6 +23,7 @@ type HeaderProps = {
 };
 
 export function Header({ username, children }: HeaderProps) {
+  const router = useRouter();
   const [openAnimation, setOpenAnimation] = useState(false);
   const [closeAnimation, setCloseAnimation] = useState(false);
   const ref = useDetectClickOutside({
@@ -79,6 +81,7 @@ export function Header({ username, children }: HeaderProps) {
                   Cookies.remove("token");
                   setOpenAnimation(false);
                   setCloseAnimation(true);
+                  router.push("/");
                 }}
                 href="/"
               >
