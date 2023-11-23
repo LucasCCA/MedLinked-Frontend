@@ -246,6 +246,7 @@ export default function Page() {
     deleteAgendamento(currentAgendamento)
       .then(() => {
         setOpenModal(false);
+        setPageNumber(0);
         getAgendamentos();
         getFilteredAgendamentos();
         toast.success("Agendamento deletado com sucesso!");

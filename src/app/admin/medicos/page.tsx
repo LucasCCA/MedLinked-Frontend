@@ -72,6 +72,7 @@ export default function Page() {
       .then(() => {
         setCurrentIdMedico(0);
         setOpenModal(false);
+        setPageNumber(0);
         getMedicos();
         toast.success("Médico desvinculado com sucesso!");
       })
@@ -88,6 +89,7 @@ export default function Page() {
       .then(() => {
         setCurrentIdMedico(0);
         setOpenModal(false);
+        setPageNumber(0);
         getMedicos();
         toast.success("Médico deletado com sucesso!");
       })
