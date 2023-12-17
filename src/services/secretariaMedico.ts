@@ -12,9 +12,9 @@ export function getAllMedicosSecretariaPaginated(
   pageSize: number,
 ) {
   return medlinked.get<SecretariaMedicoPaginatedResponse>(
-    `secretaria/medico/${
+    `secretaria/medico/paginado/${
       jwt_decode<TokenData>(Cookies.get("token")!).idUsuario
-    }/paginado?page=${pageNumber}&pageSize=${pageSize}`,
+    }?page=${pageNumber}&pageSize=${pageSize}`,
   );
 }
 
